@@ -1,3 +1,5 @@
+require "zip"
+
 module Upload::EpubParsing
   extend ActiveSupport::Concern
 

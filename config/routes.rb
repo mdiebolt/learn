@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
-  resource :session, only: [:new, :create, :destroy]
-  resources :passwords, param: :token, only: [:new, :create, :edit, :update]
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  resource :session
+  resources :passwords
+
+  resources :registrations
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
@@ -12,8 +13,8 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   # get "offline" => "rails/pwa#offline", as: :pwa_offline
 
-  resources :uploads, only: [:index, :show, :new, :create, :destroy] do
-    resources :chapters, only: [:show], controller: "uploads/chapters" do
+  resources :uploads do
+    resources :chapters do
       member do
         get :audio_status
       end
