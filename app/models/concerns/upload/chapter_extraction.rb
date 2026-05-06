@@ -63,7 +63,7 @@ module Upload::ChapterExtraction
   end
 
   def request_chapter_analysis(summaries)
-    response = anthropic_client.messages(
+    response = anthropic_client.messages.create(
       model: "claude-sonnet-4-20250514",
       max_tokens: 4096,
       system: chapter_analysis_system_prompt,

@@ -23,8 +23,8 @@
       "Bash(psql -lt)",
       "Bash(awk '{print $1}')",
       "Bash(bin/rails db:drop)",
-      "Bash(dropdb rsvp_reader_development)",
-      "Bash(dropdb rsvp_reader_test)",
+      "Bash(dropdb learn_development)",
+      "Bash(dropdb learn_test)",
       "Bash(bin/rails db:migrate:status)",
       "Bash(curl -sf http://localhost:3457/up)",
       "Bash(pkill -f \"puma.*3457\")"

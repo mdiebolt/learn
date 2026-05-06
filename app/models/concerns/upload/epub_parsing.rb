@@ -89,7 +89,10 @@ module Upload::EpubParsing
 
   def extract_nav_toc(zip, nav_path)
     doc = Nokogiri::HTML(zip.read(nav_path))
-    doc.css("nav[epub|type='toc'] a, nav#toc a").each_with_object({}) do |link, hash|
+    nav = doc.at_css("nav#toc") || doc.css("nav").find { |n| n["epub:type"] == "toc" }
+    return {} unless nav
+
+    nav.css("a").each_with_object({}) do |link, hash|
       href = link["href"]&.split("#")&.first
       hash[href] = link.text.strip if href
     end

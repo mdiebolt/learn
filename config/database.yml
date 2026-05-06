@@ -19,7 +19,6 @@ default: &default
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
-
 development:
   <<: *default
   database: learn_development
@@ -89,7 +88,7 @@ production:
     <<: *default
     database: learn_production
     username: learn
-    password: <%= ENV["RSVP_READER_DATABASE_PASSWORD"] %>
+    password: <%= ENV["LEARN_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
     database: learn_production_cache
