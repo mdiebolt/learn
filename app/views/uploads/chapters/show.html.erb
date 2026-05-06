@@ -1,0 +1,14 @@
+<div class="min-h-screen bg-gray-900 text-white">
+  <header class="p-4 border-b border-gray-700">
+    <%= link_to "← #{@upload.title}", @upload, class: "text-gray-400 hover:text-white" %>
+    <h1 class="text-xl font-semibold mt-2"><%= @chapter.title %></h1>
+  </header>
+
+  <div id="audio-player" class="flex-1">
+    <% if @chapter.audio_segment&.ready? %>
+      <%= render "audio_player", chapter: @chapter, segment: @chapter.audio_segment %>
+    <% else %>
+      <%= render "audio_loading", chapter: @chapter %>
+    <% end %>
+  </div>
+</div>

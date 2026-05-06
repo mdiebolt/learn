@@ -1,0 +1,37 @@
+<div class="max-w-4xl mx-auto py-8 px-4">
+  <%= link_to "← Back to Books", uploads_path, class: "text-gray-600 hover:text-gray-900 mb-4 inline-block" %>
+
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold"><%= @upload.title %></h1>
+    <p class="text-xl text-gray-600"><%= @upload.author %></p>
+  </header>
+
+  <% if @upload.ready? %>
+    <div class="space-y-2">
+      <% @upload.chapters.each do |chapter| %>
+        <div class="bg-white rounded-lg shadow p-4 flex justify-between items-center">
+          <div>
+            <h3 class="font-medium">
+              <%= link_to chapter.title, upload_chapter_path(@upload, chapter), class: "hover:text-blue-600" %>
+            </h3>
+            <p class="text-sm text-gray-500">
+              ~<%= chapter.estimated_duration_minutes %> min
+            </p>
+          </div>
+
+          <% if chapter.audio_ready? %>
+            <span class="text-green-600 text-sm">Audio ready</span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% elsif @upload.processing? %>
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
+      <p class="text-yellow-800">Processing your book... This may take a minute.</p>
+    </div>
+  <% else %>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
+      <p class="text-red-800">Processing failed. Please try uploading again.</p>
+    </div>
+  <% end %>
+</div>

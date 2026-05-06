@@ -1,0 +1,58 @@
+<div class="serial-reader p-8"
+     data-controller="serial-presentation audio-sync"
+     data-audio-sync-timestamps-value="<%= segment.timestamps.to_json %>">
+
+  <div class="presentation-display bg-gray-800 rounded-lg h-48 flex items-center justify-center mb-8 relative">
+    <div class="word-container font-mono text-4xl flex">
+      <span class="word-before-focal text-gray-400 text-right" style="min-width: 200px;" data-serial-presentation-target="beforeFocal"></span>
+      <span class="word-focal-character text-red-500 font-bold" data-serial-presentation-target="focalCharacter"></span>
+      <span class="word-after-focal text-gray-400 text-left" style="min-width: 200px;" data-serial-presentation-target="afterFocal"></span>
+    </div>
+    <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-red-500/30 transform -translate-x-1/2"></div>
+  </div>
+
+  <audio data-audio-sync-target="audio"
+         data-action="timeupdate->audio-sync#onTimeUpdate play->audio-sync#onPlay pause->audio-sync#onPause"
+         preload="auto"
+         class="hidden">
+    <source src="<%= url_for(segment.audio_file) %>" type="audio/mpeg">
+  </audio>
+
+  <div class="flex items-center gap-6 justify-center">
+    <button data-action="click->audio-sync#toggle"
+            data-audio-sync-target="playButton"
+            class="bg-white text-gray-900 w-16 h-16 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
+      <span data-audio-sync-target="playIcon" class="text-2xl">▶</span>
+    </button>
+
+    <div class="flex-1 max-w-md">
+      <div class="flex items-center gap-3 text-sm text-gray-400 mb-2">
+        <span data-audio-sync-target="currentTime">0:00</span>
+        <div class="flex-1 h-2 bg-gray-700 rounded-full cursor-pointer" data-action="click->audio-sync#seek">
+          <div class="h-full bg-white rounded-full transition-all" data-audio-sync-target="progress" style="width: 0%"></div>
+        </div>
+        <span><%= segment.formatted_duration %></span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <label class="text-sm text-gray-400">Speed</label>
+      <select data-action="change->audio-sync#setSpeed"
+              data-audio-sync-target="speedSelect"
+              class="bg-gray-800 border border-gray-600 rounded px-2 py-1 text-sm">
+        <option value="0.75">0.75x</option>
+        <option value="1" selected>1x</option>
+        <option value="1.25">1.25x</option>
+        <option value="1.5">1.5x</option>
+        <option value="2">2x</option>
+      </select>
+    </div>
+  </div>
+
+  <details class="mt-12">
+    <summary class="text-gray-500 cursor-pointer hover:text-gray-300">Show full text</summary>
+    <div class="mt-4 text-gray-300 leading-relaxed max-h-96 overflow-y-auto">
+      <%= simple_format(chapter.content) %>
+    </div>
+  </details>
+</div>

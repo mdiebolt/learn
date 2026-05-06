@@ -1,0 +1,25 @@
+<div class="bg-white rounded-lg shadow p-6">
+  <div class="flex justify-between items-start">
+    <div>
+      <h2 class="text-xl font-semibold">
+        <%= link_to upload.title || "Processing...", upload, class: "hover:text-blue-600" %>
+      </h2>
+      <p class="text-gray-600"><%= upload.author %></p>
+      <p class="text-sm text-gray-400 mt-2">
+        <% if upload.ready? %>
+          <%= pluralize(upload.chapters.count, "chapter") %>
+        <% else %>
+          Status: <%= upload.status.humanize %>
+        <% end %>
+      </p>
+    </div>
+
+    <% if upload.ready? %>
+      <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Ready</span>
+    <% elsif upload.processing? %>
+      <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">Processing</span>
+    <% elsif upload.failed? %>
+      <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Failed</span>
+    <% end %>
+  </div>
+</div>

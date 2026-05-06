@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  chapter: one
+  timestamps: 
+  status: 1
+  duration_seconds: 1.5
+
+two:
+  chapter: two
+  timestamps: 
+  status: 1
+  duration_seconds: 1.5
