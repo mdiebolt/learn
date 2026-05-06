@@ -50,7 +50,7 @@ module Upload::ChapterExtraction
 
     analysis = request_chapter_analysis(summaries)
 
-    analysis["chapters"]
+    (analysis["chapters"] || [])
       .select { |ch| ch["include"] && !ch["is_front_matter"] && !ch["is_back_matter"] }
       .map.with_index do |ch, new_position|
         original = raw_chapters[ch["original_index"]]
@@ -70,7 +70,9 @@ module Upload::ChapterExtraction
       messages: [{ role: "user", content: chapter_analysis_prompt(summaries) }]
     )
 
-    JSON.parse(response.content.first.text)
+    text = response.content.first.text
+    text = text.sub(/\A```json\s*/i, "").sub(/\A```\s*/i, "").sub(/```\s*\z/, "").strip
+    JSON.parse(text)
   end
 
   def chapter_analysis_system_prompt
@@ -109,6 +111,6 @@ module Upload::ChapterExtraction
   end
 
   def anthropic_client
-    @anthropic_client ||= Anthropic::Client.new
+    @anthropic_client ||= Anthropic::Client.new(api_key: Rails.application.credentials.dig(:anthropic, :api_key))
   end
 end
