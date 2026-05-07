@@ -14,9 +14,15 @@ module Audiobook::Transcript::Word::WordPositioning
     before_validation :assign_orp_index, on: :create
   end
 
+  class_methods do
+    def compute_orp_for(text)
+      length = text.to_s.gsub(/[^[:alpha:]]/, "").length
+      ORP_BY_LENGTH.find { |range, _| range.cover?(length) }&.last || 4
+    end
+  end
+
   def compute_orp_index
-    length = text.to_s.gsub(/[^[:alpha:]]/, "").length
-    ORP_BY_LENGTH.find { |range, _| range.cover?(length) }&.last || 4
+    self.class.compute_orp_for(text)
   end
 
   def before_orp

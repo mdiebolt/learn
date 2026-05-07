@@ -8,6 +8,6 @@ class Audiobook::ChapterTest < ActiveSupport::TestCase
 
   test "default scope orders by position" do
     audiobook = audiobooks(:one)
-    assert_equal [0, 1], audiobook.chapters.map(&:position)
+    assert_equal [ 0, 1 ], audiobook.chapters.map(&:position)
   end
 end

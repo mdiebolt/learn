@@ -12,8 +12,8 @@ class CreateAudiobookTranscriptWords < ActiveRecord::Migration[8.2]
       t.timestamps
     end
 
-    add_index :audiobook_transcript_words, [:transcript_id, :position], unique: true
-    add_index :audiobook_transcript_words, [:transcript_id, :start_time_ms],
+    add_index :audiobook_transcript_words, [ :transcript_id, :position ], unique: true
+    add_index :audiobook_transcript_words, [ :transcript_id, :start_time_ms ],
       name: "index_audiobook_transcript_words_on_start_time"
   end
 end

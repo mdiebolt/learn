@@ -18,6 +18,17 @@
         <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-red-500/30 -translate-x-1/2"></div>
       </div>
 
+      <div class="flex items-center justify-end gap-2 mb-2">
+        <label for="wpm" class="text-sm text-gray-400">Speed</label>
+        <select id="wpm"
+                data-action="change->rsvp#onWpmChange"
+                class="bg-gray-800 text-white rounded px-2 py-1 text-sm">
+          <% [150, 200, 250, 300, 400, 500, 600, 700, 800].each do |wpm| %>
+            <option value="<%= wpm %>"><%= wpm %> WPM</option>
+          <% end %>
+        </select>
+      </div>
+
       <audio data-rsvp-target="audio"
              data-action="timeupdate->rsvp#onTimeUpdate loadedmetadata->rsvp#onLoadedMetadata"
              controls

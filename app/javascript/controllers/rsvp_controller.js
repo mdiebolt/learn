@@ -10,12 +10,26 @@ export default class extends Controller {
 
   connect() {
     this.lastIndex = -1
+    this.naturalWpm = this.computeNaturalWpm()
   }
 
   onLoadedMetadata() {
     if (this.audioTarget.currentTime < this.startMsValue / 1000) {
       this.audioTarget.currentTime = this.startMsValue / 1000
     }
+  }
+
+  onWpmChange(event) {
+    const wpm = Number(event.target.value)
+    // Browsers typically support playbackRate in [0.25, 4.0].
+    const rate = Math.min(4, Math.max(0.25, wpm / this.naturalWpm))
+    this.audioTarget.playbackRate = rate
+  }
+
+  computeNaturalWpm() {
+    const minutes = (this.endMsValue - this.startMsValue) / 60000
+    if (minutes <= 0) return 0
+    return this.wordsValue.length / minutes
   }
 
   onTimeUpdate() {

@@ -44,6 +44,7 @@
 
     <section class="mb-8">
       <h2 class="text-xl font-semibold mb-3">Transcript</h2>
+      <%= turbo_stream_from @audiobook, :transcript_panel %>
       <%= render "transcript_panel", audiobook: @audiobook %>
     </section>
   <% end %>

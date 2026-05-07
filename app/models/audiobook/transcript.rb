@@ -8,4 +8,21 @@ class Audiobook::Transcript < ApplicationRecord
     foreign_key: :transcript_id, dependent: :destroy
 
   enum :status, { pending: 0, transcribing: 1, ready: 2, failed: 3 }
+
+  after_update_commit :broadcast_progress, if: :saved_change_to_progress_fields?
+
+  private
+
+  def saved_change_to_progress_fields?
+    saved_change_to_status? || saved_change_to_progress_message?
+  end
+
+  def broadcast_progress
+    broadcast_replace_to(
+      [ audiobook, :transcript_panel ],
+      target: ActionView::RecordIdentifier.dom_id(audiobook, :transcript_panel),
+      partial: "audiobooks/transcript_panel",
+      locals: { audiobook: audiobook }
+    )
+  end
 end

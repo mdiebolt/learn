@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.2].define(version: 2026_05_06_020300) do
+ActiveRecord::Schema[8.2].define(version: 2026_05_06_020400) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -71,6 +71,7 @@ ActiveRecord::Schema[8.2].define(version: 2026_05_06_020300) do
   create_table "audiobook_transcripts", force: :cascade do |t|
     t.bigint "audiobook_id", null: false
     t.datetime "created_at", null: false
+    t.string "progress_message"
     t.jsonb "raw_response"
     t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false

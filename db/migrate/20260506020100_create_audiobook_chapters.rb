@@ -10,6 +10,6 @@ class CreateAudiobookChapters < ActiveRecord::Migration[8.2]
       t.timestamps
     end
 
-    add_index :audiobook_chapters, [:audiobook_id, :position], unique: true
+    add_index :audiobook_chapters, [ :audiobook_id, :position ], unique: true
   end
 end
