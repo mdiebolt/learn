@@ -1,4 +1,6 @@
 class Audiobook::Transcript::Word < ApplicationRecord
+  include WordPositioning
+
   self.table_name = "audiobook_transcript_words"
 
   belongs_to :transcript, class_name: "Audiobook::Transcript"
