@@ -1,0 +1,19 @@
+<div class="p-4 max-w-4xl mx-auto">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold">Your Audiobooks</h1>
+    <%= link_to "New Audiobook", new_audiobook_path, class: "bg-gray-950 text-white px-4 py-2 hover:bg-gray-950/83" %>
+  </div>
+
+  <% if @audiobooks.any? %>
+    <div class="space-y-4">
+      <% @audiobooks.each do |audiobook| %>
+        <%= render "audiobook", audiobook: audiobook %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-12 text-gray-500">
+      <p class="mb-4">No audiobooks yet.</p>
+      <%= link_to "Add your first audiobook", new_audiobook_path, class: "text-blue-600 hover:underline" %>
+    </div>
+  <% end %>
+</div>
