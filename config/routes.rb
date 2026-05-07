@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   resource :session
   resources :passwords
-
   resources :registrations
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -13,13 +12,5 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   # get "offline" => "rails/pwa#offline", as: :pwa_offline
 
-  resources :uploads do
-    resources :chapters do
-      member do
-        get :audio_status
-      end
-    end
-  end
-
-  root "uploads#index"
+  root "sessions#new"
 end

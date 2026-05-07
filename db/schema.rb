@@ -51,39 +51,6 @@ ActiveRecord::Schema[8.2].define(version: 2026_05_06_013904) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
-  create_table "upload_chapter_audio_segments", force: :cascade do |t|
-    t.bigint "chapter_id", null: false
-    t.datetime "created_at", null: false
-    t.float "duration_seconds"
-    t.integer "status", default: 0, null: false
-    t.jsonb "timestamps"
-    t.datetime "updated_at", null: false
-    t.index ["chapter_id"], name: "index_upload_chapter_audio_segments_on_chapter_id"
-  end
-
-  create_table "upload_chapters", force: :cascade do |t|
-    t.text "content"
-    t.datetime "created_at", null: false
-    t.integer "position"
-    t.string "title"
-    t.datetime "updated_at", null: false
-    t.bigint "upload_id", null: false
-    t.jsonb "words", default: []
-    t.index ["upload_id", "position"], name: "index_upload_chapters_on_upload_id_and_position"
-    t.index ["upload_id"], name: "index_upload_chapters_on_upload_id"
-  end
-
-  create_table "uploads", force: :cascade do |t|
-    t.string "author"
-    t.datetime "created_at", null: false
-    t.datetime "processed_at"
-    t.integer "status", default: 0, null: false
-    t.string "title"
-    t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.index ["user_id"], name: "index_uploads_on_user_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email_address", null: false
@@ -95,7 +62,4 @@ ActiveRecord::Schema[8.2].define(version: 2026_05_06_013904) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "sessions", "users"
-  add_foreign_key "upload_chapter_audio_segments", "upload_chapters", column: "chapter_id"
-  add_foreign_key "upload_chapters", "uploads"
-  add_foreign_key "uploads", "users"
 end
