@@ -5,6 +5,7 @@ class Audiobook < ApplicationRecord
   belongs_to :user
   has_one_attached :audio
   has_many :chapters, class_name: "Audiobook::Chapter", dependent: :destroy
+  has_one :transcript, class_name: "Audiobook::Transcript", dependent: :destroy
 
   enum :status, { pending: 0, processing: 1, ready: 2, failed: 3 }
 

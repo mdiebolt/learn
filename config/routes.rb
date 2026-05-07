@@ -12,7 +12,11 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   # get "offline" => "rails/pwa#offline", as: :pwa_offline
 
-  resources :audiobooks
+  resources :audiobooks do
+    member do
+      post :transcribe
+    end
+  end
 
   root "audiobooks#index"
 end

@@ -1,5 +1,5 @@
 class AudiobooksController < ApplicationController
-  before_action :set_audiobook, only: [:show, :destroy]
+  before_action :set_audiobook, only: [:show, :destroy, :transcribe]
 
   def index
     @audiobooks = Current.user.audiobooks.recent
@@ -25,6 +25,14 @@ class AudiobooksController < ApplicationController
   def destroy
     @audiobook.destroy
     redirect_to audiobooks_path, notice: "Audiobook deleted."
+  end
+
+  def transcribe
+    transcript = @audiobook.transcript || @audiobook.create_transcript!
+    transcript.update!(status: :pending)
+    Audiobook::ScribeJob.perform_later(@audiobook.id)
+
+    redirect_to @audiobook, notice: "Transcription started. This may take a few minutes."
   end
 
   private

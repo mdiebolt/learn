@@ -40,6 +40,7 @@ gem "thruster", require: false
 gem "image_processing", "~> 1.2"
 
 gem "faraday"
+gem "faraday-multipart"
 gem "aws-sdk-s3", require: false
 
 group :development, :test do

@@ -18,16 +18,24 @@
       <p class="text-red-800">Chapter detection failed. Try uploading again.</p>
     </div>
   <% when :ready %>
-    <div class="space-y-2">
-      <% @audiobook.chapters.each do |chapter| %>
-        <div class="bg-white rounded-lg shadow p-4">
-          <h3 class="font-medium"><%= chapter.title %></h3>
-          <p class="text-sm text-gray-500">
-            <%= "%d:%02d" % chapter.duration_ms.divmod(60_000).then { |m, ms| [m, ms / 1000] } %>
-          </p>
-        </div>
-      <% end %>
-    </div>
+    <section class="mb-8">
+      <h2 class="text-xl font-semibold mb-3">Chapters</h2>
+      <div class="space-y-2">
+        <% @audiobook.chapters.each do |chapter| %>
+          <div class="bg-white rounded-lg shadow p-4">
+            <h3 class="font-medium"><%= chapter.title %></h3>
+            <p class="text-sm text-gray-500">
+              <%= "%d:%02d" % chapter.duration_ms.divmod(60_000).then { |m, ms| [m, ms / 1000] } %>
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="text-xl font-semibold mb-3">Transcript</h2>
+      <%= render "transcript_panel", audiobook: @audiobook %>
+    </section>
   <% end %>
 
   <div class="mt-8">
