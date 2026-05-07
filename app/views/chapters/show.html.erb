@@ -1,0 +1,37 @@
+<div class="min-h-screen bg-gray-900 text-white">
+  <header class="p-4 border-b border-gray-700">
+    <%= link_to "← #{@audiobook.display_title}", @audiobook, class: "text-gray-400 hover:text-white text-sm" %>
+    <h1 class="text-xl font-semibold mt-2"><%= @chapter.title %></h1>
+  </header>
+
+  <% if @words.any? %>
+    <div class="p-8"
+         data-controller="rsvp"
+         data-rsvp-words-value="<%= @words.to_json %>"
+         data-rsvp-start-ms-value="<%= @chapter.start_time_ms %>"
+         data-rsvp-end-ms-value="<%= @chapter.end_time_ms %>">
+
+      <div class="rsvp-display bg-gray-800 rounded-lg h-48 flex items-center justify-center mb-8 relative font-mono text-5xl">
+        <div class="rsvp-word">
+          <span class="rsvp-before" data-rsvp-target="before"></span><span class="rsvp-focal text-red-500" data-rsvp-target="focal"></span><span class="rsvp-after" data-rsvp-target="after"></span>
+        </div>
+        <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-red-500/30 -translate-x-1/2"></div>
+      </div>
+
+      <audio data-rsvp-target="audio"
+             data-action="timeupdate->rsvp#onTimeUpdate loadedmetadata->rsvp#onLoadedMetadata"
+             controls
+             preload="metadata"
+             class="w-full">
+        <source src="<%= rails_blob_path(@audiobook.audio) %>" type="<%= @audiobook.audio.content_type %>">
+      </audio>
+    </div>
+  <% else %>
+    <div class="p-8 text-center">
+      <p class="text-gray-400">
+        Transcript not ready yet.
+        <%= link_to "Back to audiobook", @audiobook, class: "text-blue-400 hover:underline" %>
+      </p>
+    </div>
+  <% end %>
+</div>

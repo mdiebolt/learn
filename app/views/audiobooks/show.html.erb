@@ -22,11 +22,21 @@
       <h2 class="text-xl font-semibold mb-3">Chapters</h2>
       <div class="space-y-2">
         <% @audiobook.chapters.each do |chapter| %>
-          <div class="bg-white rounded-lg shadow p-4">
-            <h3 class="font-medium"><%= chapter.title %></h3>
-            <p class="text-sm text-gray-500">
-              <%= "%d:%02d" % chapter.duration_ms.divmod(60_000).then { |m, ms| [m, ms / 1000] } %>
-            </p>
+          <div class="bg-white rounded-lg shadow p-4 flex justify-between items-center">
+            <div>
+              <h3 class="font-medium">
+                <% if @audiobook.transcript&.ready? %>
+                  <%= link_to chapter.title,
+                        audiobook_chapter_path(@audiobook, chapter),
+                        class: "hover:text-blue-600" %>
+                <% else %>
+                  <%= chapter.title %>
+                <% end %>
+              </h3>
+              <p class="text-sm text-gray-500">
+                <%= "%d:%02d" % chapter.duration_ms.divmod(60_000).then { |m, ms| [m, ms / 1000] } %>
+              </p>
+            </div>
           </div>
         <% end %>
       </div>

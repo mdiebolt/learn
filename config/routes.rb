@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     member do
       post :transcribe
     end
+    resources :chapters, only: [:show]
   end
 
   root "audiobooks#index"

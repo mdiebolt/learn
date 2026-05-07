@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+/* RSVP word display: a 3-column grid where the focal character column is
+ * sized to its content (auto) and the surrounding text fills the
+ * remaining space (1fr each), keeping the focal character pinned to the
+ * horizontal center regardless of word length. No per-character JS. */
+.rsvp-word {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: 100%;
+  max-width: 32rem;
+  white-space: pre;
+}
+
+.rsvp-before { text-align: right; }
+.rsvp-after  { text-align: left;  }
