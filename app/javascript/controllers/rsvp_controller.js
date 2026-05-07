@@ -11,12 +11,32 @@ export default class extends Controller {
   connect() {
     this.lastIndex = -1
     this.naturalWpm = this.computeNaturalWpm()
+    this.tick = this.tick.bind(this)
+    this.rafId = null
+  }
+
+  disconnect() {
+    this.stopTicking()
   }
 
   onLoadedMetadata() {
     if (this.audioTarget.currentTime < this.startMsValue / 1000) {
       this.audioTarget.currentTime = this.startMsValue / 1000
     }
+    this.updateWord()
+  }
+
+  onPlay() {
+    this.startTicking()
+  }
+
+  onPause() {
+    this.stopTicking()
+    this.updateWord()
+  }
+
+  onSeeked() {
+    this.updateWord()
   }
 
   onWpmChange(event) {
@@ -32,7 +52,25 @@ export default class extends Controller {
     return this.wordsValue.length / minutes
   }
 
-  onTimeUpdate() {
+  startTicking() {
+    if (this.rafId === null) {
+      this.rafId = requestAnimationFrame(this.tick)
+    }
+  }
+
+  stopTicking() {
+    if (this.rafId !== null) {
+      cancelAnimationFrame(this.rafId)
+      this.rafId = null
+    }
+  }
+
+  tick() {
+    this.updateWord()
+    this.rafId = requestAnimationFrame(this.tick)
+  }
+
+  updateWord() {
     const timeMs = this.audioTarget.currentTime * 1000
     const index = this.findWordIndex(timeMs)
 
