@@ -2,11 +2,14 @@
 
 /* RSVP word display: a 3-column grid where the focal character column is
  * sized to its content (auto) and the surrounding text fills the
- * remaining space (1fr each), keeping the focal character pinned to the
- * horizontal center regardless of word length. No per-character JS. */
+ * remaining space, keeping the focal character pinned to the horizontal
+ * center regardless of word length. The minmax(0, 1fr) bounds prevent the
+ * side columns from inflating to their min-content (which `white-space: pre`
+ * would force to the full text width, pushing the focal letter off-center);
+ * overflowing text extends visibly past the column edge instead. */
 .rsvp-word {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   width: 100%;
   max-width: 32rem;

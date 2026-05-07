@@ -9,7 +9,9 @@
          data-controller="rsvp"
          data-rsvp-words-value="<%= @words.to_json %>"
          data-rsvp-start-ms-value="<%= @chapter.start_time_ms %>"
-         data-rsvp-end-ms-value="<%= @chapter.end_time_ms %>">
+         data-rsvp-end-ms-value="<%= @chapter.end_time_ms %>"
+         data-rsvp-next-chapter-url-value="<%= @next_chapter ? audiobook_chapter_path(@audiobook, @next_chapter) : "" %>"
+         data-rsvp-autoplay-value="<%= @autoplay %>">
 
       <div class="rsvp-display bg-gray-800 rounded-lg h-48 flex items-center justify-center mb-8 relative font-mono text-5xl">
         <div class="rsvp-word">
@@ -29,11 +31,31 @@
         </select>
       </div>
 
+      <div class="flex items-center gap-3 bg-gray-800 rounded-lg p-3">
+        <button type="button"
+                data-action="click->rsvp#togglePlay"
+                data-rsvp-target="playButton"
+                aria-label="Play"
+                class="bg-gray-700 hover:bg-gray-600 rounded-full w-10 h-10 flex items-center justify-center text-lg shrink-0">
+          ▶
+        </button>
+        <span data-rsvp-target="currentTime" class="text-sm text-gray-400 tabular-nums w-12">0:00</span>
+        <input type="range"
+               min="0"
+               max="1000"
+               value="0"
+               step="1"
+               data-rsvp-target="seek"
+               data-action="input->rsvp#onSeek"
+               aria-label="Seek"
+               class="flex-1 accent-red-500">
+        <span data-rsvp-target="duration" class="text-sm text-gray-400 tabular-nums w-12 text-right">0:00</span>
+      </div>
+
       <audio data-rsvp-target="audio"
              data-action="play->rsvp#onPlay pause->rsvp#onPause seeked->rsvp#onSeeked loadedmetadata->rsvp#onLoadedMetadata"
-             controls
              preload="metadata"
-             class="w-full">
+             class="hidden">
         <source src="<%= rails_blob_path(@audiobook.audio) %>" type="<%= @audiobook.audio.content_type %>">
       </audio>
     </div>

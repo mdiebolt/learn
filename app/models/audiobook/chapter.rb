@@ -11,4 +11,8 @@ class Audiobook::Chapter < ApplicationRecord
   def duration_ms
     end_time_ms - start_time_ms
   end
+
+  def next_chapter
+    audiobook.chapters.where("position > ?", position).first
+  end
 end

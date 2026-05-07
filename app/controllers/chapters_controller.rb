@@ -15,6 +15,9 @@ class ChaptersController < ApplicationController
       else
         []
       end
+
+    @next_chapter = @chapter.next_chapter
+    @autoplay = params[:autoplay] == "1"
   end
 
   private
