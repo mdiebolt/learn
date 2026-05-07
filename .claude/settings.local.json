@@ -27,7 +27,20 @@
       "Bash(dropdb learn_test)",
       "Bash(bin/rails db:migrate:status)",
       "Bash(curl -sf http://localhost:3457/up)",
-      "Bash(pkill -f \"puma.*3457\")"
+      "Bash(pkill -f \"puma.*3457\")",
+      "Bash(bin/rails --version)",
+      "Bash(bin/rails db:drop db:create db:migrate)",
+      "Bash(bin/rails db:schema:dump)",
+      "Bash(bin/rails db:test:prepare)",
+      "Bash(bin/rails test *)",
+      "Bash(git stash *)",
+      "Bash(bin/rails db:drop db:create db:migrate db:test:prepare)",
+      "Bash(psql -d learn_development -c \"\\\\dt\")",
+      "Bash(git add *)",
+      "Bash(git restore *)",
+      "Bash(git commit -m ' *)",
+      "Bash(ffprobe -version)",
+      "Bash(bin/rails db:migrate db:test:prepare)"
     ]
   }
 }
