@@ -6,6 +6,7 @@ module Audiobook::AudioIngestion
   included do
     validates :audio, presence: true
     validate :audio_is_supported_format
+    after_create_commit :enqueue_ingestion
   end
 
   private
@@ -17,5 +18,9 @@ module Audiobook::AudioIngestion
     return if ACCEPTED_EXTENSIONS.include?(extension)
 
     errors.add(:audio, "must be an M4B or MP3 file")
+  end
+
+  def enqueue_ingestion
+    Audiobook::IngestJob.perform_later(id)
   end
 end

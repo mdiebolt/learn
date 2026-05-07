@@ -6,15 +6,29 @@
     <% if @audiobook.author.present? %>
       <p class="text-xl text-gray-600"><%= @audiobook.author %></p>
     <% end %>
-    <p class="text-sm text-gray-500 mt-2">Status: <%= @audiobook.status.humanize %></p>
   </header>
 
-  <div class="bg-white rounded-lg shadow p-6">
-    <p class="text-gray-600">
-      File: <%= @audiobook.audio.filename %>
-      (<%= number_to_human_size(@audiobook.audio.byte_size) %>)
-    </p>
-  </div>
+  <% case @audiobook.status.to_sym %>
+  <% when :pending, :processing %>
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
+      <p class="text-yellow-800">Detecting chapters... reload in a moment.</p>
+    </div>
+  <% when :failed %>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
+      <p class="text-red-800">Chapter detection failed. Try uploading again.</p>
+    </div>
+  <% when :ready %>
+    <div class="space-y-2">
+      <% @audiobook.chapters.each do |chapter| %>
+        <div class="bg-white rounded-lg shadow p-4">
+          <h3 class="font-medium"><%= chapter.title %></h3>
+          <p class="text-sm text-gray-500">
+            <%= "%d:%02d" % chapter.duration_ms.divmod(60_000).then { |m, ms| [m, ms / 1000] } %>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 
   <div class="mt-8">
     <%= button_to "Delete", @audiobook, method: :delete,
