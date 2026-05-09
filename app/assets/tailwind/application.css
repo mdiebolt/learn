@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Geist", sans-serif;
+  --font-mono: "Geist Mono", monospace;
+}
+
 /* RSVP word display: a 3-column grid where the focal character column is
  * sized to its content (auto) and the surrounding text fills the
  * remaining space, keeping the focal character pinned to the horizontal

@@ -1,19 +1,22 @@
-<div class="p-4 max-w-4xl mx-auto">
-  <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold">Your Audiobooks</h1>
-    <%= link_to "New Audiobook", new_audiobook_path, class: "bg-gray-950 text-white px-4 py-2 hover:bg-gray-950/83" %>
-  </div>
+<div class="max-w-3xl mx-auto px-6 py-12 sm:py-16">
+  <header class="flex items-end justify-between gap-6 mb-12">
+    <div>
+      <div class="font-mono text-[0.6875rem] uppercase tracking-wide text-white/40 mb-3">// library</div>
+      <h1 class="text-4xl sm:text-5xl font-medium tracking-tight">Your audiobooks</h1>
+    </div>
+    <%= link_to "+ new", new_audiobook_path, class: "font-mono text-[0.6875rem] uppercase tracking-wide text-white/80 hover:text-amber-400 hover:border-amber-400 border border-white/20 px-4 py-2.5 transition-colors shrink-0" %>
+  </header>
 
   <% if @audiobooks.any? %>
-    <div class="space-y-4">
+    <ul role="list" class="border-t border-white/10">
       <% @audiobooks.each do |audiobook| %>
         <%= render "audiobook", audiobook: audiobook %>
       <% end %>
-    </div>
+    </ul>
   <% else %>
-    <div class="text-center py-12 text-gray-500">
-      <p class="mb-4">No audiobooks yet.</p>
-      <%= link_to "Add your first audiobook", new_audiobook_path, class: "text-blue-600 hover:underline" %>
+    <div class="border border-white/10 px-6 py-16 text-center">
+      <p class="text-white/60 mb-5">No audiobooks yet.</p>
+      <%= link_to "+ add your first audiobook", new_audiobook_path, class: "font-mono text-[0.6875rem] uppercase tracking-wide text-amber-400 hover:underline" %>
     </div>
   <% end %>
 </div>
