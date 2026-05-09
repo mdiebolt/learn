@@ -9,4 +9,10 @@ class User < ApplicationRecord
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   validates :wpm, inclusion: { in: WPM_OPTIONS }
+
+  def reset_password(attrs)
+    transaction do
+      update(attrs).tap { |ok| sessions.destroy_all if ok }
+    end
+  end
 end

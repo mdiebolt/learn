@@ -1,5 +1,5 @@
 class AudiobooksController < ApplicationController
-  before_action :set_audiobook, only: [ :show, :destroy, :transcribe ]
+  before_action :set_audiobook, only: [ :show, :destroy ]
 
   def index
     @audiobooks = Current.user.audiobooks.recent
@@ -20,7 +20,7 @@ class AudiobooksController < ApplicationController
     @audiobook = Current.user.audiobooks.new(audiobook_params)
 
     if @audiobook.save
-      redirect_to @audiobook, notice: "Audiobook uploaded."
+      redirect_to @audiobook
     else
       render :new, status: :unprocessable_entity
     end
@@ -31,14 +31,6 @@ class AudiobooksController < ApplicationController
     redirect_to audiobooks_path, notice: "Audiobook deleted."
   end
 
-  def transcribe
-    transcript = @audiobook.transcript || @audiobook.create_transcript!
-    transcript.update!(status: :pending, progress_message: nil)
-    Audiobook::ScribeJob.perform_later(@audiobook.id)
-
-    redirect_to @audiobook, notice: "Transcription started. This may take a few minutes."
-  end
-
   private
 
   def set_audiobook
@@ -46,6 +38,6 @@ class AudiobooksController < ApplicationController
   end
 
   def audiobook_params
-    params.require(:audiobook).permit(:audio)
+    params.expect(audiobook: [ :audio ])
   end
 end

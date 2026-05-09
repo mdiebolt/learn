@@ -4,8 +4,11 @@ module Audiobook::AudioIngestion
   ACCEPTED_EXTENSIONS = %w[.m4b .mp3].freeze
 
   included do
+has_one_attached :audio
+
     validates :audio, presence: true
     validate :audio_is_supported_format
+
     after_create_commit :enqueue_ingestion
   end
 

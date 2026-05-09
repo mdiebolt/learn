@@ -14,11 +14,9 @@ Rails.application.routes.draw do
   # get "offline" => "rails/pwa#offline", as: :pwa_offline
 
   resources :audiobooks do
-    member do
-      post :transcribe
-    end
+    resource :transcription, module: :audiobook
     resources :chapters do
-      resource :progress, controller: "chapter_progresses"
+      resource :progress, module: :chapter
     end
   end
 

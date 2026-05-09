@@ -1,9 +1,8 @@
 class Audiobook < ApplicationRecord
-  include AudioIngestion
-  include ChapterDetection
+  include AudioIngestion, ChapterDetection
 
   belongs_to :user
-  has_one_attached :audio
+
   has_many :chapters, class_name: "Audiobook::Chapter", dependent: :destroy
   has_one :transcript, class_name: "Audiobook::Transcript", dependent: :destroy
 
@@ -13,5 +12,10 @@ class Audiobook < ApplicationRecord
 
   def display_title
     title.presence || audio.filename.to_s
+  end
+
+  def start_transcription!
+    (transcript || create_transcript!).update!(status: :pending, progress_message: nil)
+    Audiobook::ScribeJob.perform_later(id)
   end
 end

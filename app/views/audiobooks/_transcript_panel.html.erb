@@ -8,7 +8,7 @@
         List pricing is about $0.40/hour of audio.
       </p>
       <%= button_to "transcribe with scribe",
-            transcribe_audiobook_path(audiobook),
+            audiobook_transcription_path(audiobook),
             method: :post,
             form: { data: { turbo_confirm: "This will call ElevenLabs and incur cost. Continue?" } },
             class: "font-mono text-[0.6875rem] uppercase tracking-wide text-white hover:text-amber-400 hover:border-amber-400 border border-white/20 px-4 py-2.5 transition-colors cursor-pointer" %>
@@ -27,7 +27,7 @@
     <div class="border border-red-400/30 p-5 space-y-4">
       <p class="font-mono text-[0.6875rem] uppercase tracking-wide text-red-400">// transcription failed</p>
       <%= button_to "retry",
-            transcribe_audiobook_path(audiobook),
+            audiobook_transcription_path(audiobook),
             method: :post,
             class: "font-mono text-[0.6875rem] uppercase tracking-wide text-white hover:text-red-400 hover:border-red-400 border border-white/20 px-4 py-2.5 transition-colors cursor-pointer" %>
     </div>

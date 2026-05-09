@@ -16,4 +16,11 @@ class Audiobook::Chapter < ApplicationRecord
   def next_chapter
     audiobook.chapters.where("position > ?", position).first
   end
+
+  def words_for_playback
+    transcript = audiobook.transcript
+    return [] unless transcript&.ready?
+
+    transcript.words.between(start_time_ms, end_time_ms).for_playback
+  end
 end

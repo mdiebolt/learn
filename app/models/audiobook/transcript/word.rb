@@ -11,6 +11,16 @@ class Audiobook::Transcript::Word < ApplicationRecord
     where("start_time_ms <= ? AND end_time_ms > ?", time_ms, time_ms)
   }
 
+  scope :between, ->(from_ms, to_ms) {
+    where("start_time_ms >= ? AND start_time_ms < ?", from_ms, to_ms)
+  }
+
+  scope :for_playback, -> {
+    pluck(:text, :start_time_ms, :orp_index).map { |text, start_ms, orp|
+      { text: text, start: start_ms, orp: orp }
+    }
+  }
+
   def duration_ms
     end_time_ms - start_time_ms
   end
