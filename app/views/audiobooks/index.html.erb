@@ -4,11 +4,11 @@
       <div class="font-mono text-[0.6875rem] uppercase tracking-wide text-white/40 mb-3">// library</div>
       <h1 class="text-4xl sm:text-5xl font-medium tracking-tight">Your audiobooks</h1>
     </div>
-    <%= link_to "+ new", new_audiobook_path, class: "font-mono text-[0.6875rem] uppercase tracking-wide text-white/80 hover:text-amber-400 hover:border-amber-400 border border-white/20 px-4 py-2.5 transition-colors shrink-0" %>
+    <%= link_to "[+ new]", new_audiobook_path, class: "font-mono text-[0.6875rem] uppercase tracking-wide text-white/70 hover:text-amber-400 transition-colors shrink-0" %>
   </header>
 
   <% if @audiobooks.any? %>
-    <ul role="list" class="border-t border-white/10">
+    <ul role="list">
       <% @audiobooks.each do |audiobook| %>
         <%= render "audiobook", audiobook: audiobook %>
       <% end %>

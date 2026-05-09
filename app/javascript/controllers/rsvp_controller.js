@@ -14,7 +14,6 @@ export default class extends Controller {
     endMs: Number,
     nextChapterUrl: String,
     autoplay: Boolean,
-    preferencesUrl: String,
     progressUrl: String,
     initialProgressMs: Number
   }
@@ -24,19 +23,22 @@ export default class extends Controller {
     this.naturalWpm = this.computeNaturalWpm()
     this.tick = this.tick.bind(this)
     this.handleResize = this.handleResize.bind(this)
+    this.beaconProgress = this.beaconProgress.bind(this)
     this.rafId = null
     this.advanced = false
     this.lastSavedProgressMs = -1
     this.progressSaveInterval = null
     this.durationTarget.textContent = this.formatTime(this.endMsValue - this.startMsValue)
     window.addEventListener("resize", this.handleResize)
+    window.addEventListener("pagehide", this.beaconProgress)
   }
 
   disconnect() {
     this.stopTicking()
     this.stopProgressSaving()
-    this.saveProgress()
+    this.beaconProgress()
     window.removeEventListener("resize", this.handleResize)
+    window.removeEventListener("pagehide", this.beaconProgress)
   }
 
   // Re-position the current word when the frame's width changes, since
@@ -75,9 +77,8 @@ export default class extends Controller {
     }
   }
 
-  // Space toggles play/pause; F enters/exits fullscreen.
-  // Only act when nothing specific is focused — letting native key behavior
-  // (typing, opening a select, activating a focused button) win otherwise.
+  // Space toggles play/pause when nothing specific is focused — letting
+  // native key behavior (typing, opening a select, activating a button) win.
   onKeydown(event) {
     const active = document.activeElement
     if (active && active !== document.body) return
@@ -85,19 +86,6 @@ export default class extends Controller {
     if (event.code === "Space") {
       event.preventDefault()
       this.togglePlay()
-    } else if (event.key === "f" || event.key === "F") {
-      event.preventDefault()
-      this.toggleFullscreen()
-    }
-  }
-
-  // Fullscreens the document so the immersive view persists across
-  // Turbo Drive navigations to the next chapter.
-  toggleFullscreen() {
-    if (document.fullscreenElement) {
-      document.exitFullscreen()
-    } else {
-      document.documentElement.requestFullscreen().catch(() => {})
     }
   }
 
@@ -126,21 +114,14 @@ export default class extends Controller {
     this.saveProgress()
   }
 
-  onWpmChange(event) {
-    const wpm = Number(event.target.value)
-    this.audioTarget.playbackRate = this.computeRate(wpm)
-    this.savePreference(wpm)
+  setRate(event) {
+    this.audioTarget.playbackRate = this.computeRate(Number(event.target.value))
   }
 
   // playbackRate is browser-clamped to [0.25, 4.0].
   computeRate(wpm) {
     if (!this.naturalWpm) return 1
     return Math.min(4, Math.max(0.25, wpm / this.naturalWpm))
-  }
-
-  savePreference(wpm) {
-    if (!this.hasPreferencesUrlValue) return
-    this.fetchJson(this.preferencesUrlValue, "PATCH", { wpm })
   }
 
   startProgressSaving() {
@@ -164,11 +145,20 @@ export default class extends Controller {
     this.fetchJson(this.progressUrlValue, "PATCH", { progress_ms: progressMs, ...extra })
   }
 
-  fetchJson(url, method, body) {
+  // Beacon-style save for `pagehide` and `disconnect`. `keepalive: true`
+  // lets the request continue past page unload, which `sendBeacon` would
+  // also do but only via POST without custom headers (no CSRF token).
+  beaconProgress() {
+    if (!this.hasProgressUrlValue) return
+    const progressMs = Math.floor(this.audioTarget.currentTime * 1000)
+    this.fetchJson(this.progressUrlValue, "PATCH", { progress_ms: progressMs }, { keepalive: true })
+  }
+
+  fetchJson(url, method, body, options = {}) {
     const tokenEl = document.querySelector('meta[name="csrf-token"]')
     const headers = { "Content-Type": "application/json", "Accept": "application/json" }
     if (tokenEl) headers["X-CSRF-Token"] = tokenEl.content
-    fetch(url, { method, headers, body: JSON.stringify(body) }).catch(() => {})
+    fetch(url, { method, headers, body: JSON.stringify(body), ...options }).catch(() => {})
   }
 
   computeNaturalWpm() {

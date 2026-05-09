@@ -2,25 +2,30 @@
   <%= tag.div(
         class: "min-h-dvh grid place-items-center relative overflow-hidden select-none cursor-default",
         data: {
-          controller: "rsvp",
-          action: "click->rsvp#togglePlay keydown@window->rsvp#onKeydown",
+          controller: "rsvp fullscreen",
+          action: "click->rsvp#togglePlay keydown@window->rsvp#onKeydown keydown@window->fullscreen#onKeydown",
           rsvp_words_value: @words.to_json,
           rsvp_start_ms_value: @chapter.start_time_ms,
           rsvp_end_ms_value: @chapter.end_time_ms,
           rsvp_next_chapter_url_value: (@next_chapter ? audiobook_chapter_path(@audiobook, @next_chapter) : ""),
           rsvp_autoplay_value: @autoplay,
-          rsvp_preferences_url_value: preferences_path,
           rsvp_progress_url_value: audiobook_chapter_progress_path(@audiobook, @chapter),
           rsvp_initial_progress_ms_value: (@progress && !@progress.completed? ? @progress.progress_ms : 0)
         }) do %>
 
-    <%# Top hover zone — back link + chapter title fade in when cursor approaches the top edge. %>
+    <%# Top hover zone — back link, chapter title, and fullscreen fade in when cursor approaches the top edge. %>
     <div class="absolute top-0 left-0 right-0 h-24 group/header z-10">
-      <div class="absolute top-0 left-0 right-0 px-6 pt-6 flex items-start justify-between gap-6 text-[0.6875rem] font-mono uppercase tracking-wide tabular-nums transition-opacity duration-300 opacity-0 pointer-events-none group-hover/header:opacity-100 group-hover/header:pointer-events-auto">
-        <%= link_to @audiobook, class: "text-white/70 hover:text-amber-400 transition-colors" do %>
+      <div class="absolute top-0 left-0 right-0 px-6 pt-6 grid grid-cols-3 items-start gap-6 text-[0.6875rem] font-mono uppercase tracking-wide tabular-nums transition-opacity duration-300 opacity-0 pointer-events-none group-hover/header:opacity-100 group-hover/header:pointer-events-auto">
+        <%= link_to @audiobook, class: "justify-self-start text-white/70 hover:text-amber-400 transition-colors" do %>
           [← back]
         <% end %>
-        <div class="text-right max-w-[50ch] truncate text-white/40"><%= @chapter.title %></div>
+        <div class="justify-self-center text-center min-w-0 truncate text-white/40"><%= @chapter.title %></div>
+        <button type="button"
+                aria-label="Toggle fullscreen"
+                data-action="fullscreen#toggle"
+                class="justify-self-end bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer">
+          [fullscreen]
+        </button>
       </div>
     </div>
 
@@ -49,23 +54,17 @@
             <span class="text-white/25">/</span>
             <span data-rsvp-target="duration">0:00</span>
           </div>
-          <div class="flex items-center gap-4">
-            <button type="button"
-                    aria-label="Toggle fullscreen"
-                    data-action="rsvp#toggleFullscreen"
-                    class="bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer uppercase tracking-wide font-mono">
-              [fullscreen]
-            </button>
-            <select name="wpm"
-                    aria-label="Reading speed"
-                    data-rsvp-target="wpm"
-                    data-action="change->rsvp#onWpmChange"
-                    class="bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer uppercase tracking-wide font-mono">
-              <% User::WPM_OPTIONS.each do |wpm| %>
-                <option value="<%= wpm %>" class="bg-black text-white"<%= " selected" if wpm == Current.user.wpm %>><%= wpm %> wpm</option>
-              <% end %>
-            </select>
-          </div>
+          <select name="wpm"
+                  aria-label="Reading speed"
+                  data-rsvp-target="wpm"
+                  data-controller="autosave"
+                  data-autosave-url-value="<%= preferences_path %>"
+                  data-action="change->rsvp#setRate change->autosave#patch"
+                  class="bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer uppercase tracking-wide font-mono">
+            <% User::WPM_OPTIONS.each do |wpm| %>
+              <option value="<%= wpm %>" class="bg-black text-white"<%= " selected" if wpm == Current.user.wpm %>><%= wpm %> wpm</option>
+            <% end %>
+          </select>
         </div>
       </footer>
     </div>

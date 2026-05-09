@@ -1,0 +1,32 @@
+<% transcript = audiobook.transcript %>
+<% badge_id = dom_id(audiobook, :transcript_badge) %>
+<% case transcript&.status&.to_sym %>
+<% when nil, :pending %>
+  <%= button_to audiobook_transcription_path(audiobook),
+        method: :post,
+        form: { id: badge_id, data: { turbo_confirm: "Run ElevenLabs Scribe? This incurs cost (~$0.40/hour of audio)." } },
+        class: "inline-flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-wide text-white/70 hover:text-amber-400 border border-white/20 hover:border-amber-400 px-3 py-1.5 transition-colors cursor-pointer" do %>
+    <span class="size-1.5 rounded-full bg-white/40"></span>
+    transcribe
+  <% end %>
+<% when :transcribing %>
+  <div id="<%= badge_id %>"
+       class="inline-flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-wide text-amber-400 border border-amber-400/40 px-3 py-1.5">
+    <span class="size-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+    <%= transcript.progress_message.presence || "transcribing…" %>
+  </div>
+<% when :ready %>
+  <div id="<%= badge_id %>"
+       class="inline-flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-wide text-amber-400 border border-amber-400/40 px-3 py-1.5">
+    <span class="size-1.5 rounded-full bg-amber-400"></span>
+    ready
+  </div>
+<% when :failed %>
+  <%= button_to audiobook_transcription_path(audiobook),
+        method: :post,
+        form: { id: badge_id },
+        class: "inline-flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-wide text-red-400 hover:text-white border border-red-400/40 hover:border-red-400 px-3 py-1.5 transition-colors cursor-pointer" do %>
+    <span class="size-1.5 rounded-full bg-red-400"></span>
+    retry
+  <% end %>
+<% end %>
