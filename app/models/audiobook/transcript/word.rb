@@ -1,5 +1,5 @@
 class Audiobook::Transcript::Word < ApplicationRecord
-  include WordPositioning
+  include OptimalRecognitionPoint
 
   self.table_name = "audiobook_transcript_words"
 

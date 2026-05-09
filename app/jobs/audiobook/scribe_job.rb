@@ -8,9 +8,9 @@ class Audiobook::ScribeJob < ApplicationJob
     audiobook = Audiobook.find(audiobook_id)
     transcript = audiobook.transcript || audiobook.create_transcript!
 
-    transcript.update!(status: :transcribing)
+    transcript.transcribing!
     transcript.populate_from_scribe!(force: force)
-    transcript.update!(status: :ready)
+    transcript.ready!
   rescue => e
     Audiobook.find_by(id: audiobook_id)&.transcript&.update(status: :failed)
     Rails.logger.error("[Audiobook::ScribeJob] #{audiobook_id} failed: #{e.message}")

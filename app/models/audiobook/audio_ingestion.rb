@@ -7,14 +7,14 @@ module Audiobook::AudioIngestion
     has_one_attached :audio
 
     validates :audio, presence: true
-    validate :audio_is_supported_format
+    validate :format_supported
 
     after_create_commit :enqueue_ingestion
   end
 
   private
 
-  def audio_is_supported_format
+  def format_supported
     return unless audio.attached?
 
     extension = File.extname(audio.filename.to_s).downcase
