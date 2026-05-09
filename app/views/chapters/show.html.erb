@@ -1,60 +1,64 @@
-<% wpm_options = [150, 200, 250, 300, 400, 500, 600, 700, 800] %>
-
 <% if @words.any? %>
   <%= tag.div(
-        class: "min-h-dvh grid place-items-center relative overflow-hidden group/page",
+        class: "min-h-dvh grid place-items-center relative overflow-hidden select-none cursor-default",
         data: {
           controller: "rsvp",
+          action: "click->rsvp#togglePlay",
           rsvp_words_value: @words.to_json,
           rsvp_start_ms_value: @chapter.start_time_ms,
           rsvp_end_ms_value: @chapter.end_time_ms,
           rsvp_next_chapter_url_value: (@next_chapter ? audiobook_chapter_path(@audiobook, @next_chapter) : ""),
-          rsvp_autoplay_value: @autoplay
+          rsvp_autoplay_value: @autoplay,
+          rsvp_preferences_url_value: preferences_path
         }) do %>
-    <header class="absolute top-0 left-0 right-0 px-6 pt-6 flex items-start justify-between text-[0.6875rem] tabular-nums font-mono text-white/35 transition-opacity duration-500 group-hover/page:opacity-100 opacity-30 z-10">
-      <%= link_to @audiobook, class: "hover:text-white transition-colors uppercase tracking-wide" do %>
-        ← back
-      <% end %>
-      <div class="uppercase tracking-wide text-right max-w-[50ch] truncate"><%= @chapter.title %></div>
-    </header>
 
-    <div class="rsvp-word relative mx-auto text-[clamp(4.5rem,16vw,14rem)] font-medium tracking-tight leading-none">
-      <span class="rsvp-before text-white" data-rsvp-target="before"></span><span class="rsvp-focal text-amber-400" data-rsvp-target="focal"></span><span class="rsvp-after text-white" data-rsvp-target="after"></span>
-      <span aria-hidden="true" class="absolute left-1/2 -top-[0.35em] h-[0.25em] w-px bg-amber-400/70 -translate-x-1/2"></span>
-      <span aria-hidden="true" class="absolute left-1/2 -bottom-[0.35em] h-[0.25em] w-px bg-amber-400/70 -translate-x-1/2"></span>
+    <%# Top hover zone — back link + chapter title fade in when cursor approaches the top edge. %>
+    <div class="absolute top-0 left-0 right-0 h-24 group/header z-10">
+      <div class="absolute top-0 left-0 right-0 px-6 pt-6 flex items-start justify-between gap-6 text-[0.6875rem] font-mono uppercase tracking-wide tabular-nums transition-opacity duration-300 opacity-0 pointer-events-none group-hover/header:opacity-100 group-hover/header:pointer-events-auto">
+        <%= link_to @audiobook, class: "text-white/70 hover:text-amber-400 transition-colors" do %>
+          [← back]
+        <% end %>
+        <div class="text-right max-w-[50ch] truncate text-white/40"><%= @chapter.title %></div>
+      </div>
     </div>
 
-    <footer class="absolute left-0 right-0 bottom-0 transition-opacity duration-500 group-hover/page:opacity-100 opacity-25 z-10">
-      <input type="range"
-             min="0" max="1000" value="0" step="1"
-             name="seek"
-             aria-label="Seek"
-             data-rsvp-target="seek"
-             data-action="input->rsvp#onSeek"
-             class="block w-full appearance-none bg-transparent accent-amber-400 cursor-pointer">
-      <div class="px-6 py-4 flex items-center justify-between text-[0.6875rem] font-mono tabular-nums text-white/60 uppercase tracking-wide">
-        <div class="flex items-center gap-4">
-          <button type="button"
-                  data-action="click->rsvp#togglePlay"
-                  data-rsvp-target="playButton"
-                  aria-label="Play"
-                  class="text-white hover:text-amber-400 transition-colors text-sm leading-none">
-            ▶
-          </button>
-          <span data-rsvp-target="currentTime">0:00</span>
-          <span class="text-white/30">/</span>
-          <span data-rsvp-target="duration">0:00</span>
+    <%# Word display: focal letter shifted ~33% from left (asymmetric grid in CSS). %>
+    <div class="rsvp-word mx-auto text-[clamp(3.5rem,11vw,9rem)] font-medium leading-none">
+      <span class="rsvp-tick rsvp-tick-top" aria-hidden="true"></span>
+      <span class="rsvp-before text-white" data-rsvp-target="before"></span>
+      <span class="rsvp-focal text-amber-400" data-rsvp-target="focal"></span>
+      <span class="rsvp-after text-white" data-rsvp-target="after"></span>
+      <span class="rsvp-tick rsvp-tick-bottom" aria-hidden="true"></span>
+    </div>
+
+    <%# Bottom hover zone — scrubber and time/wpm fade in when cursor approaches the bottom edge. %>
+    <div class="absolute bottom-0 left-0 right-0 h-32 group/footer z-10">
+      <footer class="absolute bottom-0 left-0 right-0 transition-opacity duration-300 opacity-0 pointer-events-none group-hover/footer:opacity-100 group-hover/footer:pointer-events-auto">
+        <input type="range"
+               min="0" max="1000" value="0" step="1"
+               name="seek"
+               aria-label="Seek"
+               data-rsvp-target="seek"
+               data-action="input->rsvp#onSeek"
+               class="rsvp-scrubber">
+        <div class="px-6 py-4 flex items-center justify-between text-[0.6875rem] font-mono uppercase tracking-wide tabular-nums text-white/50">
+          <div class="flex items-center gap-2">
+            <span data-rsvp-target="currentTime">0:00</span>
+            <span class="text-white/25">/</span>
+            <span data-rsvp-target="duration">0:00</span>
+          </div>
+          <select name="wpm"
+                  aria-label="Reading speed"
+                  data-rsvp-target="wpm"
+                  data-action="change->rsvp#onWpmChange"
+                  class="bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer uppercase tracking-wide font-mono">
+            <% User::WPM_OPTIONS.each do |wpm| %>
+              <option value="<%= wpm %>" class="bg-black text-white"<%= " selected" if wpm == Current.user.wpm %>><%= wpm %> wpm</option>
+            <% end %>
+          </select>
         </div>
-        <select name="wpm"
-                aria-label="Reading speed"
-                data-action="change->rsvp#onWpmChange"
-                class="bg-transparent border-0 text-white/60 hover:text-white focus:outline-none cursor-pointer uppercase tracking-wide font-mono">
-          <% wpm_options.each do |wpm| %>
-            <option value="<%= wpm %>" class="bg-black text-white"><%= wpm %> wpm</option>
-          <% end %>
-        </select>
-      </div>
-    </footer>
+      </footer>
+    </div>
 
     <%= tag.audio(
           preload: "metadata",
@@ -67,10 +71,8 @@
     <% end %>
   <% end %>
 <% else %>
-  <div class="px-8 py-16 text-center">
-    <p class="font-mono text-[0.6875rem] uppercase tracking-wide text-white/60">
-      // transcript not ready yet ·
-      <%= link_to "back to audiobook", @audiobook, class: "text-amber-400 hover:underline" %>
-    </p>
+  <div class="px-8 py-16 text-center space-y-4">
+    <p class="font-mono text-[0.6875rem] uppercase tracking-wide text-white/60">// transcript not ready yet</p>
+    <%= link_to "[← back to audiobook]", @audiobook, class: "font-mono text-[0.6875rem] uppercase tracking-wide text-white/70 hover:text-amber-400 transition-colors" %>
   </div>
 <% end %>

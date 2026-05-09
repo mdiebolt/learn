@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   resource :session
+  resource :preferences
   resources :passwords
   resources :registrations
 
@@ -16,7 +17,7 @@ Rails.application.routes.draw do
     member do
       post :transcribe
     end
-    resources :chapters, only: [ :show ]
+    resources :chapters
   end
 
   root "audiobooks#index"

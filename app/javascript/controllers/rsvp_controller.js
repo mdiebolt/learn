@@ -3,14 +3,15 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [
     "audio", "before", "focal", "after",
-    "playButton", "currentTime", "duration", "seek"
+    "currentTime", "duration", "seek", "wpm"
   ]
   static values = {
     words: Array,
     startMs: Number,
     endMs: Number,
     nextChapterUrl: String,
-    autoplay: Boolean
+    autoplay: Boolean,
+    preferencesUrl: String
   }
 
   connect() {
@@ -30,6 +31,9 @@ export default class extends Controller {
     if (this.audioTarget.currentTime < this.startMsValue / 1000) {
       this.audioTarget.currentTime = this.startMsValue / 1000
     }
+    if (this.hasWpmTarget) {
+      this.audioTarget.playbackRate = this.computeRate(Number(this.wpmTarget.value))
+    }
     this.updateProgress()
     this.updateWord()
     if (this.autoplayValue) {
@@ -37,7 +41,11 @@ export default class extends Controller {
     }
   }
 
-  togglePlay() {
+  // Bound to the page-level wrapper so clicking anywhere toggles playback.
+  // Real controls (links, buttons, scrubber, select, labels) opt out via
+  // `closest`, so clicks on them don't double-fire as toggle.
+  togglePlay(event) {
+    if (event && event.target.closest("a, button, input, select, label, [data-rsvp-no-toggle]")) return
     if (this.audioTarget.paused) {
       this.audioTarget.play()
     } else {
@@ -46,14 +54,10 @@ export default class extends Controller {
   }
 
   onPlay() {
-    this.playButtonTarget.textContent = "⏸"
-    this.playButtonTarget.setAttribute("aria-label", "Pause")
     this.startTicking()
   }
 
   onPause() {
-    this.playButtonTarget.textContent = "▶"
-    this.playButtonTarget.setAttribute("aria-label", "Play")
     this.stopTicking()
     this.updateWord()
     this.updateProgress()
@@ -72,9 +76,26 @@ export default class extends Controller {
 
   onWpmChange(event) {
     const wpm = Number(event.target.value)
-    // Browsers typically support playbackRate in [0.25, 4.0].
-    const rate = Math.min(4, Math.max(0.25, wpm / this.naturalWpm))
-    this.audioTarget.playbackRate = rate
+    this.audioTarget.playbackRate = this.computeRate(wpm)
+    this.savePreference(wpm)
+  }
+
+  // playbackRate is browser-clamped to [0.25, 4.0].
+  computeRate(wpm) {
+    if (!this.naturalWpm) return 1
+    return Math.min(4, Math.max(0.25, wpm / this.naturalWpm))
+  }
+
+  savePreference(wpm) {
+    if (!this.hasPreferencesUrlValue) return
+    const tokenEl = document.querySelector('meta[name="csrf-token"]')
+    const headers = { "Content-Type": "application/json", "Accept": "application/json" }
+    if (tokenEl) headers["X-CSRF-Token"] = tokenEl.content
+    fetch(this.preferencesUrlValue, {
+      method: "PATCH",
+      headers,
+      body: JSON.stringify({ wpm })
+    }).catch(() => {})
   }
 
   computeNaturalWpm() {
