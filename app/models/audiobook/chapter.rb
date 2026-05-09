@@ -2,6 +2,7 @@ class Audiobook::Chapter < ApplicationRecord
   self.table_name = "audiobook_chapters"
 
   belongs_to :audiobook
+  has_many :progresses, class_name: "ChapterProgress", dependent: :destroy
 
   validates :title, presence: true
   validates :start_time_ms, :end_time_ms, :position, presence: true

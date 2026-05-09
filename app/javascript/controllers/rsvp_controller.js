@@ -1,8 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 
+const PROGRESS_SAVE_INTERVAL_MS = 5000
+
 export default class extends Controller {
   static targets = [
-    "audio", "before", "focal", "after",
+    "audio", "word",
     "currentTime", "duration", "seek", "wpm"
   ]
   static values = {
@@ -11,24 +13,43 @@ export default class extends Controller {
     endMs: Number,
     nextChapterUrl: String,
     autoplay: Boolean,
-    preferencesUrl: String
+    preferencesUrl: String,
+    progressUrl: String,
+    initialProgressMs: Number
   }
 
   connect() {
     this.lastIndex = -1
     this.naturalWpm = this.computeNaturalWpm()
     this.tick = this.tick.bind(this)
+    this.handleResize = this.handleResize.bind(this)
     this.rafId = null
     this.advanced = false
+    this.lastSavedProgressMs = -1
+    this.progressSaveInterval = null
     this.durationTarget.textContent = this.formatTime(this.endMsValue - this.startMsValue)
+    window.addEventListener("resize", this.handleResize)
   }
 
   disconnect() {
     this.stopTicking()
+    this.stopProgressSaving()
+    this.saveProgress()
+    window.removeEventListener("resize", this.handleResize)
+  }
+
+  // Re-position the current word when the frame's width changes, since
+  // `style.left` is written in pixels relative to the frame.
+  handleResize() {
+    const word = this.lastIndex >= 0 ? this.wordsValue[this.lastIndex] : null
+    if (word) this.render(word)
   }
 
   onLoadedMetadata() {
-    if (this.audioTarget.currentTime < this.startMsValue / 1000) {
+    const progressMs = this.initialProgressMsValue
+    if (progressMs > this.startMsValue && progressMs < this.endMsValue) {
+      this.audioTarget.currentTime = progressMs / 1000
+    } else if (this.audioTarget.currentTime < this.startMsValue / 1000) {
       this.audioTarget.currentTime = this.startMsValue / 1000
     }
     if (this.hasWpmTarget) {
@@ -55,12 +76,15 @@ export default class extends Controller {
 
   onPlay() {
     this.startTicking()
+    this.startProgressSaving()
   }
 
   onPause() {
     this.stopTicking()
+    this.stopProgressSaving()
     this.updateWord()
     this.updateProgress()
+    this.saveProgress()
   }
 
   onSeek(event) {
@@ -72,6 +96,7 @@ export default class extends Controller {
   onSeeked() {
     this.updateProgress()
     this.updateWord()
+    this.saveProgress()
   }
 
   onWpmChange(event) {
@@ -88,14 +113,35 @@ export default class extends Controller {
 
   savePreference(wpm) {
     if (!this.hasPreferencesUrlValue) return
+    this.fetchJson(this.preferencesUrlValue, "PATCH", { wpm })
+  }
+
+  startProgressSaving() {
+    if (this.progressSaveInterval !== null) return
+    this.progressSaveInterval = setInterval(() => this.saveProgress(), PROGRESS_SAVE_INTERVAL_MS)
+  }
+
+  stopProgressSaving() {
+    if (this.progressSaveInterval !== null) {
+      clearInterval(this.progressSaveInterval)
+      this.progressSaveInterval = null
+    }
+  }
+
+  saveProgress(extra = {}) {
+    if (!this.hasProgressUrlValue) return
+    const progressMs = Math.floor(this.audioTarget.currentTime * 1000)
+    const isCompletion = "completed" in extra
+    if (progressMs === this.lastSavedProgressMs && !isCompletion) return
+    this.lastSavedProgressMs = progressMs
+    this.fetchJson(this.progressUrlValue, "PATCH", { progress_ms: progressMs, ...extra })
+  }
+
+  fetchJson(url, method, body) {
     const tokenEl = document.querySelector('meta[name="csrf-token"]')
     const headers = { "Content-Type": "application/json", "Accept": "application/json" }
     if (tokenEl) headers["X-CSRF-Token"] = tokenEl.content
-    fetch(this.preferencesUrlValue, {
-      method: "PATCH",
-      headers,
-      body: JSON.stringify({ wpm })
-    }).catch(() => {})
+    fetch(url, { method, headers, body: JSON.stringify(body) }).catch(() => {})
   }
 
   computeNaturalWpm() {
@@ -151,8 +197,11 @@ export default class extends Controller {
     if (this.advanced) return
     this.advanced = true
     this.stopTicking()
+    this.stopProgressSaving()
     this.audioTarget.currentTime = this.endMsValue / 1000
     if (!this.audioTarget.paused) this.audioTarget.pause()
+
+    this.saveProgress({ completed: true })
 
     if (this.nextChapterUrlValue) {
       const url = new URL(this.nextChapterUrlValue, window.location.origin)
@@ -179,20 +228,40 @@ export default class extends Controller {
     return lo
   }
 
+  // Render the word as a single inline text run with the focal letter
+  // wrapped in an inner span (color only). Then translate the whole run
+  // so the focal letter's center sits on the frame's 1/3 anchor — the
+  // same X as `.rsvp-line`. The word's natural kerning and letter-
+  // spacing are never disturbed; only the run as a whole moves.
   render(word) {
     if (!word) {
-      this.beforeTarget.textContent = ""
-      this.focalTarget.textContent = ""
-      this.afterTarget.textContent = ""
+      this.wordTarget.textContent = ""
+      this.wordTarget.style.left = ""
       return
     }
 
     const { text, orp } = word
     const safeOrp = Math.min(orp || 0, Math.max(text.length - 1, 0))
 
-    this.beforeTarget.textContent = text.slice(0, safeOrp)
-    this.focalTarget.textContent = text[safeOrp] || ""
-    this.afterTarget.textContent = text.slice(safeOrp + 1)
+    this.wordTarget.textContent = ""
+
+    if (safeOrp > 0) {
+      this.wordTarget.appendChild(document.createTextNode(text.slice(0, safeOrp)))
+    }
+
+    const focalSpan = document.createElement("span")
+    focalSpan.className = "rsvp-focal"
+    focalSpan.textContent = text[safeOrp] || ""
+    this.wordTarget.appendChild(focalSpan)
+
+    if (safeOrp + 1 < text.length) {
+      this.wordTarget.appendChild(document.createTextNode(text.slice(safeOrp + 1)))
+    }
+
+    const frame = this.wordTarget.parentElement
+    if (!frame) return
+    const focalCenter = focalSpan.offsetLeft + focalSpan.offsetWidth / 2
+    this.wordTarget.style.left = `${frame.offsetWidth / 3 - focalCenter}px`
   }
 
   formatTime(ms) {

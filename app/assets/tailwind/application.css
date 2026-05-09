@@ -5,44 +5,57 @@
   --font-mono: "Geist Mono", monospace;
 }
 
-/* RSVP word display: a 3-column / 3-row grid.
+/* RSVP word display.
  *
- * Columns are asymmetric (1fr / auto / 2fr) so the focal letter sits ~33%
- * from the left rather than dead-center — anchoring the eye like classic
- * RSVP guidance and giving longer words more room to extend rightward.
+ * The whole word renders as a single inline text run inside `.rsvp-word-text`
+ * so kerning and letter-spacing are preserved end-to-end — no split into
+ * before/focal/after, no padding around the focal glyph, no per-letter
+ * spacing adjustment. The focal letter is wrapped in an inner `<span>`
+ * for color only.
  *
- * Rows reserve thin tracks above and below the word for the focal-column
- * hairline ticks. The focal letter and surrounding spans live in row 2;
- * tick spans are placed in row 1 / row 3, column 2, so they always track
- * the focal letter horizontally regardless of word length.
+ * `.rsvp-word` is the positioning frame: `position: relative`,
+ * `max-width: 48rem`, centered on the page. `.rsvp-word-text` is
+ * `position: absolute` inside it; the controller measures the focal
+ * span's offset after each render and writes `style.left` so that the
+ * focal letter's center lands on the frame's 1/3 anchor (the line X).
  *
- * The minmax(0, *fr) bounds prevent side columns from inflating to their
- * min-content (which `white-space: pre` would force to the full text
- * width, pushing the focal letter off its anchor); overflowing text
- * extends visibly past the column edge instead. */
+ * `letter-spacing` is set once on the frame and inherited; nothing in the
+ * layout ever changes it per letter, per word, or per focal width. */
 .rsvp-word {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 2fr);
-  grid-template-rows: 0.25em auto 0.25em;
-  align-items: center;
+  position: relative;
   width: 100%;
   max-width: 48rem;
+  margin-inline: auto;
+  height: 1em;
+  letter-spacing: -0.025em;
+}
+
+.rsvp-word-text {
+  position: absolute;
+  top: 0;
   white-space: pre;
 }
 
-.rsvp-before { grid-row: 2; grid-column: 1; text-align: right; }
-.rsvp-focal  { grid-row: 2; grid-column: 2; }
-.rsvp-after  { grid-row: 2; grid-column: 3; text-align: left; }
-
-.rsvp-tick {
-  grid-column: 2;
-  justify-self: center;
-  width: 1px;
-  height: 100%;
-  background: rgb(251 191 36 / 0.7);
+.rsvp-focal {
+  color: rgb(251 191 36);
 }
-.rsvp-tick-top    { grid-row: 1; }
-.rsvp-tick-bottom { grid-row: 3; }
+
+/* Full-viewport vertical reading guide pinned to the focal column.
+ *
+ * For viewports <= 48rem (the .rsvp-word max-width), the .rsvp-word fills
+ * the page so its 1/3 anchor sits at viewport * (1/3). For wider
+ * viewports the .rsvp-word centers within the page at width 48rem, and
+ * its 1/3 anchor sits at `viewport/2 - 8rem`. `max(...)` picks whichever
+ * formula applies. */
+.rsvp-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: max(33.333%, calc(50% - 8rem));
+  width: 1px;
+  background: rgb(251 191 36 / 0.2);
+  pointer-events: none;
+}
 
 /* Faint amber scrubber: 1px track at alpha 0.25 by default, alpha 0.5
  * on direct hover; small amber thumb that grows when grabbed. */

@@ -17,7 +17,9 @@ Rails.application.routes.draw do
     member do
       post :transcribe
     end
-    resources :chapters
+    resources :chapters do
+      resource :progress, controller: "chapter_progresses"
+    end
   end
 
   root "audiobooks#index"

@@ -9,7 +9,9 @@
           rsvp_end_ms_value: @chapter.end_time_ms,
           rsvp_next_chapter_url_value: (@next_chapter ? audiobook_chapter_path(@audiobook, @next_chapter) : ""),
           rsvp_autoplay_value: @autoplay,
-          rsvp_preferences_url_value: preferences_path
+          rsvp_preferences_url_value: preferences_path,
+          rsvp_progress_url_value: audiobook_chapter_progress_path(@audiobook, @chapter),
+          rsvp_initial_progress_ms_value: (@progress && !@progress.completed? ? @progress.progress_ms : 0)
         }) do %>
 
     <%# Top hover zone — back link + chapter title fade in when cursor approaches the top edge. %>
@@ -22,13 +24,13 @@
       </div>
     </div>
 
-    <%# Word display: focal letter shifted ~33% from left (asymmetric grid in CSS). %>
-    <div class="rsvp-word mx-auto text-[clamp(3.5rem,11vw,9rem)] font-medium leading-none">
-      <span class="rsvp-tick rsvp-tick-top" aria-hidden="true"></span>
-      <span class="rsvp-before text-white" data-rsvp-target="before"></span>
-      <span class="rsvp-focal text-amber-400" data-rsvp-target="focal"></span>
-      <span class="rsvp-after text-white" data-rsvp-target="after"></span>
-      <span class="rsvp-tick rsvp-tick-bottom" aria-hidden="true"></span>
+    <%# Full-viewport reading guide, pinned to the focal column. %>
+    <div class="rsvp-line" aria-hidden="true"></div>
+
+    <%# Word display: rendered as a single inline text run; the controller %>
+    <%# translates it so the focal letter's center lands on the line X. %>
+    <div class="rsvp-word text-[clamp(3.5rem,11vw,9rem)] font-medium leading-none">
+      <span class="rsvp-word-text" data-rsvp-target="word"></span>
     </div>
 
     <%# Bottom hover zone — scrubber and time/wpm fade in when cursor approaches the bottom edge. %>

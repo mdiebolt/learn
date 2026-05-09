@@ -18,6 +18,7 @@ class ChaptersController < ApplicationController
 
     @next_chapter = @chapter.next_chapter
     @autoplay = params[:autoplay] == "1"
+    @progress = Current.user.chapter_progresses.find_by(chapter_id: @chapter.id)
   end
 
   private
