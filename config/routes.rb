@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   resources :audiobooks do
     resource :transcription, module: :audiobook
     resources :chapters do
-      resource :progress, module: :chapter
+      resource :progress, module: "audiobook/chapter"
     end
   end
 

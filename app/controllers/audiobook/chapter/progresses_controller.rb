@@ -1,4 +1,4 @@
-class Chapter::ProgressesController < ApplicationController
+class Audiobook::Chapter::ProgressesController < ApplicationController
   before_action :set_chapter
 
   def update

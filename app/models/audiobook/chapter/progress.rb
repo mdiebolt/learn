@@ -1,4 +1,8 @@
-class ChapterProgress < ApplicationRecord
+class Audiobook::Chapter::Progress < ApplicationRecord
+  self.table_name = "audiobook_chapter_progresses"
+
+  attribute :completed, :boolean
+
   belongs_to :user
   belongs_to :chapter, class_name: "Audiobook::Chapter"
 
@@ -15,8 +19,8 @@ class ChapterProgress < ApplicationRecord
   end
 
   def record(attrs)
-    self.progress_ms = attrs[:progress_ms].to_i if attrs.key?(:progress_ms)
-    self.completed_at ||= Time.current if attrs[:completed].to_s == "true"
+    assign_attributes(attrs.slice(:progress_ms, :completed))
+    self.completed_at ||= Time.current if completed
     save
   end
 end

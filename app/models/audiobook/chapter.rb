@@ -2,7 +2,7 @@ class Audiobook::Chapter < ApplicationRecord
   self.table_name = "audiobook_chapters"
 
   belongs_to :audiobook
-  has_many :progresses, class_name: "ChapterProgress", dependent: :destroy
+  has_many :progresses, dependent: :destroy
 
   validates :title, presence: true
   validates :start_time_ms, :end_time_ms, :position, presence: true
@@ -13,14 +13,16 @@ class Audiobook::Chapter < ApplicationRecord
     end_time_ms - start_time_ms
   end
 
-  def next_chapter
+  def following
     audiobook.chapters.where("position > ?", position).first
   end
 
-  def words_for_playback
+  def playback_words
     transcript = audiobook.transcript
     return [] unless transcript&.ready?
 
-    transcript.words.between(start_time_ms, end_time_ms).for_playback
+    Audiobook::Transcript::Word.playback_payload(
+      transcript.words.between(start_time_ms, end_time_ms)
+    )
   end
 end
