@@ -19,9 +19,9 @@ class Audiobook::Transcript < ApplicationRecord
 
   def broadcast_progress
     broadcast_replace_to(
-      [ audiobook, :transcript_panel ],
-      target: ActionView::RecordIdentifier.dom_id(audiobook, :transcript_panel),
-      partial: "audiobooks/transcript_panel",
+      [ audiobook, :transcript_badge ],
+      target: ActionView::RecordIdentifier.dom_id(audiobook, :transcript_badge),
+      partial: "audiobooks/transcript_badge",
       locals: { audiobook: audiobook }
     )
   end

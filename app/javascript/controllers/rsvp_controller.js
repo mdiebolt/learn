@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 const PROGRESS_SAVE_INTERVAL_MS = 5000
+const WORD_LEAD_MS = 75
 
 export default class extends Controller {
   static targets = [
@@ -71,6 +72,32 @@ export default class extends Controller {
       this.audioTarget.play()
     } else {
       this.audioTarget.pause()
+    }
+  }
+
+  // Space toggles play/pause; F enters/exits fullscreen.
+  // Only act when nothing specific is focused — letting native key behavior
+  // (typing, opening a select, activating a focused button) win otherwise.
+  onKeydown(event) {
+    const active = document.activeElement
+    if (active && active !== document.body) return
+
+    if (event.code === "Space") {
+      event.preventDefault()
+      this.togglePlay()
+    } else if (event.key === "f" || event.key === "F") {
+      event.preventDefault()
+      this.toggleFullscreen()
+    }
+  }
+
+  // Fullscreens the document so the immersive view persists across
+  // Turbo Drive navigations to the next chapter.
+  toggleFullscreen() {
+    if (document.fullscreenElement) {
+      document.exitFullscreen()
+    } else {
+      document.documentElement.requestFullscreen().catch(() => {})
     }
   }
 
@@ -177,7 +204,7 @@ export default class extends Controller {
       return
     }
 
-    const index = this.findWordIndex(timeMs)
+    const index = this.findWordIndex(timeMs + WORD_LEAD_MS)
 
     if (index !== this.lastIndex) {
       this.lastIndex = index
@@ -211,9 +238,13 @@ export default class extends Controller {
   }
 
   // Binary search for the last word whose `start` is <= timeMs.
+  // When timeMs is before the first word (typical at a fresh chapter load,
+  // since chapter.start_time_ms can precede the first word's start), we
+  // surface word 0 so the reader sees the upcoming word instead of a blank.
   findWordIndex(timeMs) {
     const words = this.wordsValue
-    if (words.length === 0 || timeMs < words[0].start) return -1
+    if (words.length === 0) return -1
+    if (timeMs < words[0].start) return 0
 
     let lo = 0
     let hi = words.length - 1

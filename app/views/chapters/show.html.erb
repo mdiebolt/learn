@@ -3,7 +3,7 @@
         class: "min-h-dvh grid place-items-center relative overflow-hidden select-none cursor-default",
         data: {
           controller: "rsvp",
-          action: "click->rsvp#togglePlay",
+          action: "click->rsvp#togglePlay keydown@window->rsvp#onKeydown",
           rsvp_words_value: @words.to_json,
           rsvp_start_ms_value: @chapter.start_time_ms,
           rsvp_end_ms_value: @chapter.end_time_ms,
@@ -49,15 +49,23 @@
             <span class="text-white/25">/</span>
             <span data-rsvp-target="duration">0:00</span>
           </div>
-          <select name="wpm"
-                  aria-label="Reading speed"
-                  data-rsvp-target="wpm"
-                  data-action="change->rsvp#onWpmChange"
-                  class="bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer uppercase tracking-wide font-mono">
-            <% User::WPM_OPTIONS.each do |wpm| %>
-              <option value="<%= wpm %>" class="bg-black text-white"<%= " selected" if wpm == Current.user.wpm %>><%= wpm %> wpm</option>
-            <% end %>
-          </select>
+          <div class="flex items-center gap-4">
+            <button type="button"
+                    aria-label="Toggle fullscreen"
+                    data-action="rsvp#toggleFullscreen"
+                    class="bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer uppercase tracking-wide font-mono">
+              [fullscreen]
+            </button>
+            <select name="wpm"
+                    aria-label="Reading speed"
+                    data-rsvp-target="wpm"
+                    data-action="change->rsvp#onWpmChange"
+                    class="bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer uppercase tracking-wide font-mono">
+              <% User::WPM_OPTIONS.each do |wpm| %>
+                <option value="<%= wpm %>" class="bg-black text-white"<%= " selected" if wpm == Current.user.wpm %>><%= wpm %> wpm</option>
+              <% end %>
+            </select>
+          </div>
         </div>
       </footer>
     </div>

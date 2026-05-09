@@ -104,6 +104,16 @@
 .rsvp-scrubber:focus-visible::-moz-range-track {
   background: rgb(251 191 36 / 0.55);
 }
+/* "Table of contents" leader: a row of '.' characters whose left `--p`
+ * portion fills amber, the rest white/15. Implemented as a horizontal
+ * gradient clipped to the text glyphs. */
+.progress-leader {
+  background: linear-gradient(to right, rgb(251 191 36) var(--p, 0%), rgb(255 255 255 / 0.15) 0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .rsvp-scrubber::-moz-range-thumb {
   border: 0;
   width: 8px;
