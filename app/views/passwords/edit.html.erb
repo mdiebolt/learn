@@ -3,7 +3,6 @@
     <p id="alert" class="border border-red-400/30 px-4 py-3 mb-8 font-mono text-2xs uppercase tracking-wide text-red-400">// <%= alert %></p>
   <% end %>
 
-  <div class="ui-title mb-3">// reset</div>
   <h1 class="text-4xl font-medium tracking-tight mb-12">Update your password</h1>
 
   <%= form_with url: password_path(params[:token]), method: :put, class: "space-y-8" do |form| %>

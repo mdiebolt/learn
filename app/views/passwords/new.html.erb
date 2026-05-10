@@ -3,8 +3,7 @@
     <p id="alert" class="border border-red-400/30 px-4 py-3 mb-8 font-mono text-2xs uppercase tracking-wide text-red-400">// <%= alert %></p>
   <% end %>
 
-  <div class="ui-title mb-3">// recovery</div>
-  <h1 class="text-4xl font-medium tracking-tight mb-12">Forgot your password?</h1>
+  <h1 class="text-4xl font-medium tracking-tight mb-12">Reset Password</h1>
 
   <%= form_with url: passwords_path, class: "space-y-8" do |form| %>
     <div>
@@ -16,8 +15,7 @@
     </div>
 
     <div class="flex items-center justify-between gap-4 pt-4">
-      <%= form.submit "email reset instructions",
-            class: "ui-button ui-button--accent" %>
+      <%= form.submit "email instructions", class: "ui-button ui-button--accent" %>
       <%= link_to "[← back to sign in]", new_session_path, class: "ui-link" %>
     </div>
   <% end %>

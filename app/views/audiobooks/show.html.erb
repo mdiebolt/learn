@@ -33,7 +33,7 @@
     </div>
   <% when :ready %>
     <section>
-      <h2 class="ui-title mb-4">// chapters</h2>
+      <h2 class="ui-title mb-3">// chapters</h2>
       <ul role="list">
         <% @audiobook.chapters.each_with_index do |chapter, i| %>
           <% progress = @progresses_by_chapter_id[chapter.id] %>

@@ -28,6 +28,10 @@
 
   <body class="min-h-dvh bg-black text-white antialiased font-sans">
     <main class="isolate">
+      <%= link_to root_path, class: "fixed top-4 right-2 size-10" do %>
+        <%= image_tag "logo.jpeg", alt: "Learn Logo" %>
+      <% end %>
+
       <%= yield %>
     </main>
   </body>

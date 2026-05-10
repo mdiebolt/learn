@@ -1,6 +1,5 @@
 <% if @words.any? %>
   <%= tag.div(**rsvp_container_attributes(audiobook: @audiobook, chapter: @chapter, words: @words, next_chapter: @next_chapter, autoplay: @autoplay, progress: @progress)) do %>
-
     <%# Top hover zone — back link, chapter title, and fullscreen fade in when cursor approaches the top edge. %>
     <div class="absolute top-0 left-0 right-0 h-24 group/header z-10">
       <div class="absolute top-0 left-0 right-0 px-6 pt-6 grid grid-cols-3 items-start gap-6 text-2xs font-mono uppercase tracking-wide tabular-nums transition-opacity duration-300 opacity-0 pointer-events-none group-hover/header:opacity-100 group-hover/header:pointer-events-auto">
@@ -8,12 +7,6 @@
           [← back]
         <% end %>
         <div class="justify-self-center text-center min-w-0 truncate text-white/40"><%= @chapter.title %></div>
-        <button type="button"
-                aria-label="Toggle fullscreen"
-                data-action="fullscreen#toggle"
-                class="justify-self-end bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer">
-          [fullscreen]
-        </button>
       </div>
     </div>
 
@@ -42,6 +35,14 @@
             <span class="text-white/25">/</span>
             <span data-rsvp-target="duration">0:00</span>
           </div>
+
+          <button type="button"
+                  aria-label="Toggle fullscreen"
+                  data-action="fullscreen#toggle"
+                  class="justify-self-end bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer">
+            [fullscreen]
+          </button>
+
           <select name="wpm"
                   aria-label="Reading speed"
                   data-rsvp-target="wpm"
