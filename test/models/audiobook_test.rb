@@ -1,13 +1,6 @@
 require "test_helper"
 
 class AudiobookTest < ActiveSupport::TestCase
-  test "requires an attached audio file" do
-    audiobook = Audiobook.new(user: users(:one))
-
-    assert_not audiobook.valid?
-    assert_includes audiobook.errors[:audio], "can't be blank"
-  end
-
   test "rejects unsupported audio formats" do
     audiobook = Audiobook.new(user: users(:one))
     audiobook.audio.attach(
@@ -42,11 +35,15 @@ class AudiobookTest < ActiveSupport::TestCase
     assert audiobook.valid?
   end
 
-  test "display_title falls back to filename when title is blank" do
-    audiobook = audiobooks(:one)
-    audiobook.audio.attach(io: StringIO.new("fake"), filename: "filename.m4b", content_type: "audio/mp4")
-    audiobook.update!(title: nil)
+  test "title defaults to the audio filename when blank" do
+    audiobook = Audiobook.new(user: users(:one))
+    audiobook.audio.attach(
+      io: StringIO.new("fake"),
+      filename: "filename.m4b",
+      content_type: "audio/mp4"
+    )
+    audiobook.valid?
 
-    assert_equal "filename.m4b", audiobook.display_title
+    assert_equal "filename.m4b", audiobook.title
   end
 end

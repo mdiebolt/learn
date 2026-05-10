@@ -1,24 +1,23 @@
 <div class="max-w-sm mx-auto px-6 py-16 sm:py-24">
   <% if alert = flash[:alert] %>
-    <p id="alert" class="border border-red-400/30 px-4 py-3 mb-8 font-mono text-[0.6875rem] uppercase tracking-wide text-red-400">// <%= alert %></p>
+    <p id="alert" class="border border-red-400/30 px-4 py-3 mb-8 font-mono text-2xs uppercase tracking-wide text-red-400">// <%= alert %></p>
   <% end %>
   <% if notice = flash[:notice] %>
-    <p id="notice" class="border border-amber-400/30 px-4 py-3 mb-8 font-mono text-[0.6875rem] uppercase tracking-wide text-amber-400">// <%= notice %></p>
+    <p id="notice" class="border border-amber-400/30 px-4 py-3 mb-8 font-mono text-2xs uppercase tracking-wide text-amber-400">// <%= notice %></p>
   <% end %>
 
-  <div class="font-mono text-[0.6875rem] uppercase tracking-wide text-white/40 mb-3">// session</div>
   <h1 class="text-4xl font-medium tracking-tight mb-12">Sign in</h1>
 
   <%= form_with url: session_url, class: "space-y-8" do |form| %>
     <div>
-      <%= form.label :email_address, "// email", class: "block font-mono text-[0.6875rem] uppercase tracking-wide text-white/40 mb-2" %>
+      <%= form.label :email_address, "// email", class: "ui-label mb-2" %>
       <%= form.email_field :email_address,
             required: true, autofocus: true, autocomplete: "username",
             value: params[:email_address],
             class: "block w-full bg-transparent border-0 border-b border-white/20 focus:border-amber-400 focus:outline-none px-0 py-3 text-base placeholder:text-white/30" %>
     </div>
     <div>
-      <%= form.label :password, "// password", class: "block font-mono text-[0.6875rem] uppercase tracking-wide text-white/40 mb-2" %>
+      <%= form.label :password, "// password", class: "ui-label mb-2" %>
       <%= form.password_field :password,
             required: true, autocomplete: "current-password", maxlength: 72,
             class: "block w-full bg-transparent border-0 border-b border-white/20 focus:border-amber-400 focus:outline-none px-0 py-3 text-base placeholder:text-white/30" %>
@@ -26,8 +25,8 @@
 
     <div class="flex items-center justify-between gap-4 pt-4">
       <%= form.submit "sign in",
-            class: "font-mono text-[0.6875rem] uppercase tracking-wide text-black bg-amber-400 hover:bg-amber-300 px-6 py-3 cursor-pointer transition-colors" %>
-      <%= link_to "[forgot password]", new_password_path, class: "font-mono text-[0.6875rem] uppercase tracking-wide text-white/70 hover:text-amber-400 transition-colors" %>
+            class: "ui-button ui-button--accent" %>
+      <%= link_to "[forgot password]", new_password_path, class: "ui-link" %>
     </div>
   <% end %>
 </div>

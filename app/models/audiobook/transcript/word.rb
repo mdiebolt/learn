@@ -1,8 +1,6 @@
 class Audiobook::Transcript::Word < ApplicationRecord
   include OptimalRecognitionPoint
 
-  self.table_name = "audiobook_transcript_words"
-
   belongs_to :transcript, class_name: "Audiobook::Transcript"
 
   default_scope { order(:position) }

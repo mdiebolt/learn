@@ -1,16 +1,16 @@
 <div class="max-w-3xl mx-auto px-6 py-12 sm:py-16">
-  <%= link_to audiobooks_path, class: "font-mono text-[0.6875rem] uppercase tracking-wide text-white/70 hover:text-amber-400 transition-colors" do %>
+  <%= link_to audiobooks_path, class: "ui-link" do %>
     [← back to library]
   <% end %>
 
   <header class="mt-8 mb-12">
-    <div class="font-mono text-[0.6875rem] uppercase tracking-wide text-white/40 mb-3">// upload</div>
+    <div class="ui-title mb-3">// upload</div>
     <h1 class="text-4xl sm:text-5xl font-medium tracking-tight">New audiobook</h1>
   </header>
 
   <%= form_with model: @audiobook, class: "space-y-8" do |f| %>
     <% if @audiobook.errors.any? %>
-      <div class="border border-red-400/30 p-4 font-mono text-[0.6875rem] uppercase tracking-wide text-red-400 space-y-1">
+      <div class="border border-red-400/30 p-4 font-mono text-2xs uppercase tracking-wide text-red-400 space-y-1">
         <% @audiobook.errors.full_messages.each do |message| %>
           <div>// <%= message %></div>
         <% end %>
@@ -18,17 +18,16 @@
     <% end %>
 
     <div>
-      <%= f.label :audio, "// audio file (m4b or mp3)", class: "block font-mono text-[0.6875rem] uppercase tracking-wide text-white/40 mb-3" %>
+      <%= f.label :audio, "// audio file (m4b or mp3)", class: "ui-label mb-3" %>
       <%= f.file_field :audio,
             accept: ".m4b,.mp3",
             direct_upload: true,
-            class: "block w-full text-sm text-white/60 file:mr-4 file:py-2 file:px-4 file:font-mono file:text-[0.6875rem] file:uppercase file:tracking-wide file:border file:border-white/20 file:bg-transparent file:text-white file:hover:border-amber-400 file:hover:text-amber-400 file:transition-colors file:cursor-pointer cursor-pointer" %>
+            class: "block w-full text-sm text-white/60 file:mr-4 file:py-2 file:px-4 file:font-mono file:text-2xs file:uppercase file:tracking-wide file:border file:border-white/20 file:bg-transparent file:text-white file:hover:border-amber-400 file:hover:text-amber-400 file:transition-colors file:cursor-pointer cursor-pointer" %>
       <p class="text-xs text-white/40 mt-3">
         Audiobook files can be large. The upload will go directly from your browser to storage.
       </p>
     </div>
 
-    <%= f.submit "upload",
-          class: "w-full font-mono text-[0.6875rem] uppercase tracking-wide text-black bg-amber-400 hover:bg-amber-300 py-3.5 cursor-pointer transition-colors" %>
+    <%= f.submit "upload", class: "ui-button ui-button--accent" %>
   <% end %>
 </div>

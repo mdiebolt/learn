@@ -1,6 +1,4 @@
 class Audiobook::Chapter::Progress < ApplicationRecord
-  self.table_name = "audiobook_chapter_progresses"
-
   attribute :completed, :boolean
 
   belongs_to :user

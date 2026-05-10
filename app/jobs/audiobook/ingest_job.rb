@@ -4,7 +4,7 @@ class Audiobook::IngestJob < ApplicationJob
   def perform(audiobook_id)
     audiobook = Audiobook.find(audiobook_id)
     audiobook.processing!
-    audiobook.detect_chapters!
+    audiobook.detect!
     audiobook.ready!
   rescue => e
     Audiobook.find_by(id: audiobook_id)&.update(status: :failed)

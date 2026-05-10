@@ -47,7 +47,9 @@
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d, indent=2\\)\\)\")",
       "mcp__uidotsh__uidotsh_fetch",
       "Bash(git mv *)",
-      "Bash(bin/rails zeitwerk:check)"
+      "Bash(bin/rails zeitwerk:check)",
+      "Bash(bundle exec *)",
+      "Bash(grep *)"
     ]
   }
 }

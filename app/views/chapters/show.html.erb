@@ -1,21 +1,9 @@
 <% if @words.any? %>
-  <%= tag.div(
-        class: "min-h-dvh grid place-items-center relative overflow-hidden select-none cursor-default",
-        data: {
-          controller: "rsvp fullscreen",
-          action: "click->rsvp#togglePlay keydown@window->rsvp#onKeydown keydown@window->fullscreen#onKeydown",
-          rsvp_words_value: @words.to_json,
-          rsvp_start_ms_value: @chapter.start_time_ms,
-          rsvp_end_ms_value: @chapter.end_time_ms,
-          rsvp_next_chapter_url_value: (@next_chapter ? audiobook_chapter_path(@audiobook, @next_chapter) : ""),
-          rsvp_autoplay_value: @autoplay,
-          rsvp_progress_url_value: audiobook_chapter_progress_path(@audiobook, @chapter),
-          rsvp_initial_progress_ms_value: (@progress && !@progress.completed? ? @progress.progress_ms : 0)
-        }) do %>
+  <%= tag.div(**rsvp_container_attributes(audiobook: @audiobook, chapter: @chapter, words: @words, next_chapter: @next_chapter, autoplay: @autoplay, progress: @progress)) do %>
 
     <%# Top hover zone — back link, chapter title, and fullscreen fade in when cursor approaches the top edge. %>
     <div class="absolute top-0 left-0 right-0 h-24 group/header z-10">
-      <div class="absolute top-0 left-0 right-0 px-6 pt-6 grid grid-cols-3 items-start gap-6 text-[0.6875rem] font-mono uppercase tracking-wide tabular-nums transition-opacity duration-300 opacity-0 pointer-events-none group-hover/header:opacity-100 group-hover/header:pointer-events-auto">
+      <div class="absolute top-0 left-0 right-0 px-6 pt-6 grid grid-cols-3 items-start gap-6 text-2xs font-mono uppercase tracking-wide tabular-nums transition-opacity duration-300 opacity-0 pointer-events-none group-hover/header:opacity-100 group-hover/header:pointer-events-auto">
         <%= link_to @audiobook, class: "justify-self-start text-white/70 hover:text-amber-400 transition-colors" do %>
           [← back]
         <% end %>
@@ -48,7 +36,7 @@
                data-rsvp-target="seek"
                data-action="input->rsvp#onSeek"
                class="rsvp-scrubber">
-        <div class="px-6 py-4 flex items-center justify-between text-[0.6875rem] font-mono uppercase tracking-wide tabular-nums text-white/50">
+        <div class="px-6 py-4 flex items-center justify-between text-2xs font-mono uppercase tracking-wide tabular-nums text-white/50">
           <div class="flex items-center gap-2">
             <span data-rsvp-target="currentTime">0:00</span>
             <span class="text-white/25">/</span>
@@ -69,19 +57,13 @@
       </footer>
     </div>
 
-    <%= tag.audio(
-          preload: "metadata",
-          class: "hidden",
-          data: {
-            rsvp_target: "audio",
-            action: "play->rsvp#onPlay pause->rsvp#onPause seeked->rsvp#onSeeked loadedmetadata->rsvp#onLoadedMetadata"
-          }) do %>
+    <%= tag.audio(**rsvp_audio_attributes) do %>
       <%= tag.source src: rails_blob_path(@audiobook.audio), type: @audiobook.audio.content_type %>
     <% end %>
   <% end %>
 <% else %>
   <div class="px-8 py-16 text-center space-y-4">
-    <p class="font-mono text-[0.6875rem] uppercase tracking-wide text-white/60">// transcript not ready yet</p>
-    <%= link_to "[← back to audiobook]", @audiobook, class: "font-mono text-[0.6875rem] uppercase tracking-wide text-white/70 hover:text-amber-400 transition-colors" %>
+    <p class="font-mono text-2xs uppercase tracking-wide text-white/60">// transcript not ready yet</p>
+    <%= link_to "[← back to audiobook]", @audiobook, class: "ui-link" %>
   </div>
 <% end %>

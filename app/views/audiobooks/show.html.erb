@@ -1,20 +1,20 @@
-<div class="max-w-3xl mx-auto px-6 py-12 sm:py-16">
+<div class="font-mono max-w-3xl mx-auto px-6 py-12 sm:py-16">
   <div class="flex items-center justify-between gap-4">
-    <%= link_to audiobooks_path, class: "font-mono text-[0.6875rem] uppercase tracking-wide text-white/70 hover:text-amber-400 transition-colors" do %>
+    <%= link_to audiobooks_path, class: "ui-link" do %>
       [← back to library]
     <% end %>
     <%= button_to "[delete audiobook]", @audiobook, method: :delete,
           form: { data: { turbo_confirm: "Delete this audiobook?" } },
-          class: "font-mono text-[0.6875rem] uppercase tracking-wide text-white/40 hover:text-red-400 transition-colors cursor-pointer" %>
+          class: "ui-button text-white/40 hover:text-red-400" %>
   </div>
 
   <header class="mt-8 mb-12">
-    <div class="font-mono text-[0.6875rem] uppercase tracking-wide text-white/40 mb-3">// audiobook</div>
+    <div class="ui-title mb-3">// audiobook</div>
     <div class="flex items-center justify-between gap-6">
-      <h1 class="text-4xl sm:text-5xl font-medium tracking-tight truncate min-w-0"><%= @audiobook.display_title %></h1>
+      <h1 class="text-4xl sm:text-5xl font-medium tracking-tight truncate min-w-0"><%= @audiobook.title %></h1>
       <div class="shrink-0">
         <%= turbo_stream_from @audiobook, :transcript_badge %>
-        <%= render "transcript_badge", audiobook: @audiobook %>
+        <%= transcript_badge(@audiobook) %>
       </div>
     </div>
     <% if @audiobook.author.present? %>
@@ -25,39 +25,39 @@
   <% case @audiobook.status.to_sym %>
   <% when :pending, :processing %>
     <div class="border border-amber-400/30 px-6 py-8 text-center">
-      <p class="font-mono text-[0.6875rem] uppercase tracking-wide text-amber-400">// detecting chapters · reload in a moment</p>
+      <p class="text-2xs uppercase tracking-wide text-amber-400">// detecting chapters · reload in a moment</p>
     </div>
   <% when :failed %>
     <div class="border border-red-400/30 px-6 py-8 text-center">
-      <p class="font-mono text-[0.6875rem] uppercase tracking-wide text-red-400">// chapter detection failed · try uploading again</p>
+      <p class="text-2xs uppercase tracking-wide text-red-400">// chapter detection failed · try uploading again</p>
     </div>
   <% when :ready %>
     <section>
-      <h2 class="font-mono text-[0.6875rem] uppercase tracking-wide text-white/40 mb-4">// chapters</h2>
+      <h2 class="ui-title mb-4">// chapters</h2>
       <ul role="list">
         <% @audiobook.chapters.each_with_index do |chapter, i| %>
           <% progress = @progresses_by_chapter_id[chapter.id] %>
-          <% duration_str = "%d:%02d" % chapter.duration_ms.divmod(60_000).then { |m, ms| [m, ms / 1000] } %>
+          <% duration_str = "%02d:%02d" % chapter.duration_ms.divmod(60_000).then { |m, ms| [m, ms / 1000] } %>
           <li>
             <% if @audiobook.transcript&.ready? %>
               <% fraction = progress&.fraction_through(chapter) || 0 %>
               <%= link_to audiobook_chapter_path(@audiobook, chapter), class: "flex items-baseline justify-between gap-4 py-3 -mx-4 px-4 hover:bg-white/[0.02] transition-colors group" do %>
                 <div class="flex items-baseline gap-4 min-w-0">
-                  <span class="font-mono text-[0.6875rem] tabular-nums text-white/40 shrink-0"><%= "%02d" % (i + 1) %></span>
+                  <span class="text-2xs tabular-nums text-white/40 shrink-0"><%= "%02d" % (i + 1) %></span>
                   <span class="font-medium truncate <%= progress&.completed? ? "text-white/50" : "" %> group-hover:text-amber-400 transition-colors"><%= chapter.title %></span>
                 </div>
-                <div class="hidden sm:block flex-1 min-w-0 overflow-hidden whitespace-nowrap font-mono progress-leader"
+                <div class="hidden sm:block flex-1 min-w-0 overflow-hidden whitespace-nowrap progress-leader"
                      style="--p: <%= (fraction * 100).round %>%"
                      aria-hidden="true"><%= "." * 240 %></div>
-                <span class="shrink-0 font-mono text-[0.6875rem] uppercase tracking-wide tabular-nums text-white/40"><%= duration_str %></span>
+                <span class="shrink-0 text-2xs uppercase tracking-wide tabular-nums text-white/40"><%= duration_str %></span>
               <% end %>
             <% else %>
               <div class="flex items-baseline justify-between gap-4 py-3">
                 <div class="flex items-baseline gap-4 min-w-0">
-                  <span class="font-mono text-[0.6875rem] tabular-nums text-white/40 shrink-0"><%= "%02d" % (i + 1) %></span>
+                  <span class="text-2xs tabular-nums text-white/40 shrink-0"><%= "%02d" % (i + 1) %></span>
                   <span class="text-white/60 truncate"><%= chapter.title %></span>
                 </div>
-                <span class="font-mono text-[0.6875rem] tabular-nums text-white/40 shrink-0"><%= duration_str %></span>
+                <span class="text-2xs tabular-nums text-white/40 shrink-0"><%= duration_str %></span>
               </div>
             <% end %>
           </li>

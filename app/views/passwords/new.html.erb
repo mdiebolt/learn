@@ -1,14 +1,14 @@
 <div class="max-w-sm mx-auto px-6 py-16 sm:py-24">
   <% if alert = flash[:alert] %>
-    <p id="alert" class="border border-red-400/30 px-4 py-3 mb-8 font-mono text-[0.6875rem] uppercase tracking-wide text-red-400">// <%= alert %></p>
+    <p id="alert" class="border border-red-400/30 px-4 py-3 mb-8 font-mono text-2xs uppercase tracking-wide text-red-400">// <%= alert %></p>
   <% end %>
 
-  <div class="font-mono text-[0.6875rem] uppercase tracking-wide text-white/40 mb-3">// recovery</div>
+  <div class="ui-title mb-3">// recovery</div>
   <h1 class="text-4xl font-medium tracking-tight mb-12">Forgot your password?</h1>
 
   <%= form_with url: passwords_path, class: "space-y-8" do |form| %>
     <div>
-      <%= form.label :email_address, "// email", class: "block font-mono text-[0.6875rem] uppercase tracking-wide text-white/40 mb-2" %>
+      <%= form.label :email_address, "// email", class: "ui-label mb-2" %>
       <%= form.email_field :email_address,
             required: true, autofocus: true, autocomplete: "username",
             value: params[:email_address],
@@ -17,8 +17,8 @@
 
     <div class="flex items-center justify-between gap-4 pt-4">
       <%= form.submit "email reset instructions",
-            class: "font-mono text-[0.6875rem] uppercase tracking-wide text-black bg-amber-400 hover:bg-amber-300 px-6 py-3 cursor-pointer transition-colors" %>
-      <%= link_to "[← back to sign in]", new_session_path, class: "font-mono text-[0.6875rem] uppercase tracking-wide text-white/70 hover:text-amber-400 transition-colors" %>
+            class: "ui-button ui-button--accent" %>
+      <%= link_to "[← back to sign in]", new_session_path, class: "ui-link" %>
     </div>
   <% end %>
 </div>

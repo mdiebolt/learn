@@ -1,7 +1,7 @@
 <li class="flex items-center justify-between gap-6 py-5">
   <%= link_to audiobook, class: "flex-1 min-w-0 group" do %>
     <h2 class="text-lg font-medium tracking-tight truncate group-hover:text-amber-400 transition-colors">
-      <%= audiobook.display_title %>
+      <%= audiobook.title %>
     </h2>
     <% if audiobook.author.present? %>
       <p class="text-sm text-white/50 mt-1 truncate"><%= audiobook.author %></p>
@@ -9,11 +9,8 @@
   <% end %>
 
   <% if audiobook.status.to_sym == :ready %>
-    <%= render "transcript_badge", audiobook: audiobook, small: true %>
+    <%= transcript_badge(audiobook, small: true) %>
   <% else %>
-    <% color = audiobook.status.to_sym == :failed ? "text-red-400" : "text-white/50" %>
-    <span class="font-mono text-[0.6875rem] uppercase tracking-wide shrink-0 <%= color %>">
-      // <%= audiobook.status %>
-    </span>
+    <%= audiobook_status_chip(audiobook) %>
   <% end %>
 </li>
