@@ -1,70 +1,76 @@
-<% if @words.any? %>
-  <%= tag.div(**rsvp_container_attributes(audiobook: @audiobook, chapter: @chapter, words: @words, next_chapter: @next_chapter, autoplay: @autoplay, progress: @progress)) do %>
-    <%# Top hover zone — back link, chapter title, and fullscreen fade in when cursor approaches the top edge. %>
-    <div class="absolute top-0 left-0 right-0 h-24 group/header z-10">
-      <div class="absolute top-0 left-0 right-0 px-6 pt-6 grid grid-cols-3 items-start gap-6 text-2xs font-mono uppercase tracking-wide tabular-nums transition-opacity duration-300 opacity-0 pointer-events-none group-hover/header:opacity-100 group-hover/header:pointer-events-auto">
-        <%= link_to @audiobook, class: "justify-self-start text-white/70 hover:text-amber-400 transition-colors" do %>
-          [← back]
-        <% end %>
-        <div class="justify-self-center text-center min-w-0 truncate text-white/40"><%= @chapter.title %></div>
-      </div>
-    </div>
-
-    <%# Full-viewport reading guide, pinned to the focal column. %>
-    <div class="rsvp-line" aria-hidden="true"></div>
-
-    <%# Word display: rendered as a single inline text run; the controller %>
-    <%# translates it so the focal letter's center lands on the line X. %>
-    <div class="rsvp-word text-[clamp(3.5rem,11vw,9rem)] font-medium leading-none">
-      <span class="rsvp-word-text" data-rsvp-target="word"></span>
-    </div>
-
-    <%# Bottom hover zone — scrubber and time/wpm fade in when cursor approaches the bottom edge. %>
-    <div class="absolute bottom-0 left-0 right-0 h-32 group/footer z-10">
-      <footer class="absolute bottom-0 left-0 right-0 transition-opacity duration-300 opacity-0 pointer-events-none group-hover/footer:opacity-100 group-hover/footer:pointer-events-auto">
-        <input type="range"
-               min="0" max="1000" value="0" step="1"
-               name="seek"
-               aria-label="Seek"
-               data-rsvp-target="seek"
-               data-action="input->rsvp#onSeek"
-               class="rsvp-scrubber">
-        <div class="px-6 py-4 flex items-center justify-between text-2xs font-mono uppercase tracking-wide tabular-nums text-white/50">
-          <div class="flex items-center gap-2">
-            <span data-rsvp-target="currentTime">0:00</span>
-            <span class="text-white/25">/</span>
-            <span data-rsvp-target="duration">0:00</span>
-          </div>
-
-          <button type="button"
-                  aria-label="Toggle fullscreen"
-                  data-action="fullscreen#toggle"
-                  class="justify-self-end bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer">
-            [fullscreen]
-          </button>
-
-          <select name="wpm"
-                  aria-label="Reading speed"
-                  data-rsvp-target="wpm"
-                  data-controller="autosave"
-                  data-autosave-url-value="<%= preferences_path %>"
-                  data-action="change->rsvp#setRate change->autosave#patch"
-                  class="bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer uppercase tracking-wide font-mono">
-            <% User::WPM_OPTIONS.each do |wpm| %>
-              <option value="<%= wpm %>" class="bg-black text-white"<%= " selected" if wpm == Current.user.wpm %>><%= wpm %> wpm</option>
-            <% end %>
-          </select>
+<%# Wrapping the chapter in a Turbo Frame lets the RSVP controller advance to %>
+<%# the next chapter via `frame.src = ...` instead of `Turbo.visit`. A frame %>
+<%# swap leaves <html> in place, so document-level fullscreen survives the %>
+<%# transition; a body-replacing visit would drop fullscreen on most browsers. %>
+<%= turbo_frame_tag "chapter", data: { turbo_action: "advance" } do %>
+  <% if @words.any? %>
+    <%= tag.div(**rsvp_container_attributes(audiobook: @audiobook, chapter: @chapter, words: @words, next_chapter: @next_chapter, autoplay: @autoplay, progress: @progress)) do %>
+      <%# Top hover zone — back link, chapter title, and fullscreen fade in when cursor approaches the top edge. %>
+      <div class="absolute top-0 left-0 right-0 h-24 group/header z-10">
+        <div class="absolute top-0 left-0 right-0 px-6 pt-6 grid grid-cols-3 items-start gap-6 text-2xs font-mono uppercase tracking-wide tabular-nums transition-opacity duration-300 opacity-0 pointer-events-none group-hover/header:opacity-100 group-hover/header:pointer-events-auto">
+          <%= link_to @audiobook, class: "justify-self-start text-white/70 hover:text-amber-400 transition-colors" do %>
+            [← back]
+          <% end %>
+          <div class="justify-self-center text-center min-w-0 truncate text-white/40"><%= @chapter.title %></div>
         </div>
-      </footer>
-    </div>
+      </div>
 
-    <%= tag.audio(**rsvp_audio_attributes) do %>
-      <%= tag.source src: rails_blob_path(@audiobook.audio), type: @audiobook.audio.content_type %>
+      <%# Full-viewport reading guide, pinned to the focal column. %>
+      <div class="rsvp-line" aria-hidden="true"></div>
+
+      <%# Word display: rendered as a single inline text run; the controller %>
+      <%# translates it so the focal letter's center lands on the line X. %>
+      <div class="rsvp-word text-[clamp(3.5rem,11vw,9rem)] font-medium leading-none">
+        <span class="rsvp-word-text" data-rsvp-target="word"></span>
+      </div>
+
+      <%# Bottom hover zone — scrubber and time/wpm fade in when cursor approaches the bottom edge. %>
+      <div class="absolute bottom-0 left-0 right-0 h-32 group/footer z-10">
+        <footer class="absolute bottom-0 left-0 right-0 transition-opacity duration-300 opacity-0 pointer-events-none group-hover/footer:opacity-100 group-hover/footer:pointer-events-auto">
+          <input type="range"
+                 min="0" max="1000" value="0" step="1"
+                 name="seek"
+                 aria-label="Seek"
+                 data-rsvp-target="seek"
+                 data-action="input->rsvp#onSeek"
+                 class="rsvp-scrubber">
+          <div class="px-6 py-4 flex items-center justify-between text-2xs font-mono uppercase tracking-wide tabular-nums text-white/50">
+            <div class="flex items-center gap-2">
+              <span data-rsvp-target="currentTime">0:00</span>
+              <span class="text-white/25">/</span>
+              <span data-rsvp-target="duration">0:00</span>
+            </div>
+
+            <button type="button"
+                    aria-label="Toggle fullscreen"
+                    data-action="fullscreen#toggle"
+                    class="justify-self-end bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer">
+              [fullscreen]
+            </button>
+
+            <select name="wpm"
+                    aria-label="Reading speed"
+                    data-rsvp-target="wpm"
+                    data-controller="autosave"
+                    data-autosave-url-value="<%= preferences_path %>"
+                    data-action="change->rsvp#setRate change->autosave#patch"
+                    class="bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer uppercase tracking-wide font-mono">
+              <% User::WPM_OPTIONS.each do |wpm| %>
+                <option value="<%= wpm %>" class="bg-black text-white"<%= " selected" if wpm == Current.user.wpm %>><%= wpm %> wpm</option>
+              <% end %>
+            </select>
+          </div>
+        </footer>
+      </div>
+
+      <%= tag.audio(**rsvp_audio_attributes) do %>
+        <%= tag.source src: rails_blob_path(@audiobook.audio), type: @audiobook.audio.content_type %>
+      <% end %>
     <% end %>
+  <% else %>
+    <div class="px-8 py-16 text-center space-y-4">
+      <p class="font-mono text-2xs uppercase tracking-wide text-white/60">// transcript not ready yet</p>
+      <%= link_to "[← back to audiobook]", @audiobook, class: "ui-link" %>
+    </div>
   <% end %>
-<% else %>
-  <div class="px-8 py-16 text-center space-y-4">
-    <p class="font-mono text-2xs uppercase tracking-wide text-white/60">// transcript not ready yet</p>
-    <%= link_to "[← back to audiobook]", @audiobook, class: "ui-link" %>
-  </div>
 <% end %>

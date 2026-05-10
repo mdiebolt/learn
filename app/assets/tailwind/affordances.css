@@ -1,0 +1,151 @@
+/* UI affordances.
+ *
+ * Hand-written, framework-agnostic primitives for the surfaces users can act
+ * on: text labels, inputs, buttons, links, and flash banners. Composed from
+ * Tailwind theme variables (`--font-mono`, `--text-2xs`) so the visual
+ * language stays in sync with the rest of the app.
+ *
+ * Variants follow BEM naming (`ui-input--password`). Inputs share a common
+ * baseline in `.ui-input` and overlay per-type tweaks via nested rules. */
+
+.ui-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.4);
+}
+
+.ui-title {
+  font-size: 2.25rem;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+
+  @media (min-width: 40rem) {
+    font-size: 3rem;
+  }
+}
+
+.ui-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.4);
+}
+
+.ui-input {
+  display: block;
+  width: 100%;
+  background-color: transparent;
+  border: 0;
+  border-bottom: 1px solid rgb(255 255 255 / 0.2);
+  padding: 0.75rem 0;
+  font-size: 1rem;
+  color: rgb(255 255 255);
+  transition: border-color 150ms;
+
+  &::placeholder {
+    color: rgb(255 255 255 / 0.3);
+  }
+
+  &:focus {
+    outline: none;
+    border-bottom-color: rgb(251 191 36);
+  }
+
+  &.ui-input--text,
+  &.ui-input--email {
+    font-family: var(--font-sans);
+  }
+
+  &.ui-input--password {
+    font-family: var(--font-mono);
+    letter-spacing: 0.1em;
+  }
+
+  &.ui-input--file {
+    border-bottom: 0;
+    padding: 0;
+    font-size: 0.875rem;
+    color: rgb(255 255 255 / 0.6);
+    cursor: pointer;
+
+    &::file-selector-button {
+      margin-right: 1rem;
+      padding: 0.5rem 1rem;
+      font-family: var(--font-mono);
+      font-size: var(--text-2xs);
+      letter-spacing: 0.025em;
+      text-transform: uppercase;
+      border: 1px solid rgb(255 255 255 / 0.2);
+      background-color: transparent;
+      color: rgb(255 255 255);
+      cursor: pointer;
+      transition:
+        color 150ms,
+        border-color 150ms;
+    }
+
+    &::file-selector-button:hover {
+      border-color: rgb(251 191 36);
+      color: rgb(251 191 36);
+    }
+  }
+}
+
+.ui-button {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    color 150ms,
+    background-color 150ms,
+    border-color 150ms;
+
+  &.ui-button--accent {
+    color: rgb(0 0 0);
+    background-color: rgb(251 191 36);
+    padding: 0.75rem 1.5rem;
+
+    &:hover {
+      background-color: rgb(252 211 77);
+    }
+  }
+}
+
+.ui-link {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.7);
+  transition: color 150ms;
+
+  &:hover {
+    color: rgb(251 191 36);
+  }
+}
+
+.ui-flash {
+  border: 1px solid;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+
+  &.ui-flash--alert {
+    border-color: rgb(248 113 113 / 0.3);
+    color: rgb(248 113 113);
+  }
+
+  &.ui-flash--notice {
+    border-color: rgb(251 191 36 / 0.3);
+    color: rgb(251 191 36);
+  }
+}

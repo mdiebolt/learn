@@ -9,9 +9,9 @@
   </div>
 
   <header class="mt-8 mb-12">
-    <div class="ui-title mb-3">// audiobook</div>
+    <div class="ui-eyebrow mb-3">// audiobook</div>
     <div class="flex items-center justify-between gap-6">
-      <h1 class="text-4xl sm:text-5xl font-medium tracking-tight truncate min-w-0"><%= @audiobook.title %></h1>
+      <h1 class="ui-title truncate min-w-0"><%= @audiobook.title %></h1>
       <div class="shrink-0">
         <%= turbo_stream_from @audiobook, :transcript_badge %>
         <%= transcript_badge(@audiobook) %>
@@ -33,7 +33,7 @@
     </div>
   <% when :ready %>
     <section>
-      <h2 class="ui-title mb-3">// chapters</h2>
+      <h2 class="ui-eyebrow mb-3">// chapters</h2>
       <ul role="list">
         <% @audiobook.chapters.each_with_index do |chapter, i| %>
           <% progress = @progresses_by_chapter_id[chapter.id] %>

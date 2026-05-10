@@ -1,9 +1,9 @@
 <div class="max-w-sm mx-auto px-6 py-16 sm:py-24">
-  <h1 class="text-4xl font-medium tracking-tight mb-12">Sign up</h1>
+  <h1 class="ui-title mb-12">Sign up</h1>
 
   <%= form_with model: @user, url: registrations_path, class: "space-y-8" do |form| %>
     <% if @user.errors.any? %>
-      <div class="border border-red-400/30 px-4 py-3 font-mono text-2xs uppercase tracking-wide text-red-400 space-y-1">
+      <div class="ui-flash ui-flash--alert space-y-1">
         <% @user.errors.full_messages.each do |message| %>
           <div>// <%= message %></div>
         <% end %>
@@ -14,19 +14,19 @@
       <%= form.label :email_address, "// email", class: "ui-label mb-2" %>
       <%= form.email_field :email_address,
             required: true, autofocus: true, autocomplete: "username",
-            class: "block w-full bg-transparent border-0 border-b border-white/20 focus:border-amber-400 focus:outline-none px-0 py-3 text-base placeholder:text-white/30" %>
+            class: "ui-input ui-input--email" %>
     </div>
     <div>
       <%= form.label :password, "// password", class: "ui-label mb-2" %>
       <%= form.password_field :password,
             required: true, autocomplete: "new-password", maxlength: 72,
-            class: "block w-full bg-transparent border-0 border-b border-white/20 focus:border-amber-400 focus:outline-none px-0 py-3 text-base placeholder:text-white/30" %>
+            class: "ui-input ui-input--password" %>
     </div>
     <div>
       <%= form.label :password_confirmation, "// confirm password", class: "ui-label mb-2" %>
       <%= form.password_field :password_confirmation,
             required: true, autocomplete: "new-password", maxlength: 72,
-            class: "block w-full bg-transparent border-0 border-b border-white/20 focus:border-amber-400 focus:outline-none px-0 py-3 text-base placeholder:text-white/30" %>
+            class: "ui-input ui-input--password" %>
     </div>
 
     <div class="flex items-center justify-between gap-4 pt-4">

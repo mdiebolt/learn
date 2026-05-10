@@ -220,9 +220,19 @@ export default class extends Controller {
 
     this.saveProgress({ completed: true })
 
-    if (this.nextChapterUrlValue) {
-      const url = new URL(this.nextChapterUrlValue, window.location.origin)
-      url.searchParams.set("autoplay", "1")
+    if (!this.nextChapterUrlValue) return
+
+    const url = new URL(this.nextChapterUrlValue, window.location.origin)
+    url.searchParams.set("autoplay", "1")
+
+    // Prefer a Turbo Frame swap when our wrapper frame is present: it
+    // replaces only the frame's contents, leaving <html> untouched, so
+    // document-level fullscreen survives the transition. Fall back to a
+    // full visit (e.g. if the frame markup is ever removed).
+    const frame = this.element.closest("turbo-frame")
+    if (frame) {
+      frame.src = url.toString()
+    } else {
       window.Turbo.visit(url.toString())
     }
   }

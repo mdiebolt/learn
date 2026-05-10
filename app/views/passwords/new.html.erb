@@ -1,9 +1,9 @@
 <div class="max-w-sm mx-auto px-6 py-16 sm:py-24">
   <% if alert = flash[:alert] %>
-    <p id="alert" class="border border-red-400/30 px-4 py-3 mb-8 font-mono text-2xs uppercase tracking-wide text-red-400">// <%= alert %></p>
+    <p id="alert" class="ui-flash ui-flash--alert mb-8">// <%= alert %></p>
   <% end %>
 
-  <h1 class="text-4xl font-medium tracking-tight mb-12">Reset Password</h1>
+  <h1 class="ui-title mb-12">Reset Password</h1>
 
   <%= form_with url: passwords_path, class: "space-y-8" do |form| %>
     <div>
@@ -11,7 +11,7 @@
       <%= form.email_field :email_address,
             required: true, autofocus: true, autocomplete: "username",
             value: params[:email_address],
-            class: "block w-full bg-transparent border-0 border-b border-white/20 focus:border-amber-400 focus:outline-none px-0 py-3 text-base placeholder:text-white/30" %>
+            class: "ui-input ui-input--email" %>
     </div>
 
     <div class="flex items-center justify-between gap-4 pt-4">

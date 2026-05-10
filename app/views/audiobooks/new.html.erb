@@ -4,13 +4,13 @@
   <% end %>
 
   <header class="mt-8 mb-12">
-    <div class="ui-title mb-3">// upload</div>
-    <h1 class="text-4xl sm:text-5xl font-medium tracking-tight">New audiobook</h1>
+    <div class="ui-eyebrow mb-3">// upload</div>
+    <h1 class="ui-title">New audiobook</h1>
   </header>
 
   <%= form_with model: @audiobook, class: "space-y-8" do |f| %>
     <% if @audiobook.errors.any? %>
-      <div class="border border-red-400/30 p-4 font-mono text-2xs uppercase tracking-wide text-red-400 space-y-1">
+      <div class="ui-flash ui-flash--alert space-y-1">
         <% @audiobook.errors.full_messages.each do |message| %>
           <div>// <%= message %></div>
         <% end %>
@@ -22,7 +22,7 @@
       <%= f.file_field :audio,
             accept: ".m4b,.mp3",
             direct_upload: true,
-            class: "block w-full text-sm text-white/60 file:mr-4 file:py-2 file:px-4 file:font-mono file:text-2xs file:uppercase file:tracking-wide file:border file:border-white/20 file:bg-transparent file:text-white file:hover:border-amber-400 file:hover:text-amber-400 file:transition-colors file:cursor-pointer cursor-pointer" %>
+            class: "ui-input ui-input--file" %>
       <p class="text-xs text-white/40 mt-3">
         Audiobook files can be large. The upload will go directly from your browser to storage.
       </p>
