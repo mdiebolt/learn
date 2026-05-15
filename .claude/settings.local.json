@@ -50,7 +50,8 @@
       "Bash(bin/rails zeitwerk:check)",
       "Bash(bundle exec *)",
       "Bash(grep *)",
-      "Bash(bin/rails tailwindcss:build)"
+      "Bash(bin/rails tailwindcss:build)",
+      "Bash(xargs ls -la)"
     ]
   }
 }

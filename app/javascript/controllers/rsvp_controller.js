@@ -1,176 +1,83 @@
 import { Controller } from "@hotwired/stimulus"
 
-const PROGRESS_SAVE_INTERVAL_MS = 5000
-const WORD_LEAD_MS = 75
+// Small head-start (wall-clock ms) so the eye sees the next word a beat
+// before it's audible. Anything beyond ~50ms starts to feel ahead; below
+// ~15ms the cut feels late. 30ms is the sweet spot once output latency
+// is being compensated for separately.
+const ARTISTIC_LEAD_WALL_MS = 30
 
+// Word display only. Reads `audio.currentTime` each frame, picks the
+// matching word from `wordsValue`, and renders it centered on the focal
+// column. Subscribes to `playback:*` events to start/stop its rAF loop,
+// and exposes a sync-offset slider that the user can nudge to dial in
+// audio/word alignment for their output device.
 export default class extends Controller {
-  static targets = [
-    "audio", "word",
-    "currentTime", "duration", "seek", "wpm"
-  ]
+  static targets = ["audio", "word", "audioOffset", "audioOffsetReadout"]
   static values = {
     words: Array,
-    startMs: Number,
-    endMs: Number,
-    nextChapterUrl: String,
-    autoplay: Boolean,
-    progressUrl: String,
-    initialProgressMs: Number
+    audioOffsetMs: Number
   }
 
   connect() {
     this.lastIndex = -1
-    this.naturalWpm = this.computeNaturalWpm()
     this.tick = this.tick.bind(this)
     this.handleResize = this.handleResize.bind(this)
-    this.beaconProgress = this.beaconProgress.bind(this)
     this.rafId = null
-    this.advanced = false
-    this.lastSavedProgressMs = -1
-    this.progressSaveInterval = null
-    this.durationTarget.textContent = this.formatTime(this.endMsValue - this.startMsValue)
+    this.audioCtx = this.createAudioCtx()
     window.addEventListener("resize", this.handleResize)
-    window.addEventListener("pagehide", this.beaconProgress)
   }
 
   disconnect() {
     this.stopTicking()
-    this.stopProgressSaving()
-    this.beaconProgress()
+    if (this.audioCtx) {
+      this.audioCtx.close().catch(() => {})
+      this.audioCtx = null
+    }
     window.removeEventListener("resize", this.handleResize)
-    window.removeEventListener("pagehide", this.beaconProgress)
   }
 
-  // Re-position the current word when the frame's width changes, since
-  // `style.left` is written in pixels relative to the frame.
-  handleResize() {
-    const word = this.lastIndex >= 0 ? this.wordsValue[this.lastIndex] : null
-    if (word) this.render(word)
-  }
-
-  onLoadedMetadata() {
-    const progressMs = this.initialProgressMsValue
-    if (progressMs > this.startMsValue && progressMs < this.endMsValue) {
-      this.audioTarget.currentTime = progressMs / 1000
-    } else if (this.audioTarget.currentTime < this.startMsValue / 1000) {
-      this.audioTarget.currentTime = this.startMsValue / 1000
-    }
-    if (this.hasWpmTarget) {
-      this.audioTarget.playbackRate = this.computeRate(Number(this.wpmTarget.value))
-    }
-    this.updateProgress()
-    this.updateWord()
-    if (this.autoplayValue) {
-      this.audioTarget.play().catch(() => {})
-    }
-  }
-
-  // Bound to the page-level wrapper so clicking anywhere toggles playback.
-  // Real controls (links, buttons, scrubber, select, labels) opt out via
-  // `closest`, so clicks on them don't double-fire as toggle.
-  togglePlay(event) {
-    if (event && event.target.closest("a, button, input, select, label, [data-rsvp-no-toggle]")) return
-    if (this.audioTarget.paused) {
-      this.audioTarget.play()
-    } else {
-      this.audioTarget.pause()
-    }
-  }
-
-  // Space toggles play/pause when nothing specific is focused — letting
-  // native key behavior (typing, opening a select, activating a button) win.
-  onKeydown(event) {
-    const active = document.activeElement
-    if (active && active !== document.body) return
-
-    if (event.code === "Space") {
-      event.preventDefault()
-      this.togglePlay()
-    }
-  }
+  // ---- Playback event handlers ---------------------------------------
 
   onPlay() {
+    // The click/space that triggered playback still counts as a recent
+    // user gesture here, which is what `audioCtx.resume()` needs.
+    if (this.audioCtx && this.audioCtx.state === "suspended") {
+      this.audioCtx.resume().catch(() => {})
+    }
     this.startTicking()
-    this.startProgressSaving()
   }
 
   onPause() {
     this.stopTicking()
-    this.stopProgressSaving()
     this.updateWord()
-    this.updateProgress()
-    this.saveProgress()
-  }
-
-  onSeek(event) {
-    const fraction = Number(event.target.value) / 1000
-    const chapterMs = fraction * (this.endMsValue - this.startMsValue)
-    this.audioTarget.currentTime = (this.startMsValue + chapterMs) / 1000
   }
 
   onSeeked() {
-    this.updateProgress()
     this.updateWord()
-    this.saveProgress()
   }
 
-  setRate(event) {
-    this.audioTarget.playbackRate = this.computeRate(Number(event.target.value))
+  onLoadedMetadata() {
+    this.updateWord()
   }
 
-  // playbackRate is browser-clamped to [0.25, 4.0].
-  computeRate(wpm) {
-    if (!this.naturalWpm) return 1
-    return Math.min(4, Math.max(0.25, wpm / this.naturalWpm))
+  onChapterEnd() {
+    this.stopTicking()
   }
 
-  startProgressSaving() {
-    if (this.progressSaveInterval !== null) return
-    this.progressSaveInterval = setInterval(() => this.saveProgress(), PROGRESS_SAVE_INTERVAL_MS)
-  }
+  // ---- Sync-offset slider --------------------------------------------
 
-  stopProgressSaving() {
-    if (this.progressSaveInterval !== null) {
-      clearInterval(this.progressSaveInterval)
-      this.progressSaveInterval = null
+  setAudioOffset(event) {
+    this.audioOffsetMsValue = Number(event.target.value)
+    if (this.hasAudioOffsetReadoutTarget) {
+      this.audioOffsetReadoutTarget.textContent = this.formatOffset(this.audioOffsetMsValue)
     }
+    this.updateWord()
   }
 
-  saveProgress(extra = {}) {
-    if (!this.hasProgressUrlValue) return
-    const progressMs = Math.floor(this.audioTarget.currentTime * 1000)
-    const isCompletion = "completed" in extra
-    if (progressMs === this.lastSavedProgressMs && !isCompletion) return
-    this.lastSavedProgressMs = progressMs
-    this.fetchJson(this.progressUrlValue, "PATCH", { progress_ms: progressMs, ...extra })
-  }
-
-  // Beacon-style save for `pagehide` and `disconnect`. `keepalive: true`
-  // lets the request continue past page unload, which `sendBeacon` would
-  // also do but only via POST without custom headers (no CSRF token).
-  beaconProgress() {
-    if (!this.hasProgressUrlValue) return
-    const progressMs = Math.floor(this.audioTarget.currentTime * 1000)
-    this.fetchJson(this.progressUrlValue, "PATCH", { progress_ms: progressMs }, { keepalive: true })
-  }
-
-  fetchJson(url, method, body, options = {}) {
-    const tokenEl = document.querySelector('meta[name="csrf-token"]')
-    const headers = { "Content-Type": "application/json", "Accept": "application/json" }
-    if (tokenEl) headers["X-CSRF-Token"] = tokenEl.content
-    fetch(url, { method, headers, body: JSON.stringify(body), ...options }).catch(() => {})
-  }
-
-  computeNaturalWpm() {
-    const minutes = (this.endMsValue - this.startMsValue) / 60000
-    if (minutes <= 0) return 0
-    return this.wordsValue.length / minutes
-  }
+  // ---- Word display loop ---------------------------------------------
 
   startTicking() {
-    if (this.rafId === null) {
-      this.rafId = requestAnimationFrame(this.tick)
-    }
+    if (this.rafId === null) this.rafId = requestAnimationFrame(this.tick)
   }
 
   stopTicking() {
@@ -182,59 +89,66 @@ export default class extends Controller {
 
   tick() {
     this.updateWord()
-    this.updateProgress()
     this.rafId = requestAnimationFrame(this.tick)
   }
 
   updateWord() {
     const timeMs = this.audioTarget.currentTime * 1000
-
-    if (timeMs >= this.endMsValue) {
-      this.handleChapterEnd()
-      return
-    }
-
-    const index = this.findWordIndex(timeMs + WORD_LEAD_MS)
-
+    const index = this.findWordIndex(timeMs + this.leadMediaMs())
     if (index !== this.lastIndex) {
       this.lastIndex = index
       this.render(this.wordsValue[index])
     }
   }
 
-  updateProgress() {
-    const elapsedMs = this.audioTarget.currentTime * 1000 - this.startMsValue
-    const totalMs = this.endMsValue - this.startMsValue
-    const fraction = totalMs > 0 ? Math.max(0, Math.min(1, elapsedMs / totalMs)) : 0
-    this.seekTarget.value = String(fraction * 1000)
-    this.currentTimeTarget.textContent = this.formatTime(Math.max(0, elapsedMs))
+  // Re-position the current word when the frame's width changes, since
+  // `style.left` is written in pixels relative to the frame.
+  handleResize() {
+    const word = this.lastIndex >= 0 ? this.wordsValue[this.lastIndex] : null
+    if (word) this.render(word)
   }
 
-  handleChapterEnd() {
-    if (this.advanced) return
-    this.advanced = true
-    this.stopTicking()
-    this.stopProgressSaving()
-    this.audioTarget.currentTime = this.endMsValue / 1000
-    if (!this.audioTarget.paused) this.audioTarget.pause()
+  // ---- Latency probe and lead math -----------------------------------
 
-    this.saveProgress({ completed: true })
-
-    if (!this.nextChapterUrlValue) return
-
-    const url = new URL(this.nextChapterUrlValue, window.location.origin)
-    url.searchParams.set("autoplay", "1")
-
-    // Prefer a Turbo Frame swap when our wrapper frame is present: it
-    // replaces only the frame's contents, leaving <html> untouched, so
-    // document-level fullscreen survives the transition. Fall back to a
-    // full visit (e.g. if the frame markup is ever removed).
-    const frame = this.element.closest("turbo-frame")
-    if (frame) {
-      frame.src = url.toString()
-    } else {
-      window.Turbo.visit(url.toString())
+  // A latency-probe AudioContext. We do NOT route the `<audio>` element
+  // through it — the native playback path is untouched. The context
+  // exists only so `baseLatency + outputLatency` can tell us how far
+  // behind `audio.currentTime` the user actually hears the audio
+  // (typically ~150ms on Bluetooth/AirPods, ~30ms on wired/built-in).
+  // Starts suspended in most browsers; resumed in `onPlay` since some
+  // implementations only report useful `outputLatency` values once the
+  // context is running.
+  createAudioCtx() {
+    const Ctx = window.AudioContext || window.webkitAudioContext
+    if (!Ctx) return null
+    try {
+      return new Ctx()
+    } catch (_) {
+      return null
     }
+  }
+
+  // Wall-clock ms between when a sample is scheduled (advancing
+  // `audio.currentTime`) and when it actually reaches the ear. Reactive
+  // to output-device changes in Chrome/Firefox. Returns 0 in browsers
+  // without an AudioContext.
+  latencyWallMs() {
+    if (!this.audioCtx) return 0
+    const base = this.audioCtx.baseLatency || 0
+    const output = this.audioCtx.outputLatency || 0
+    return (base + output) * 1000
+  }
+
+  // Media-time offset to add to `currentTime` when picking the word that
+  // should be displayed now. Three wall-clock components: artistic lead
+  // (eye gets a head-start), the user's sync nudge, and the device's
+  // output latency (subtracted, since heard audio trails `currentTime`).
+  // Rescaled by `playbackRate` so the *perceived* lead is constant
+  // across WPM choices — at 2× rate, 30ms of wall-clock lead is 60ms of
+  // media time.
+  leadMediaMs() {
+    const rate = this.audioTarget.playbackRate || 1
+    return (ARTISTIC_LEAD_WALL_MS + this.audioOffsetMsValue - this.latencyWallMs()) * rate
   }
 
   // Binary search for the last word whose `start` is <= timeMs.
@@ -295,10 +209,7 @@ export default class extends Controller {
     this.wordTarget.style.left = `${frame.offsetWidth / 3 - focalCenter}px`
   }
 
-  formatTime(ms) {
-    const totalSec = Math.max(0, Math.floor(ms / 1000))
-    const min = Math.floor(totalSec / 60)
-    const sec = totalSec % 60
-    return `${min}:${String(sec).padStart(2, "0")}`
+  formatOffset(ms) {
+    return `${ms >= 0 ? "+" : ""}${ms}ms`
   }
 }

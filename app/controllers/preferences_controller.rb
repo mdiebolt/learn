@@ -10,6 +10,6 @@ class PreferencesController < ApplicationController
   private
 
   def preference_params
-    params.permit(:wpm)
+    params.permit(:wpm, :audio_offset_ms)
   end
 end

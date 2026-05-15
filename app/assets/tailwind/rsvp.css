@@ -60,7 +60,13 @@
   background: transparent;
   cursor: pointer;
 
+  /* The track and thumb already brighten on focus-visible below, so the
+   * global amber outline would be doubly redundant here. */
   &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
     outline: none;
   }
 

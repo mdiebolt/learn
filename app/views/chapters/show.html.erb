@@ -1,4 +1,4 @@
-<%# Wrapping the chapter in a Turbo Frame lets the RSVP controller advance to %>
+<%# Wrapping the chapter in a Turbo Frame lets chapter-autoplay advance to %>
 <%# the next chapter via `frame.src = ...` instead of `Turbo.visit`. A frame %>
 <%# swap leaves <html> in place, so document-level fullscreen survives the %>
 <%# transition; a body-replacing visit would drop fullscreen on most browsers. %>
@@ -8,7 +8,10 @@
       <%# Top hover zone — back link, chapter title, and fullscreen fade in when cursor approaches the top edge. %>
       <div class="absolute top-0 left-0 right-0 h-24 group/header z-10">
         <div class="absolute top-0 left-0 right-0 px-6 pt-6 grid grid-cols-3 items-start gap-6 text-2xs font-mono uppercase tracking-wide tabular-nums transition-opacity duration-300 opacity-0 pointer-events-none group-hover/header:opacity-100 group-hover/header:pointer-events-auto">
-          <%= link_to @audiobook, class: "justify-self-start text-white/70 hover:text-amber-400 transition-colors" do %>
+          <%# `turbo_frame: "_top"` escapes the chapter frame so Turbo doesn't %>
+          <%# look for a matching frame on the audiobook show page and surface %>
+          <%# a "Content missing" error. %>
+          <%= link_to @audiobook, data: { turbo_frame: "_top" }, class: "justify-self-start text-white/70 hover:text-amber-400 transition-colors" do %>
             [← back]
           <% end %>
           <div class="justify-self-center text-center min-w-0 truncate text-white/40"><%= @chapter.title %></div>
@@ -31,34 +34,53 @@
                  min="0" max="1000" value="0" step="1"
                  name="seek"
                  aria-label="Seek"
-                 data-rsvp-target="seek"
-                 data-action="input->rsvp#onSeek"
+                 data-playback-target="seek"
+                 data-action="input->playback#seek"
                  class="rsvp-scrubber">
           <div class="px-6 py-4 flex items-center justify-between text-2xs font-mono uppercase tracking-wide tabular-nums text-white/50">
             <div class="flex items-center gap-2">
-              <span data-rsvp-target="currentTime">0:00</span>
+              <span data-playback-target="currentTime">0:00</span>
               <span class="text-white/25">/</span>
-              <span data-rsvp-target="duration">0:00</span>
+              <span data-playback-target="duration">0:00</span>
             </div>
 
-            <button type="button"
-                    aria-label="Toggle fullscreen"
-                    data-action="fullscreen#toggle"
-                    class="justify-self-end bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer">
-              [fullscreen]
-            </button>
+            <div class="flex items-center gap-5">
+              <label class="flex items-center gap-2 cursor-pointer" data-playback-no-toggle>
+                <span class="text-white/40">sync</span>
+                <input type="range"
+                       min="<%= User::AUDIO_OFFSET_MS_RANGE.begin %>"
+                       max="<%= User::AUDIO_OFFSET_MS_RANGE.end %>"
+                       step="25"
+                       value="<%= Current.user.audio_offset_ms %>"
+                       name="audio_offset_ms"
+                       aria-label="Audio sync offset in milliseconds"
+                       data-rsvp-target="audioOffset"
+                       data-controller="autosave"
+                       data-autosave-url-value="<%= preferences_path %>"
+                       data-action="input->rsvp#setAudioOffset change->autosave#patch"
+                       class="w-20 accent-amber-400 cursor-pointer">
+                <span data-rsvp-target="audioOffsetReadout" class="text-white/40 w-12 text-right"><%= format("%+dms", Current.user.audio_offset_ms) %></span>
+              </label>
 
-            <select name="wpm"
-                    aria-label="Reading speed"
-                    data-rsvp-target="wpm"
-                    data-controller="autosave"
-                    data-autosave-url-value="<%= preferences_path %>"
-                    data-action="change->rsvp#setRate change->autosave#patch"
-                    class="bg-transparent border-0 text-white/60 hover:text-amber-400 focus:outline-none cursor-pointer uppercase tracking-wide font-mono">
-              <% User::WPM_OPTIONS.each do |wpm| %>
-                <option value="<%= wpm %>" class="bg-black text-white"<%= " selected" if wpm == Current.user.wpm %>><%= wpm %> wpm</option>
-              <% end %>
-            </select>
+              <button type="button"
+                      aria-label="Toggle fullscreen"
+                      data-action="fullscreen#toggle"
+                      class="bg-transparent border-0 text-white/60 hover:text-amber-400 cursor-pointer">
+                [fullscreen]
+              </button>
+
+              <select name="wpm"
+                      aria-label="Reading speed"
+                      data-playback-target="wpm"
+                      data-controller="autosave"
+                      data-autosave-url-value="<%= preferences_path %>"
+                      data-action="change->playback#setRate change->autosave#patch"
+                      class="bg-transparent border-0 text-white/60 hover:text-amber-400 cursor-pointer uppercase tracking-wide font-mono">
+                <% User::WPM_OPTIONS.each do |wpm| %>
+                  <option value="<%= wpm %>" class="bg-black text-white"<%= " selected" if wpm == Current.user.wpm %>><%= wpm %> wpm</option>
+                <% end %>
+              </select>
+            </div>
           </div>
         </footer>
       </div>
