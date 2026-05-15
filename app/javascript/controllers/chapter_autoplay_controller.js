@@ -22,15 +22,25 @@ export default class extends Controller {
   // replaces only the frame's contents, leaving <html> untouched, so
   // document-level fullscreen survives the transition. Fall back to a
   // full visit (e.g. if the frame markup is ever removed).
+  //
+  // The frame is fetched with `?autoplay=1` so the server-rendered view
+  // for the new chapter starts playing on load. After the frame swap
+  // succeeds we push a *clean* URL to history — no query param — so
+  // reloads and bookmarks don't re-trigger autoplay.
   advance() {
     if (!this.nextChapterUrlValue) return
-    const url = new URL(this.nextChapterUrlValue, window.location.origin)
-    url.searchParams.set("autoplay", "1")
+    const targetUrl = new URL(this.nextChapterUrlValue, window.location.origin)
+    const fetchUrl = new URL(targetUrl)
+    fetchUrl.searchParams.set("autoplay", "1")
+
     const frame = this.element.closest("turbo-frame")
     if (frame) {
-      frame.src = url.toString()
+      frame.addEventListener("turbo:frame-load", () => {
+        window.history.pushState({}, "", targetUrl.toString())
+      }, { once: true })
+      frame.src = fetchUrl.toString()
     } else {
-      window.Turbo.visit(url.toString())
+      window.Turbo.visit(fetchUrl.toString())
     }
   }
 }

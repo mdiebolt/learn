@@ -23,6 +23,7 @@ export default class extends Controller {
 
   disconnect() {
     this.stopTicking()
+    this.setPlaybackActive(false)
   }
 
   // ---- User-driven control -------------------------------------------
@@ -84,14 +85,24 @@ export default class extends Controller {
   // controllers on the wrapper can react.
 
   onPlay() {
+    this.setPlaybackActive(true)
     this.startTicking()
     this.dispatch("play")
   }
 
   onPause() {
+    this.setPlaybackActive(false)
     this.stopTicking()
     this.updateUI()
     this.dispatch("pause")
+  }
+
+  // Mirrored on the wrapper (for in-frame styles like cursor: none) and
+  // on `<body>` (for layout-level styles like the logo fade, which
+  // lives outside the wrapper).
+  setPlaybackActive(active) {
+    this.element.classList.toggle("playback-active", active)
+    document.body.classList.toggle("playback-active", active)
   }
 
   onSeeked() {

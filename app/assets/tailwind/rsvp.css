@@ -1,3 +1,20 @@
+/* While audio is playing, the chapter wrapper hides its cursor and the
+ * layout-level logo fades out. The playback controller toggles
+ * `playback-active` on the chapter wrapper and on `<body>`; the logo
+ * lives outside the wrapper, so the body class is what reaches it. */
+.playback-active {
+  cursor: none;
+}
+
+.app-logo {
+  transition: opacity 200ms;
+}
+
+body.playback-active .app-logo {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* RSVP word display.
  *
  * The whole word renders as a single inline text run inside `.rsvp-word-text`
@@ -133,7 +150,11 @@
 
 /* "Table of contents" leader: a row of '.' characters whose left `--p`
  * portion fills amber, the rest white/15. Implemented as a horizontal
- * gradient clipped to the text glyphs. */
+ * gradient clipped to the text glyphs.
+ *
+ * `liga`/`calt` are explicitly disabled because Geist Mono otherwise
+ * collapses three-dot runs into a single ellipsis glyph, breaking the
+ * leader rhythm. */
 .progress-leader {
   background: linear-gradient(
     to right,
@@ -143,4 +164,6 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
 }
