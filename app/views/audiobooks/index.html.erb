@@ -9,9 +9,7 @@
 
   <% if @audiobooks.any? %>
     <ul role="list">
-      <% @audiobooks.each do |audiobook| %>
-        <%= render "audiobook", audiobook: audiobook %>
-      <% end %>
+      <%= render @audiobooks %>
     </ul>
   <% else %>
     <div class="border border-white/10 px-6 py-16 text-center">
