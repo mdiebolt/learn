@@ -3,9 +3,7 @@
     <%= link_to audiobooks_path, class: "ui-link" do %>
       [← back to library]
     <% end %>
-    <%= button_to "[delete audiobook]", @audiobook, method: :delete,
-          form: { data: { turbo_confirm: "Delete this audiobook?" } },
-          class: "ui-button text-white/40 hover:text-red-400" %>
+    <%= delete_audiobook_button(@audiobook) %>
   </div>
 
   <header class="mt-8 mb-12">

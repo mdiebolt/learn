@@ -9,20 +9,11 @@
   </header>
 
   <%= form_with model: @audiobook, class: "space-y-8" do |f| %>
-    <% if @audiobook.errors.any? %>
-      <div class="ui-flash ui-flash--alert space-y-1">
-        <% @audiobook.errors.full_messages.each do |message| %>
-          <div>// <%= message %></div>
-        <% end %>
-      </div>
-    <% end %>
+    <%= error_summary @audiobook %>
 
     <div>
-      <%= f.label :audio, "// audio file (m4b or mp3)", class: "ui-label mb-3" %>
-      <%= f.file_field :audio,
-            accept: ".m4b,.mp3",
-            direct_upload: true,
-            class: "ui-input ui-input--file" %>
+      <%= f.label :audio, "// audio file (m4b or mp3)", class: "mb-3" %>
+      <%= f.file_field :audio, accept: ".m4b,.mp3", direct_upload: true %>
       <p class="text-xs text-white/40 mt-3">
         Audiobook files can be large. The upload will go directly from your browser to storage.
       </p>

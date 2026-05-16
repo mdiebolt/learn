@@ -51,7 +51,9 @@
       "Bash(bundle exec *)",
       "Bash(grep *)",
       "Bash(bin/rails tailwindcss:build)",
-      "Bash(xargs ls -la)"
+      "Bash(xargs ls -la)",
+      "Bash(ruby -v)",
+      "Bash(bin/rails -v)"
     ]
   }
 }

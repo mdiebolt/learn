@@ -1,26 +1,12 @@
-<div class="max-w-sm mx-auto px-6 py-16 sm:py-24">
-  <% if alert = flash[:alert] %>
-    <p id="alert" class="ui-flash ui-flash--alert mb-8">// <%= alert %></p>
-  <% end %>
-  <% if notice = flash[:notice] %>
-    <p id="notice" class="ui-flash ui-flash--notice mb-8">// <%= notice %></p>
-  <% end %>
-
-  <h1 class="ui-title mb-12">Sign in</h1>
-
+<%= auth_panel "Sign in" do %>
   <%= form_with url: session_url, class: "space-y-8" do |form| %>
     <div>
-      <%= form.label :email_address, "// email", class: "ui-label mb-2" %>
-      <%= form.email_field :email_address,
-            required: true, autofocus: true, autocomplete: "username",
-            value: params[:email_address],
-            class: "ui-input ui-input--email" %>
+      <%= form.label :email_address, "// email", class: "mb-2" %>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", value: params[:email_address] %>
     </div>
     <div>
-      <%= form.label :password, "// password", class: "ui-label mb-2" %>
-      <%= form.password_field :password,
-            required: true, autocomplete: "current-password", maxlength: 72,
-            class: "ui-input ui-input--password" %>
+      <%= form.label :password, "// password", class: "mb-2" %>
+      <%= form.password_field :password, required: true, autocomplete: "current-password", maxlength: 72 %>
     </div>
 
     <div class="flex items-center justify-between gap-4 pt-4">
@@ -28,4 +14,4 @@
       <%= link_to "[reset password]", new_password_path, class: "ui-link" %>
     </div>
   <% end %>
-</div>
+<% end %>

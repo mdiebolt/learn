@@ -1,17 +1,11 @@
-<div class="max-w-sm mx-auto px-6 py-16 sm:py-24">
-  <% if alert = flash[:alert] %>
-    <p id="alert" class="ui-flash ui-flash--alert mb-8">// <%= alert %></p>
-  <% end %>
-
-  <h1 class="ui-title mb-12">Reset Password</h1>
-
+<%= auth_panel "Reset Password" do %>
   <%= form_with url: passwords_path, class: "space-y-8" do |form| %>
     <div>
-      <%= form.label :email_address, "// email", class: "ui-label mb-2" %>
+      <%= form.label :email_address, "// email", class: "mb-2" %>
       <%= form.email_field :email_address,
-            required: true, autofocus: true, autocomplete: "username",
-            value: params[:email_address],
-            class: "ui-input ui-input--email" %>
+        required: true, autofocus: true, autocomplete: "username",
+        value: params[:email_address]
+      %>
     </div>
 
     <div class="flex items-center justify-between gap-4 pt-4">
@@ -19,4 +13,4 @@
       <%= link_to "[← back to sign in]", new_session_path, class: "ui-link" %>
     </div>
   <% end %>
-</div>
+<% end %>

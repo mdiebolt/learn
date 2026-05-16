@@ -30,13 +30,7 @@
       <%# Bottom hover zone — scrubber and time/wpm fade in when cursor approaches the bottom edge. %>
       <div class="absolute bottom-0 left-0 right-0 h-32 group/footer z-10">
         <footer class="absolute bottom-0 left-0 right-0 transition-opacity duration-300 opacity-0 pointer-events-none group-hover/footer:opacity-100 group-hover/footer:pointer-events-auto">
-          <input type="range"
-                 min="0" max="1000" value="0" step="1"
-                 name="seek"
-                 aria-label="Seek"
-                 data-playback-target="seek"
-                 data-action="input->playback#seek"
-                 class="rsvp-scrubber">
+          <%= rsvp_scrubber %>
           <div class="px-6 py-4 flex items-center justify-between text-2xs font-mono uppercase tracking-wide tabular-nums text-white/50">
             <div class="flex items-center gap-2">
               <span data-playback-target="currentTime">0:00</span>
@@ -45,41 +39,9 @@
             </div>
 
             <div class="flex items-center gap-5">
-              <label class="flex items-center gap-2 cursor-pointer" data-playback-no-toggle>
-                <span class="text-white/40">sync</span>
-                <input type="range"
-                       min="<%= User::AUDIO_OFFSET_MS_RANGE.begin %>"
-                       max="<%= User::AUDIO_OFFSET_MS_RANGE.end %>"
-                       step="25"
-                       value="<%= Current.user.audio_offset_ms %>"
-                       name="audio_offset_ms"
-                       aria-label="Audio sync offset in milliseconds"
-                       data-rsvp-target="audioOffset"
-                       data-controller="autosave"
-                       data-autosave-url-value="<%= preferences_path %>"
-                       data-action="input->rsvp#setAudioOffset change->autosave#patch"
-                       class="w-20 accent-amber-400 cursor-pointer">
-                <span data-rsvp-target="audioOffsetReadout" class="text-white/40 w-12 text-right"><%= format("%+dms", Current.user.audio_offset_ms) %></span>
-              </label>
-
-              <button type="button"
-                      aria-label="Toggle fullscreen"
-                      data-action="fullscreen#toggle"
-                      class="bg-transparent border-0 text-white/60 hover:text-amber-400 cursor-pointer">
-                [fullscreen]
-              </button>
-
-              <select name="wpm"
-                      aria-label="Reading speed"
-                      data-playback-target="wpm"
-                      data-controller="autosave"
-                      data-autosave-url-value="<%= preferences_path %>"
-                      data-action="change->playback#setRate change->autosave#patch"
-                      class="bg-transparent border-0 text-white/60 hover:text-amber-400 cursor-pointer uppercase tracking-wide font-mono">
-                <% User::WPM_OPTIONS.each do |wpm| %>
-                  <option value="<%= wpm %>" class="bg-black text-white"<%= " selected" if wpm == Current.user.wpm %>><%= wpm %> wpm</option>
-                <% end %>
-              </select>
+              <%= rsvp_audio_offset_control %>
+              <%= rsvp_fullscreen_button %>
+              <%= rsvp_wpm_select %>
             </div>
           </div>
         </footer>

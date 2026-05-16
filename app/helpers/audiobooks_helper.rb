@@ -36,6 +36,12 @@ module AudiobooksHelper
       class: "font-mono text-2xs uppercase tracking-wide shrink-0 #{color}"
   end
 
+  def delete_audiobook_button(audiobook)
+    button_to "[delete audiobook]", audiobook, method: :delete,
+      form: { data: { turbo_confirm: "Delete this audiobook?" } },
+      class: "ui-button text-white/40 hover:text-red-400"
+  end
+
   private
 
   def transcribe_button(audiobook, id:, box:, dot_size:, text:, chrome:, dot_color:, confirm: nil)
