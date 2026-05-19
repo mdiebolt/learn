@@ -9,6 +9,11 @@ module Audiobook::Transcript::Scribing
     raise "audiobook has no audio attached" unless audiobook.audio.attached?
 
     chapters = audiobook.chapters.to_a
+    if chapters.empty?
+      update!(status: :ready, progress_message: nil)
+      return
+    end
+
     transaction do
       words.delete_all
       Audiobook::Chapter.where(id: chapters.map(&:id)).update_all(transcription_status: :pending)

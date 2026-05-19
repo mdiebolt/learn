@@ -20,7 +20,6 @@ class AudiobooksController < ApplicationController
     @audiobook = Current.user.audiobooks.new(audiobook_params)
 
     if @audiobook.save
-      @audiobook.extract_title_author_and_cover!
       redirect_to @audiobook
     else
       render :new, status: :unprocessable_entity

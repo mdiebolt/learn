@@ -80,7 +80,8 @@
       "Bash(time ffmpeg -v error -y -i /Users/bolt/code/learn/storage/no/p9/nop9b8y4e95n3l1os8gzdbaa3wig -ss 11047.750 -to 14520.068 -vn -acodec aac -b:a 128k -f mp4 /tmp/g.m4a)",
       "Bash(echo \"exit=$? size=$\\(stat -f%z /tmp/g.m4a 2>/dev/null\\) $\\(tail -2 /tmp/g\\)\")",
       "Bash(ffprobe -v error -show_entries format=duration,format_name -select_streams a:0 -show_entries stream=codec_name,channels,sample_rate -of default=nw=1 /tmp/f.m4a)",
-      "Bash(tee /tmp/ch325_rerun.log)"
+      "Bash(tee /tmp/ch325_rerun.log)",
+      "Bash(echo \"exit:$?\")"
     ]
   }
 }
