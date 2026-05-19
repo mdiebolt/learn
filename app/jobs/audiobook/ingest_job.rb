@@ -1,14 +1,11 @@
 class Audiobook::IngestJob < ApplicationJob
   queue_as :default
 
-  def perform(audiobook_id)
-    audiobook = Audiobook.find(audiobook_id)
-    audiobook.processing!
-    audiobook.detect!
-    audiobook.ready!
+  def perform(audiobook)
+    audiobook.extract_from_audio_source_file!
   rescue => e
-    Audiobook.find_by(id: audiobook_id)&.update(status: :failed)
-    Rails.logger.error("[Audiobook::IngestJob] #{audiobook_id} failed: #{e.message}")
+    audiobook.failed!
+    Rails.logger.error("[Audiobook::IngestJob] #{audiobook.id} failed: #{e.message}")
     raise
   end
 end

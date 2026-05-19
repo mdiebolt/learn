@@ -31,6 +31,6 @@ module Audiobook::Ingestible
   end
 
   def enqueue_ingestion
-    Audiobook::IngestJob.perform_later(id)
+    Audiobook::IngestJob.perform_later(self)
   end
 end

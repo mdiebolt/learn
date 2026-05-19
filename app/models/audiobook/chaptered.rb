@@ -7,7 +7,7 @@ module Audiobook::Chaptered
     has_many :chapters, class_name: "Audiobook::Chapter", dependent: :destroy
   end
 
-  def detect!
+  def detect_chapters!
     audio.open do |file|
       probe_data = ffprobe(file.path)
       duration = ((probe_data.dig("format", "duration") || 0).to_f * 1000).round

@@ -53,7 +53,8 @@
       "Bash(bin/rails tailwindcss:build)",
       "Bash(xargs ls -la)",
       "Bash(ruby -v)",
-      "Bash(bin/rails -v)"
+      "Bash(bin/rails -v)",
+      "Bash(ffmpeg -version)"
     ]
   }
 }
