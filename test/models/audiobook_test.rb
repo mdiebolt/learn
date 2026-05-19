@@ -35,7 +35,7 @@ class AudiobookTest < ActiveSupport::TestCase
     assert audiobook.valid?
   end
 
-  test "title defaults to the audio filename when blank" do
+  test "title falls back to the filename without its extension when blank" do
     audiobook = Audiobook.new(user: users(:one))
     audiobook.audio.attach(
       io: StringIO.new("fake"),
@@ -44,6 +44,6 @@ class AudiobookTest < ActiveSupport::TestCase
     )
     audiobook.valid?
 
-    assert_equal "filename.m4b", audiobook.title
+    assert_equal "filename", audiobook.title
   end
 end

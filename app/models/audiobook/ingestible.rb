@@ -8,7 +8,7 @@ module Audiobook::Ingestible
 
     validate :format_supported
 
-    before_validation :default_title_to_filename, on: :create
+    before_validation :default_title_from_filename, on: :create
     after_create_commit :enqueue_ingestion
   end
 
@@ -23,11 +23,14 @@ module Audiobook::Ingestible
     errors.add(:audio, "must be an M4B or MP3 file")
   end
 
-  def default_title_to_filename
+  # Fallback only — the embedded title (Audiobook::Authored#extract_title!)
+  # is the real public-facing title. When a file carries no title tag we
+  # still want a clean label, so strip the extension: "Dune", not "Dune.m4b".
+  def default_title_from_filename
     return if title.present?
     return unless audio.attached?
 
-    self.title = audio.filename.to_s
+    self.title = File.basename(audio.filename.to_s, ".*")
   end
 
   def enqueue_ingestion

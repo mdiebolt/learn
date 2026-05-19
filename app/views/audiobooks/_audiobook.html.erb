@@ -1,11 +1,20 @@
 <li class="flex items-center justify-between gap-6 py-5">
-  <%= link_to audiobook, class: "flex-1 min-w-0 group" do %>
-    <h2 class="text-lg font-medium tracking-tight truncate group-hover:text-amber-400 transition-colors">
-      <%= audiobook.title %>
-    </h2>
-    <% if audiobook.author.present? %>
-      <p class="text-sm text-white/50 mt-1 truncate"><%= audiobook.author %></p>
+  <%= link_to audiobook, class: "flex items-center gap-4 flex-1 min-w-0 group" do %>
+    <% if audiobook.cover.attached? %>
+      <%= image_tag audiobook.cover.variant(resize_to_fill: [ 112, 112 ]),
+            alt: audiobook.title,
+            class: "size-14 shrink-0 object-cover border border-white/10" %>
+    <% else %>
+      <div class="size-14 shrink-0 grid place-items-center border border-white/10 font-mono text-2xs text-white/20" aria-hidden="true">//</div>
     <% end %>
+    <div class="min-w-0">
+      <h2 class="text-lg font-medium tracking-tight truncate group-hover:text-amber-400 transition-colors">
+        <%= audiobook.title %>
+      </h2>
+      <% if audiobook.author.present? %>
+        <p class="text-sm text-white/50 mt-1 truncate"><%= audiobook.author %></p>
+      <% end %>
+    </div>
   <% end %>
 
   <% if audiobook.status.to_sym == :ready %>

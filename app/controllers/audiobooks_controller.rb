@@ -2,7 +2,7 @@ class AudiobooksController < ApplicationController
   before_action :set_audiobook, only: [ :show, :destroy ]
 
   def index
-    @audiobooks = Current.user.audiobooks.recent
+    @audiobooks = Current.user.audiobooks.with_attached_cover.recent
   end
 
   def show
@@ -20,6 +20,7 @@ class AudiobooksController < ApplicationController
     @audiobook = Current.user.audiobooks.new(audiobook_params)
 
     if @audiobook.save
+      @audiobook.extract_title_author_and_cover!
       redirect_to @audiobook
     else
       render :new, status: :unprocessable_entity

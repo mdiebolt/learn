@@ -13,3 +13,11 @@ resources :chapters
 resource :preferences, only: [:update]
 resources :chapters, except: [:destroy]
 ```
+
+## Comments
+
+Minimize these. Prefer richly-named domain terms. Only add a comment if it explains the "why" of the code in a way that isn’t clear from the method name or invocation flow.
+
+## Views
+
+Don’t wrap tags or erb code into multiple lines.
