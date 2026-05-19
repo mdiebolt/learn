@@ -5,6 +5,10 @@ module Audiobook::Authored
 
   AUTHOR_TAGS = %w[author artist album_artist].freeze
 
+  included do
+    before_validation :default_blank_title_from_filename, on: :create
+  end
+
   def extract_author!
     audio.open do |file|
       tags = probe_format_tags(file.path)
@@ -36,5 +40,12 @@ module Audiobook::Authored
     JSON.parse(output).dig("format", "tags") || {}
   rescue JSON::ParserError
     {}
+  end
+
+  def default_blank_title_from_filename
+    return if title.present?
+    return unless audio.attached?
+
+    self.title = File.basename(audio.filename.to_s, ".*")
   end
 end

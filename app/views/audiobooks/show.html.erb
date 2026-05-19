@@ -39,15 +39,15 @@
           <li>
             <% if @audiobook.transcript&.ready? %>
               <% fraction = progress&.fraction_through(chapter) || 0 %>
-              <%= link_to audiobook_chapter_path(@audiobook, chapter), class: "flex items-baseline justify-between gap-4 py-3 -mx-4 px-4 hover:bg-white/[0.02] transition-colors group" do %>
-                <div class="flex items-baseline gap-4 min-w-0">
-                  <span class="text-2xs tabular-nums text-white/40 shrink-0"><%= "%02d" % (i + 1) %></span>
-                  <span class="font-medium truncate <%= progress&.completed? ? "text-white/50" : "" %> group-hover:text-amber-400 transition-colors"><%= chapter.title %></span>
+              <%= link_to audiobook_chapter_path(@audiobook, chapter), class: "block py-3 -mx-4 px-4 hover:bg-white/[0.02] transition-colors group" do %>
+                <div class="flex items-baseline justify-between gap-4">
+                  <div class="flex items-baseline gap-4 min-w-0">
+                    <span class="text-2xs tabular-nums text-white/40 shrink-0"><%= "%02d" % (i + 1) %></span>
+                    <span class="font-medium truncate <%= progress&.completed? ? "text-white/50" : "" %> group-hover:text-amber-400 transition-colors"><%= chapter.title %></span>
+                  </div>
+                  <span class="shrink-0 text-2xs uppercase tracking-wide tabular-nums text-white/40"><%= duration_str %></span>
                 </div>
-                <div class="hidden sm:block flex-1 min-w-0 overflow-hidden whitespace-nowrap progress-leader"
-                     style="--p: <%= (fraction * 100).round %>%"
-                     aria-hidden="true"><%= "." * 240 %></div>
-                <span class="shrink-0 text-2xs uppercase tracking-wide tabular-nums text-white/40"><%= duration_str %></span>
+                <div class="overflow-hidden whitespace-nowrap progress-leader text-xs" style="--p: <%= (fraction * 100).round %>%" aria-hidden="true"><%= "." * 240 %></div>
               <% end %>
             <% else %>
               <div class="flex items-baseline justify-between gap-4 py-3">
