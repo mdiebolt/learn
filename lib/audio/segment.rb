@@ -20,9 +20,11 @@ module Audio
       Tempfile.create([ "chapter_segment", ".mp3" ]) do |tempfile|
         output, status = Open3.capture2e(
           "ffmpeg", "-v", "error", "-y",
-          "-ss", seconds(@start_time_ms), "-to", seconds(@end_time_ms),
           "-i", @source_path,
-          "-vn", "-acodec", "libmp3lame", "-f", "mp3",
+          "-ss", seconds(@start_time_ms), "-to", seconds(@end_time_ms),
+          "-vn", "-acodec", "libmp3lame",
+          "-fflags", "+genpts", "-avoid_negative_ts", "make_zero",
+          "-f", "mp3",
           tempfile.path
         )
         unless status.success?

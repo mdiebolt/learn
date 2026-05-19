@@ -62,7 +62,8 @@
       "Bash(git log *)",
       "Bash(ruby -e 'puts Gem.loaded_specs rescue nil')",
       "Read(//Users/bolt/.rbenv/**)",
-      "Bash(xargs sed -n '60,75p;195,205p')"
+      "Bash(xargs sed -n '60,75p;195,205p')",
+      "Bash(awk 'NR>=205100' /Users/bolt/code/learn/log/development.log)"
     ]
   }
 }
