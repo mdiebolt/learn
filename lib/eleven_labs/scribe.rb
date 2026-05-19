@@ -20,7 +20,7 @@ module ElevenLabs
       response = connection.post(API_URL) do |req|
         req.headers["xi-api-key"] = @api_key
         req.body = {
-          file: Faraday::Multipart::FilePart.new(file_path, "audio/mpeg"),
+          file: Faraday::Multipart::FilePart.new(file_path, "audio/mp4"),
           model_id: MODEL_ID
         }
       end

@@ -2,9 +2,9 @@ require "open3"
 require "tempfile"
 
 module Audio
-  # Extracts a time range from an audio file into a standalone MP3 so each
-  # chapter can be sent to Scribe independently. Yields the temp file path and
-  # cleans it up afterward.
+  # Extracts a time range from an audio file into a standalone AAC/m4a file so
+  # each chapter can be sent to Scribe independently. Yields the temp file path
+  # and cleans it up afterward.
   class Segment
     def self.extract(source_path, start_time_ms, end_time_ms, &block)
       new(source_path, start_time_ms, end_time_ms).extract(&block)
@@ -17,14 +17,13 @@ module Audio
     end
 
     def extract
-      Tempfile.create([ "chapter_segment", ".mp3" ]) do |tempfile|
+      Tempfile.create([ "chapter_segment", ".m4a" ]) do |tempfile|
         output, status = Open3.capture2e(
           "ffmpeg", "-v", "error", "-y",
           "-i", @source_path,
           "-ss", seconds(@start_time_ms), "-to", seconds(@end_time_ms),
-          "-vn", "-acodec", "libmp3lame",
-          "-fflags", "+genpts", "-avoid_negative_ts", "make_zero",
-          "-f", "mp3",
+          "-vn", "-acodec", "aac", "-b:a", "128k",
+          "-f", "mp4",
           tempfile.path
         )
         unless status.success?

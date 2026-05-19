@@ -63,7 +63,24 @@
       "Bash(ruby -e 'puts Gem.loaded_specs rescue nil')",
       "Read(//Users/bolt/.rbenv/**)",
       "Bash(xargs sed -n '60,75p;195,205p')",
-      "Bash(awk 'NR>=205100' /Users/bolt/code/learn/log/development.log)"
+      "Bash(awk 'NR>=205100' /Users/bolt/code/learn/log/development.log)",
+      "Bash(ffmpeg -v error -y -i /Users/bolt/code/learn/storage/no/p9/nop9b8y4e95n3l1os8gzdbaa3wig -ss 11047.750 -to 14520.068 -vn -acodec libmp3lame -fflags +genpts -avoid_negative_ts make_zero -f mp3 /tmp/seg_new.mp3)",
+      "Read(//tmp/**)",
+      "Bash(echo \"exit=$? newsize=$\\(stat -f%z /tmp/seg_new.mp3 \\)\")",
+      "Bash(ffmpeg -v error -y -ss 11047.750 -to 14520.068 -i /Users/bolt/code/learn/storage/no/p9/nop9b8y4e95n3l1os8gzdbaa3wig -vn -acodec libmp3lame -f mp3 /tmp/seg_orig.mp3)",
+      "Bash(echo \"ffmpeg exit=$?\")",
+      "Bash(ffmpeg -v error -y -i /Users/bolt/code/learn/storage/no/p9/nop9b8y4e95n3l1os8gzdbaa3wig -ss 11047.750 -to 11137.750 -vn -acodec libmp3lame -f mp3 /tmp/a.mp3)",
+      "Bash(echo \"exit=$? $\\(tail -1 /tmp/a\\)\")",
+      "Bash(ffmpeg -v error -y -i /Users/bolt/code/learn/storage/no/p9/nop9b8y4e95n3l1os8gzdbaa3wig -ss 11047.750 -to 11137.750 -vn -af aresample=44100 -acodec libmp3lame -f mp3 /tmp/b.mp3)",
+      "Bash(echo \"exit=$? $\\(tail -1 /tmp/b\\)\")",
+      "Bash(ffmpeg -v error -y -i /Users/bolt/code/learn/storage/no/p9/nop9b8y4e95n3l1os8gzdbaa3wig -ss 11047.750 -to 11137.750 -vn -ac 2 -ar 44100 -sample_fmt s16p -acodec libmp3lame -f mp3 /tmp/c.mp3)",
+      "Bash(ffprobe -v error -select_streams a:0 -show_entries stream=codec_name,sample_rate,channels -of default=nw=1 /Users/bolt/code/learn/storage/no/p9/nop9b8y4e95n3l1os8gzdbaa3wig)",
+      "Bash(time ffmpeg -v error -y -i /Users/bolt/code/learn/storage/no/p9/nop9b8y4e95n3l1os8gzdbaa3wig -ss 11047.750 -to 14520.068 -vn -c:a copy -f mp4 /tmp/f.m4a)",
+      "Bash(echo \"exit=$? size=$\\(stat -f%z /tmp/f.m4a 2>/dev/null\\) $\\(tail -2 /tmp/f\\)\")",
+      "Bash(time ffmpeg -v error -y -i /Users/bolt/code/learn/storage/no/p9/nop9b8y4e95n3l1os8gzdbaa3wig -ss 11047.750 -to 14520.068 -vn -acodec aac -b:a 128k -f mp4 /tmp/g.m4a)",
+      "Bash(echo \"exit=$? size=$\\(stat -f%z /tmp/g.m4a 2>/dev/null\\) $\\(tail -2 /tmp/g\\)\")",
+      "Bash(ffprobe -v error -show_entries format=duration,format_name -select_streams a:0 -show_entries stream=codec_name,channels,sample_rate -of default=nw=1 /tmp/f.m4a)",
+      "Bash(tee /tmp/ch325_rerun.log)"
     ]
   }
 }
