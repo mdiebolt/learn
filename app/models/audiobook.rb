@@ -11,6 +11,7 @@ class Audiobook < ApplicationRecord
 
   def extract_from_audio_source_file!
     processing!
+    extract_title_author_and_cover!
     detect_chapters!
     ready!
   end

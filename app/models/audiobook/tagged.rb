@@ -5,8 +5,6 @@ module Audiobook::Tagged
 
   included do
     before_validation :default_blank_title_from_filename, on: :create
-
-    after_create_commit :extract_title_author_and_cover!
   end
 
   # Best-effort: a tag-less or odd file should still ingest (title falls back

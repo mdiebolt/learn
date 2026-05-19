@@ -81,7 +81,9 @@
       "Bash(echo \"exit=$? size=$\\(stat -f%z /tmp/g.m4a 2>/dev/null\\) $\\(tail -2 /tmp/g\\)\")",
       "Bash(ffprobe -v error -show_entries format=duration,format_name -select_streams a:0 -show_entries stream=codec_name,channels,sample_rate -of default=nw=1 /tmp/f.m4a)",
       "Bash(tee /tmp/ch325_rerun.log)",
-      "Bash(echo \"exit:$?\")"
+      "Bash(echo \"exit:$?\")",
+      "Read(//Users/bolt/code/skills/skills/the-rails-way/**)",
+      "Bash(ruby *)"
     ]
   }
 }
