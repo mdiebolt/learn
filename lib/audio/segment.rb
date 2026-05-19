@@ -18,14 +18,17 @@ module Audio
 
     def extract
       Tempfile.create([ "chapter_segment", ".mp3" ]) do |tempfile|
-        _, status = Open3.capture2(
-          "ffmpeg", "-v", "quiet", "-y",
+        output, status = Open3.capture2e(
+          "ffmpeg", "-v", "error", "-y",
           "-ss", seconds(@start_time_ms), "-to", seconds(@end_time_ms),
           "-i", @source_path,
           "-vn", "-acodec", "libmp3lame", "-f", "mp3",
           tempfile.path
         )
-        raise "ffmpeg failed to slice #{@start_time_ms}–#{@end_time_ms}ms from #{@source_path}" unless status.success?
+        unless status.success?
+          details = output.lines.last(20).join.strip
+          raise "ffmpeg failed to slice #{@start_time_ms}–#{@end_time_ms}ms from #{@source_path}: #{details}"
+        end
         yield tempfile.path
       end
     end

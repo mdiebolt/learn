@@ -56,7 +56,13 @@
       "Bash(bin/rails -v)",
       "Bash(ffmpeg -version)",
       "Bash(psql learn_development -c \"\\\\dt\")",
-      "Bash(ps -eo pid,lstart,etime,command)"
+      "Bash(ps -eo pid,lstart,etime,command)",
+      "Bash(awk 'NR>=3511 && NR<=3525' /Users/bolt/code/learn/log/development.log)",
+      "Bash(awk 'NR>=3420 && NR<=3512' /Users/bolt/code/learn/log/development.log)",
+      "Bash(git log *)",
+      "Bash(ruby -e 'puts Gem.loaded_specs rescue nil')",
+      "Read(//Users/bolt/.rbenv/**)",
+      "Bash(xargs sed -n '60,75p;195,205p')"
     ]
   }
 }

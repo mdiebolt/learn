@@ -25,8 +25,11 @@ module ElevenLabs
         }
       end
 
-      raise Error, "Scribe #{response.status}: #{response.body}" unless response.success?
-      JSON.parse(response.body)
+      return JSON.parse(response.body) if response.success?
+
+      message = "Scribe #{response.status}: #{response.body}"
+      raise RateLimitError, message if response.status == 429
+      raise Error, message
     end
 
     private
@@ -41,5 +44,9 @@ module ElevenLabs
     end
 
     class Error < StandardError; end
+
+    # ElevenLabs caps concurrent speech-to-text requests per subscription and
+    # returns 429 when exceeded. Transient and safe to retry with backoff.
+    class RateLimitError < Error; end
   end
 end
