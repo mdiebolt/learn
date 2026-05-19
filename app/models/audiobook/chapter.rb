@@ -1,6 +1,10 @@
 class Audiobook::Chapter < ApplicationRecord
+  include Scribing
+
   belongs_to :audiobook
   has_many :progresses, dependent: :destroy
+
+  enum :transcription_status, { pending: 0, transcribing: 1, ready: 2, failed: 3 }, prefix: :transcription
 
   default_scope { order(:position) }
 

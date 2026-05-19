@@ -7,6 +7,6 @@ module Audiobook::Transcribable
 
   def transcribe!
     (transcript || create_transcript!).update!(status: :pending, progress_message: nil)
-    Audiobook::ScribeJob.perform_later(id)
+    Audiobook::ScribeJob.perform_later(self)
   end
 end

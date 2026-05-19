@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.2].define(version: 2026_05_14_120000) do
+ActiveRecord::Schema[8.2].define(version: 2026_05_19_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -60,6 +60,7 @@ ActiveRecord::Schema[8.2].define(version: 2026_05_14_120000) do
     t.integer "position", null: false
     t.integer "start_time_ms", null: false
     t.string "title", null: false
+    t.integer "transcription_status", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["audiobook_id", "position"], name: "index_audiobook_chapters_on_audiobook_id_and_position", unique: true
     t.index ["audiobook_id"], name: "index_audiobook_chapters_on_audiobook_id"
