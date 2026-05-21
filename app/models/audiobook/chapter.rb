@@ -4,6 +4,10 @@ class Audiobook::Chapter < ApplicationRecord
   belongs_to :audiobook
   has_many :words, class_name: "Audiobook::Chapter::Word", dependent: :destroy
   has_many :progresses, dependent: :destroy
+  has_many :study_guides, class_name: "Audiobook::Chapter::StudyGuide",
+    foreign_key: :audiobook_chapter_id, dependent: :destroy
+  has_many :cards, class_name: "Audiobook::Chapter::Card",
+    foreign_key: :audiobook_chapter_id, dependent: :destroy
 
   enum :transcription_status, { pending: 0, transcribing: 1, ready: 2, failed: 3 }, prefix: :transcription
 

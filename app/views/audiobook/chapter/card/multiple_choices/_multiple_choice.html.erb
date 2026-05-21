@@ -1,0 +1,6 @@
+<div class="space-y-2">
+  <p class="text-base"><%= multiple_choice.question %></p>
+  <ol class="list-[upper-alpha] pl-6 space-y-1 text-white/80">
+    <% multiple_choice.options.each do |opt| %><li><%= opt %></li><% end %>
+  </ol>
+</div>

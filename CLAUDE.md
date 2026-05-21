@@ -25,3 +25,7 @@ Don’t wrap tags or erb code into multiple lines.
 ## Jobs
 
 Pass instances of ActiveRecord objects to jobs rather than ids since Rails knows how to look up the model automatically.
+
+## Skills
+
+Always use `~/.config/agents/skills/the-rails-way` skill

@@ -1,0 +1,23 @@
+<%= turbo_frame_tag dom_id(card) do %>
+  <article class="space-y-4" data-controller="reveal">
+    <header class="text-xs font-mono uppercase tracking-wide text-white/40">
+      <%= card.concept_title %>
+    </header>
+
+    <%= render card.kind, card: card %>
+
+    <div data-reveal-target="answer" hidden class="space-y-4 border-t border-white/10 pt-4">
+      <%= render "audiobook/chapter/cards/answer", card: card %>
+
+      <%= form_with url: audiobook_chapter_study_guide_card_reviews_path(card.audiobook_chapter.audiobook, card.audiobook_chapter, card), class: "flex gap-2" do |f| %>
+        <% { again: FsrsRuby::Rating::AGAIN, hard: FsrsRuby::Rating::HARD, good: FsrsRuby::Rating::GOOD, easy: FsrsRuby::Rating::EASY }.each do |label, rating| %>
+          <%= f.button label.to_s.titleize, name: "rating", value: rating, class: "ui-button" %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <button type="button" data-action="reveal#show" data-reveal-target="trigger" class="ui-button">
+      Reveal answer
+    </button>
+  </article>
+<% end %>

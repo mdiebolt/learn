@@ -1,0 +1,6 @@
+<figure class="space-y-2">
+  <%= render visual.kind %>
+  <% if visual.caption.present? %>
+    <figcaption class="text-xs font-mono uppercase tracking-wide text-white/40"><%= visual.caption %></figcaption>
+  <% end %>
+</figure>

@@ -1,0 +1,7 @@
+<div class="space-y-2">
+  <p class="text-base"><%= matching.prompt %></p>
+  <div class="grid grid-cols-2 gap-3">
+    <ul class="space-y-1 text-white/80"><% matching.pairs.each do |p| %><li><%= p["left"] %></li><% end %></ul>
+    <ul class="space-y-1 text-white/80"><% matching.pairs.map { |p| p["right"] }.shuffle.each do |r| %><li><%= r %></li><% end %></ul>
+  </div>
+</div>

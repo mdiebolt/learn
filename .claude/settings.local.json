@@ -87,7 +87,17 @@
       "Bash(git -C /Users/bolt/code/learn mv app/models/audiobook/transcript/word/optimal_recognition_point.rb app/models/audiobook/chapter/word/optimal_recognition_point.rb)",
       "Bash(git -C /Users/bolt/code/learn mv app/models/audiobook/transcript/word.rb app/models/audiobook/chapter/word.rb)",
       "Bash(git -C /Users/bolt/code/learn rm -f app/models/audiobook/transcribable.rb)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "Bash(gh api *)",
+      "Bash(python3 -c \"import json,sys; [print\\(f['name'], f['size']\\) for f in json.load\\(sys.stdin\\)]\")",
+      "Bash(curl -sL https://raw.githubusercontent.com/ondrejrohon/fsrs_ruby/main/lib/fsrs_ruby.rb)",
+      "Bash(curl -sL https://raw.githubusercontent.com/ondrejrohon/fsrs_ruby/main/lib/fsrs_ruby/models.rb)",
+      "Bash(curl -sL https://raw.githubusercontent.com/ondrejrohon/fsrs_ruby/main/lib/fsrs_ruby/fsrs_instance.rb)",
+      "Bash(curl -sL https://raw.githubusercontent.com/ondrejrohon/fsrs_ruby/main/lib/fsrs_ruby/version.rb)",
+      "Bash(curl -s https://api.github.com/repos/ondrejrohon/fsrs_ruby)",
+      "Bash(cp -R /tmp/fsrs_ruby/lib/fsrs_ruby /Users/bolt/code/learn/lib/fsrs_ruby)",
+      "Bash(cp /tmp/fsrs_ruby/lib/fsrs_ruby.rb /Users/bolt/code/learn/lib/fsrs_ruby.rb)",
+      "Bash(cp /tmp/fsrs_ruby/LICENSE /Users/bolt/code/learn/lib/fsrs_ruby/LICENSE)"
     ]
   }
 }

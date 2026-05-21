@@ -6,6 +6,8 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   has_many :audiobooks, dependent: :destroy
   has_many :chapter_progresses, class_name: "Audiobook::Chapter::Progress", dependent: :destroy
+  has_many :study_guides, class_name: "Audiobook::Chapter::StudyGuide", dependent: :destroy
+  has_many :cards, class_name: "Audiobook::Chapter::Card", dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
