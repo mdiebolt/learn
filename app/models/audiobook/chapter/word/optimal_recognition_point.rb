@@ -1,4 +1,4 @@
-module Audiobook::Transcript::Word::OptimalRecognitionPoint
+module Audiobook::Chapter::Word::OptimalRecognitionPoint
   extend ActiveSupport::Concern
 
   # Spritz ORP table — the focal character index is chosen from the alphabetic

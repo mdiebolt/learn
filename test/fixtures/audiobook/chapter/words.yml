@@ -1,5 +1,5 @@
 first:
-  transcript: one
+  chapter: one
   text: Hello
   start_time_ms: 0
   end_time_ms: 500
@@ -7,7 +7,7 @@ first:
   orp_index: 1
 
 second:
-  transcript: one
+  chapter: one
   text: world
   start_time_ms: 500
   end_time_ms: 1000

@@ -6,15 +6,15 @@ module AudiobooksHelper
     dot_size = small ? "size-1" : "size-1.5"
     id = dom_id(audiobook, :transcript_badge)
 
-    case audiobook.transcript&.status&.to_sym
-    when nil, :pending
+    case audiobook.transcription_status
+    when :pending
       transcribe_button(audiobook, id:, box:, dot_size:,
         text: "transcribe", confirm: TRANSCRIBE_CONFIRM,
         chrome: "text-white/70 hover:text-amber-400 border border-white/20 hover:border-amber-400",
         dot_color: "bg-white/40")
     when :transcribing
       transcript_status_badge(id:, box:, dot_size:,
-        text: audiobook.transcript.progress_message.presence || "transcribing…",
+        text: audiobook.transcription_progress_message.presence || "transcribing…",
         chrome: "text-amber-400 border border-amber-400/40",
         dot_color: "bg-amber-400 animate-pulse")
     when :ready

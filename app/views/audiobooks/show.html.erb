@@ -37,7 +37,7 @@
           <% progress = @progresses_by_chapter_id[chapter.id] %>
           <% duration_str = "%02d:%02d" % chapter.duration_ms.divmod(60_000).then { |m, ms| [m, ms / 1000] } %>
           <li>
-            <% if @audiobook.transcript&.ready? %>
+            <% if chapter.transcription_ready? %>
               <% fraction = progress&.fraction_through(chapter) || 0 %>
               <%= link_to audiobook_chapter_path(@audiobook, chapter), class: "block py-3 -mx-4 px-4 hover:bg-white/[0.02] transition-colors group" do %>
                 <div class="flex items-baseline justify-between gap-4">
@@ -50,12 +50,15 @@
                 <div class="overflow-hidden whitespace-nowrap progress-leader text-xs" style="--p: <%= (fraction * 100).round %>%" aria-hidden="true"><%= "." * 240 %></div>
               <% end %>
             <% else %>
-              <div class="flex items-baseline justify-between gap-4 py-3">
-                <div class="flex items-baseline gap-4 min-w-0">
-                  <span class="text-2xs tabular-nums text-white/40 shrink-0"><%= "%02d" % (i + 1) %></span>
-                  <span class="text-white/60 truncate"><%= chapter.title %></span>
+              <div class="py-3">
+                <div class="flex items-baseline justify-between gap-4">
+                  <div class="flex items-baseline gap-4 min-w-0">
+                    <span class="text-2xs tabular-nums text-white/40 shrink-0"><%= "%02d" % (i + 1) %></span>
+                    <span class="text-white/60 truncate"><%= chapter.title %></span>
+                  </div>
+                  <span class="shrink-0 text-2xs uppercase tracking-wide tabular-nums text-white/40"><%= duration_str %></span>
                 </div>
-                <span class="text-2xs tabular-nums text-white/40 shrink-0"><%= duration_str %></span>
+                <div class="overflow-hidden whitespace-nowrap progress-leader text-xs" style="--p: 0%" aria-hidden="true"><%= "." * 240 %></div>
               </div>
             <% end %>
           </li>

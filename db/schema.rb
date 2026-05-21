@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.2].define(version: 2026_05_19_120000) do
+ActiveRecord::Schema[8.2].define(version: 2026_05_20_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -53,6 +53,20 @@ ActiveRecord::Schema[8.2].define(version: 2026_05_19_120000) do
     t.index ["user_id", "chapter_id"], name: "index_audiobook_chapter_progresses_on_user_id_and_chapter_id", unique: true
   end
 
+  create_table "audiobook_chapter_words", force: :cascade do |t|
+    t.bigint "chapter_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "end_time_ms", null: false
+    t.integer "orp_index", default: 0, null: false
+    t.integer "position", null: false
+    t.integer "start_time_ms", null: false
+    t.string "text", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chapter_id", "position"], name: "index_audiobook_chapter_words_on_chapter_id_and_position", unique: true
+    t.index ["chapter_id", "start_time_ms"], name: "index_audiobook_chapter_words_on_chapter_id_and_start_time_ms"
+    t.index ["chapter_id"], name: "index_audiobook_chapter_words_on_chapter_id"
+  end
+
   create_table "audiobook_chapters", force: :cascade do |t|
     t.bigint "audiobook_id", null: false
     t.datetime "created_at", null: false
@@ -64,30 +78,6 @@ ActiveRecord::Schema[8.2].define(version: 2026_05_19_120000) do
     t.datetime "updated_at", null: false
     t.index ["audiobook_id", "position"], name: "index_audiobook_chapters_on_audiobook_id_and_position", unique: true
     t.index ["audiobook_id"], name: "index_audiobook_chapters_on_audiobook_id"
-  end
-
-  create_table "audiobook_transcript_words", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.integer "end_time_ms", null: false
-    t.integer "orp_index", default: 0, null: false
-    t.integer "position", null: false
-    t.integer "start_time_ms", null: false
-    t.string "text", null: false
-    t.bigint "transcript_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["transcript_id", "position"], name: "index_audiobook_transcript_words_on_transcript_id_and_position", unique: true
-    t.index ["transcript_id", "start_time_ms"], name: "index_audiobook_transcript_words_on_start_time"
-    t.index ["transcript_id"], name: "index_audiobook_transcript_words_on_transcript_id"
-  end
-
-  create_table "audiobook_transcripts", force: :cascade do |t|
-    t.bigint "audiobook_id", null: false
-    t.datetime "created_at", null: false
-    t.string "progress_message"
-    t.jsonb "raw_response"
-    t.integer "status", default: 0, null: false
-    t.datetime "updated_at", null: false
-    t.index ["audiobook_id"], name: "index_audiobook_transcripts_on_audiobook_id", unique: true
   end
 
   create_table "audiobooks", force: :cascade do |t|
@@ -124,9 +114,8 @@ ActiveRecord::Schema[8.2].define(version: 2026_05_19_120000) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "audiobook_chapter_progresses", "audiobook_chapters", column: "chapter_id"
   add_foreign_key "audiobook_chapter_progresses", "users"
+  add_foreign_key "audiobook_chapter_words", "audiobook_chapters", column: "chapter_id"
   add_foreign_key "audiobook_chapters", "audiobooks"
-  add_foreign_key "audiobook_transcript_words", "audiobook_transcripts", column: "transcript_id"
-  add_foreign_key "audiobook_transcripts", "audiobooks"
   add_foreign_key "audiobooks", "users"
   add_foreign_key "sessions", "users"
 end

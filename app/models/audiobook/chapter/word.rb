@@ -1,16 +1,12 @@
-class Audiobook::Transcript::Word < ApplicationRecord
+class Audiobook::Chapter::Word < ApplicationRecord
   include OptimalRecognitionPoint
 
-  belongs_to :transcript, class_name: "Audiobook::Transcript"
+  belongs_to :chapter, class_name: "Audiobook::Chapter"
 
   default_scope { order(:position) }
 
   scope :covering, ->(time_ms) {
     where("start_time_ms <= ? AND end_time_ms > ?", time_ms, time_ms)
-  }
-
-  scope :between, ->(from_ms, to_ms) {
-    where("start_time_ms >= ? AND start_time_ms < ?", from_ms, to_ms)
   }
 
   def self.playback_payload(scope = all)

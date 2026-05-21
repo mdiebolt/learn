@@ -83,7 +83,11 @@
       "Bash(tee /tmp/ch325_rerun.log)",
       "Bash(echo \"exit:$?\")",
       "Read(//Users/bolt/code/skills/skills/the-rails-way/**)",
-      "Bash(ruby *)"
+      "Bash(ruby *)",
+      "Bash(git -C /Users/bolt/code/learn mv app/models/audiobook/transcript/word/optimal_recognition_point.rb app/models/audiobook/chapter/word/optimal_recognition_point.rb)",
+      "Bash(git -C /Users/bolt/code/learn mv app/models/audiobook/transcript/word.rb app/models/audiobook/chapter/word.rb)",
+      "Bash(git -C /Users/bolt/code/learn rm -f app/models/audiobook/transcribable.rb)",
+      "Bash(git *)"
     ]
   }
 }

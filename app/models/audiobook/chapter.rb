@@ -2,11 +2,14 @@ class Audiobook::Chapter < ApplicationRecord
   include Scribing
 
   belongs_to :audiobook
+  has_many :words, class_name: "Audiobook::Chapter::Word", dependent: :destroy
   has_many :progresses, dependent: :destroy
 
   enum :transcription_status, { pending: 0, transcribing: 1, ready: 2, failed: 3 }, prefix: :transcription
 
   default_scope { order(:position) }
+
+  after_update_commit :broadcast_audiobook_transcript_badge, if: :saved_change_to_transcription_status?
 
   def duration_ms
     end_time_ms - start_time_ms
@@ -17,11 +20,19 @@ class Audiobook::Chapter < ApplicationRecord
   end
 
   def playback_words
-    transcript = audiobook.transcript
-    return [] unless transcript&.ready?
+    return [] unless transcription_ready?
 
-    Audiobook::Transcript::Word.playback_payload(
-      transcript.words.between(start_time_ms, end_time_ms)
+    Audiobook::Chapter::Word.playback_payload(words)
+  end
+
+  private
+
+  def broadcast_audiobook_transcript_badge
+    broadcast_replace_to(
+      [ audiobook, :transcript_badge ],
+      target: ActionView::RecordIdentifier.dom_id(audiobook, :transcript_badge),
+      partial: "audiobooks/transcript_badge",
+      locals: { audiobook: audiobook }
     )
   end
 end

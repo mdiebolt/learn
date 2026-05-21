@@ -1,5 +1,5 @@
 class Audiobook < ApplicationRecord
-  include Chaptered, Ingestible, Tagged, Transcribable
+  include Chaptered, Ingestible, Tagged, Transcribing
 
   belongs_to :user
 

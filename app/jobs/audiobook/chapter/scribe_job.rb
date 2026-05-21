@@ -12,18 +12,15 @@ class Audiobook::Chapter::ScribeJob < ApplicationJob
     chapter = job.arguments.first
     chapter.transcription_failed!
     Rails.logger.error("[Audiobook::Chapter::ScribeJob] #{chapter.id} failed after retries: #{error.message}")
-    chapter.audiobook.transcript&.settle_chapter!
   end
 
   def perform(chapter)
     chapter.transcribe_segment!
-    chapter.audiobook.transcript&.settle_chapter!
   rescue ElevenLabs::Scribe::RateLimitError
     raise
   rescue => e
     chapter.transcription_failed!
     Rails.logger.error("[Audiobook::Chapter::ScribeJob] #{chapter.id} failed: #{e.message}")
-    chapter.audiobook.transcript&.settle_chapter!
     raise
   end
 end

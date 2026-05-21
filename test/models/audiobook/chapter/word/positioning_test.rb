@@ -1,7 +1,7 @@
 require "test_helper"
 
-class Audiobook::Transcript::WordPositioningTest < ActiveSupport::TestCase
-  Word = Audiobook::Transcript::Word
+class Audiobook::Chapter::Word::PositioningTest < ActiveSupport::TestCase
+  Word = Audiobook::Chapter::Word
 
   def build(text)
     Word.new(text: text, start_time_ms: 0, end_time_ms: 1, position: 0)
@@ -36,8 +36,8 @@ class Audiobook::Transcript::WordPositioningTest < ActiveSupport::TestCase
   end
 
   test "orp_index is assigned on create from text" do
-    transcript = audiobook_transcripts(:one)
-    word = transcript.words.create!(
+    chapter = audiobook_chapters(:one)
+    word = chapter.words.create!(
       text: "wonderful", start_time_ms: 0, end_time_ms: 1, position: 99
     )
 
