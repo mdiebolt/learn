@@ -2,10 +2,7 @@ class Audiobook::Chapter::Card::ReviewsController < ApplicationController
   before_action :set_card
 
   def create
-    @card.apply_review!(
-      rating: Integer(params.require(:rating)),
-      response: params[:response]&.permit!&.to_h
-    )
+    @card.apply_review!(rating: Integer(review_params.fetch(:rating)))
 
     @next_card = Current.user.cards.due.where.not(id: @card.id).order(:due).first
 
@@ -21,5 +18,9 @@ class Audiobook::Chapter::Card::ReviewsController < ApplicationController
     audiobook = Current.user.audiobooks.find(params[:audiobook_id])
     chapter = audiobook.chapters.find(params[:chapter_id])
     @card = chapter.cards.where(user: Current.user).find(params[:card_id])
+  end
+
+  def review_params
+    params.expect(review: [ :rating ])
   end
 end

@@ -8,4 +8,8 @@ class Audiobook::Chapter::Visual < ApplicationRecord
   belongs_to :study_guide,
     class_name: "Audiobook::Chapter::StudyGuide",
     foreign_key: :audiobook_chapter_study_guide_id
+
+  def self.kind_class_for(slug)
+    kind_types.find { |t| t.demodulize.underscore == slug.to_s }&.constantize
+  end
 end

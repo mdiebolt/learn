@@ -6,4 +6,8 @@ module Audiobook::Chapter::Card::Kind
       class_name: "Audiobook::Chapter::Card",
       touch: true
   end
+
+  def to_answer_partial_path
+    "#{to_partial_path.rpartition('/').first}/answer"
+  end
 end

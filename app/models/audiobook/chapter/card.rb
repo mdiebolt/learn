@@ -21,6 +21,10 @@ class Audiobook::Chapter::Card < ApplicationRecord
 
   scope :due, ->(now = Time.current) { where("due <= ?", now) }
 
+  def self.kind_class_for(slug)
+    kind_types.find { |t| t.demodulize.underscore == slug.to_s }&.constantize
+  end
+
   def chapter
     audiobook_chapter
   end
