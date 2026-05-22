@@ -36,9 +36,11 @@
         <% @audiobook.chapters.each_with_index do |chapter, i| %>
           <% progress = @progresses_by_chapter_id[chapter.id] %>
           <% duration_str = "%02d:%02d" % chapter.duration_ms.divmod(60_000).then { |m, ms| [m, ms / 1000] } %>
-          <li>
+          <li class="relative">
             <% if chapter.transcription_ready? %>
               <% fraction = progress&.fraction_through(chapter) || 0 %>
+              <div class="hidden"><%= turbo_stream_from chapter, :study_guide_control %></div>
+              <%= render "audiobook/chapter/study_guides/control", audiobook: @audiobook, chapter: chapter, study_guide: @study_guides_by_chapter_id[chapter.id] %>
               <%= link_to audiobook_chapter_path(@audiobook, chapter), class: "block py-3 -mx-4 px-4 hover:bg-white/[0.02] transition-colors group" do %>
                 <div class="flex items-baseline justify-between gap-4">
                   <div class="flex items-baseline gap-4 min-w-0">
@@ -49,10 +51,6 @@
                 </div>
                 <div class="overflow-hidden whitespace-nowrap progress-leader text-xs" style="--p: <%= (fraction * 100).round %>%" aria-hidden="true"><%= "." * 240 %></div>
               <% end %>
-              <div class="pl-8 pb-3">
-                <%= turbo_stream_from chapter, :study_guide_control %>
-                <%= render "audiobook/chapter/study_guides/control", audiobook: @audiobook, chapter: chapter, study_guide: @study_guides_by_chapter_id[chapter.id] %>
-              </div>
             <% else %>
               <div class="py-3">
                 <div class="flex items-baseline justify-between gap-4">
