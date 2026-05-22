@@ -11,7 +11,11 @@ export default class extends Controller {
     if (this.graded) return
     this.chosen = Number(event.params.index)
     this.optionTargets.forEach((option, index) => {
-      option.classList.toggle(this.selectedClass, index === this.chosen)
+      if (index === this.chosen) {
+        option.classList.add(...this.selectedClasses)
+      } else {
+        option.classList.remove(...this.selectedClasses)
+      }
     })
   }
 

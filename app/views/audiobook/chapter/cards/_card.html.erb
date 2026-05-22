@@ -8,7 +8,7 @@
 
     <%= render card.kind, card: card %>
 
-    <div data-reveal-target="answer" hidden class="space-y-4 border-t border-white/10 pt-4">
+    <div data-reveal-target="answer" hidden class="space-y-4">
       <%= render partial: card.kind.to_answer_partial_path, object: card.kind, as: card.kind.model_name.element %>
 
       <%= form_with url: audiobook_chapter_card_reviews_path(card.audiobook_chapter.audiobook, card.audiobook_chapter, card), scope: :review, class: "flex flex-wrap gap-3" do |f| %>

@@ -1,4 +1,4 @@
-<div class="space-y-3" data-controller="multiple-choice" data-multiple-choice-correct-index-value="<%= multiple_choice.correct_index %>" data-multiple-choice-hover-class="hover:border-white/40" data-multiple-choice-selected-class="border-amber-400/60" data-multiple-choice-locked-class="cursor-default" data-multiple-choice-correct-class="border-green-400/60 bg-green-400/10" data-multiple-choice-incorrect-class="border-red-400/60 bg-red-400/10">
+<div class="space-y-3" data-controller="multiple-choice" data-multiple-choice-correct-index-value="<%= multiple_choice.correct_index %>" data-multiple-choice-hover-class="hover:border-white/40" data-multiple-choice-selected-class="border-amber-400/60 bg-amber-400/10" data-multiple-choice-locked-class="cursor-default" data-multiple-choice-correct-class="border-green-400/60 bg-green-400/10" data-multiple-choice-incorrect-class="border-red-400/60 bg-red-400/10">
   <p class="text-base"><%= multiple_choice.question %></p>
   <ul class="space-y-2">
     <% multiple_choice.options.each_with_index do |option, i| %>

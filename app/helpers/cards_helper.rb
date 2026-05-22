@@ -27,7 +27,7 @@ module CardsHelper
   end
 
   def card_actions(submit = nil, reveal: "reveal#show")
-    tag.div(class: "flex flex-wrap gap-6", data: { reveal_target: "controls" }) { safe_join([ submit, reveal_trigger(reveal) ].compact) }
+    tag.div(class: "flex flex-wrap gap-4", data: { reveal_target: "controls" }) { safe_join([ submit, reveal_trigger(reveal) ].compact) }
   end
 
   def submit_button(controller)
@@ -42,11 +42,11 @@ module CardsHelper
     tag.div(class: "space-y-3", data: { controller: "sortable", sortable_dragging_class: "opacity-40", sortable_grab_class: "cursor-grab", sortable_locked_class: "cursor-default", sortable_correct_class: "border-green-400/60 bg-green-400/10", sortable_incorrect_class: "border-red-400/60 bg-red-400/10" }, &block)
   end
 
-  def sortable_list(entries)
-    tag.ul(class: "space-y-2", data: { sortable_target: "list", action: "dragover->sortable#dragOver drop->sortable#drop" }) { safe_join(entries.map { |label, position| sortable_item(label, position) }) }
+  def sortable_list(entries, item_height: "min-h-14")
+    tag.ul(class: "space-y-2", data: { sortable_target: "list", action: "dragover->sortable#dragOver drop->sortable#drop" }) { safe_join(entries.map { |label, position| sortable_item(label, position, height: item_height) }) }
   end
 
-  def sortable_item(label, position)
-    tag.li(class: "flex min-h-14 cursor-grab items-center gap-3 border border-white/15 px-3 py-2 text-white/80 transition-colors", draggable: true, data: { sortable_target: "item", position: position, action: "dragstart->sortable#dragStart dragend->sortable#dragEnd" }) { safe_join([ tag.span("::", class: "font-mono text-2xs text-white/30"), tag.span(label) ]) }
+  def sortable_item(label, position, height: "min-h-14")
+    tag.li(class: "flex #{height} cursor-grab items-center gap-3 border border-white/15 px-3 py-2 text-white/80 transition-colors", draggable: true, data: { sortable_target: "item", position: position, action: "dragstart->sortable#dragStart dragend->sortable#dragEnd" }) { safe_join([ tag.span("::", class: "font-mono text-2xs text-white/30"), tag.span(label) ]) }
   end
 end
