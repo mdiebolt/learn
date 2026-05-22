@@ -3,9 +3,8 @@
     <% if visual.caption.present? %>
       <span class="shrink-0 font-mono text-xs uppercase tracking-wider text-white/40">// <%= visual.caption %></span>
     <% end %>
-    <hr class="grow border-t border-white/15">
-    <span class="shrink-0 font-mono text-2xs uppercase tracking-wider text-white/40">reference</span>
-    <span class="flex size-6 shrink-0 items-center justify-center border border-white/15 font-mono text-xs text-white/50" title="<%= visual.kind.model_name.element.titleize %>"><%= visual.kind.glyph %></span>
+    <hr class="grow border-t border-dashed border-white/15">
+    <span class="flex size-6 shrink-0 items-center justify-center border border-dashed border-white/15 font-mono text-xs text-white/50" title="<%= visual.kind.model_name.element.titleize %>"><%= visual.kind.glyph %></span>
   </figcaption>
   <%= render visual.kind %>
 </figure>
