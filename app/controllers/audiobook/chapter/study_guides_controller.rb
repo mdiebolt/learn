@@ -8,8 +8,11 @@ class Audiobook::Chapter::StudyGuidesController < ApplicationController
 
   def create
     Audiobook::Chapter::StudyGuide::GenerateJob.perform_later(@chapter, Current.user)
-    redirect_to audiobook_chapter_study_guide_path(@audiobook, @chapter),
-      notice: "Generating study guide…"
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to audiobook_chapter_study_guide_path(@audiobook, @chapter), notice: "Generating study guide…" }
+    end
   end
 
   private

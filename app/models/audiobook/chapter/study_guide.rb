@@ -14,7 +14,7 @@ class Audiobook::Chapter::StudyGuide < ApplicationRecord
   has_many :visuals, class_name: "Audiobook::Chapter::Visual",
     foreign_key: :audiobook_chapter_study_guide_id, dependent: :destroy
 
-  after_create_commit :broadcast_ready
+  after_create_commit :broadcast_ready, :broadcast_control
 
   class << self
     def create_from_ai_payload!(chapter:, user:, raw_response:, model:, prompt_version: PROMPT_VERSION)
@@ -81,6 +81,15 @@ class Audiobook::Chapter::StudyGuide < ApplicationRecord
       [ audiobook_chapter, :study_guide ],
       target: ActionView::RecordIdentifier.dom_id(audiobook_chapter, :study_guide),
       partial: "audiobook/chapter/study_guides/ready",
+      locals: { audiobook: audiobook_chapter.audiobook, chapter: audiobook_chapter, study_guide: self }
+    )
+  end
+
+  def broadcast_control
+    broadcast_replace_to(
+      [ audiobook_chapter, :study_guide_control ],
+      target: ActionView::RecordIdentifier.dom_id(audiobook_chapter, :study_guide_control),
+      partial: "audiobook/chapter/study_guides/control",
       locals: { audiobook: audiobook_chapter.audiobook, chapter: audiobook_chapter, study_guide: self }
     )
   end
