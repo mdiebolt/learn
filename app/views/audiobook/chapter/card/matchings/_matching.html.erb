@@ -1,7 +1,12 @@
-<div class="space-y-2">
+<%= sortable do %>
   <p class="text-base"><%= matching.prompt %></p>
   <div class="grid grid-cols-2 gap-3">
-    <ul class="space-y-1 text-white/80"><% matching.pairs.each do |p| %><li><%= p["left"] %></li><% end %></ul>
-    <ul class="space-y-1 text-white/80"><% matching.pairs.map { |p| p["right"] }.shuffle.each do |r| %><li><%= r %></li><% end %></ul>
+    <ol class="space-y-2">
+      <% matching.pairs.each do |pair| %>
+        <li class="flex min-h-14 items-center border border-white/10 px-3 py-2 text-white/80"><%= pair["left"] %></li>
+      <% end %>
+    </ol>
+    <%= sortable_list(matching.shuffled_answers) %>
   </div>
-</div>
+  <%= card_actions(submit_button("sortable")) %>
+<% end %>

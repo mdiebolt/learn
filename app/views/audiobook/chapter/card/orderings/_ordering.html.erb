@@ -1,6 +1,5 @@
-<div class="space-y-2">
+<%= sortable do %>
   <p class="text-base"><%= ordering.prompt %></p>
-  <ul class="pl-5 space-y-1 text-white/70">
-    <% ordering.items.shuffle.each do |i| %><li>• <%= i %></li><% end %>
-  </ul>
-</div>
+  <%= sortable_list(ordering.shuffled_items) %>
+  <%= card_actions(submit_button("sortable")) %>
+<% end %>

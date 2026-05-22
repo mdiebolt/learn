@@ -1,1 +1,4 @@
-<p class="text-base"><%= cloze.text.gsub(/\{\{\d+\}\}/, "______") %></p>
+<div class="space-y-3" data-controller="cloze" data-cloze-correct-class="cloze-blank--correct" data-cloze-incorrect-class="cloze-blank--incorrect">
+  <p class="text-base leading-loose"><%= cloze_blanks(cloze) %></p>
+  <%= card_actions(submit_button("cloze")) %>
+</div>

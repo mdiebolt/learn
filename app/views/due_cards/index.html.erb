@@ -5,7 +5,7 @@
   </header>
 
   <% if @due_cards.any? %>
-    <ol class="space-y-6"><% @due_cards.each do |card| %><li class="border border-white/10 rounded p-5"><%= render card %></li><% end %></ol>
+    <ol class="space-y-20"><% @due_cards.each do |card| %><li><%= render card %></li><% end %></ol>
   <% else %>
     <p class="text-white/60">Nothing due. Come back later.</p>
   <% end %>

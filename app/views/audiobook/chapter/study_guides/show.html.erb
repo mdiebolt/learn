@@ -8,9 +8,9 @@
   <%= turbo_stream_from @chapter, :study_guide %>
   <%= turbo_frame_tag dom_id(@chapter, :study_guide) do %>
     <% if @study_guide %>
-      <ol class="space-y-6">
+      <ol class="space-y-20">
         <% @items.each do |item| %>
-          <li class="border border-white/10 rounded p-5"><%= render item.itemable %></li>
+          <li><%= render item.itemable %></li>
         <% end %>
       </ol>
     <% else %>
