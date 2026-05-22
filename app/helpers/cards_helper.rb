@@ -23,11 +23,11 @@ module CardsHelper
   end
 
   def cloze_blank(answer)
-    tag.input(type: "text", autocomplete: "off", spellcheck: "false", size: [ answer.length + 1, 5 ].max, class: "cloze-blank", data: { cloze_target: "blank", answer: answer })
+    tag.input(type: "text", autocomplete: "off", spellcheck: "false", size: [ answer.length + 1, 5 ].max, class: "cloze-blank", data: { "cards--cloze_target": "blank", answer: answer })
   end
 
-  def card_actions(submit = nil, reveal: "reveal#show")
-    tag.div(class: "flex flex-wrap gap-4", data: { reveal_target: "controls" }) { safe_join([ submit, reveal_trigger(reveal) ].compact) }
+  def card_actions(submit = nil, reveal: "cards--reveal#show")
+    tag.div(class: "flex flex-wrap gap-4", data: { "cards--reveal_target": "controls" }) { safe_join([ submit, reveal_trigger(reveal) ].compact) }
   end
 
   def submit_button(controller)
@@ -39,14 +39,14 @@ module CardsHelper
   end
 
   def sortable(&block)
-    tag.div(class: "space-y-3", data: { controller: "sortable", sortable_dragging_class: "opacity-40", sortable_grab_class: "cursor-grab", sortable_locked_class: "cursor-default", sortable_correct_class: "border-green-400/60 bg-green-400/10", sortable_incorrect_class: "border-red-400/60 bg-red-400/10" }, &block)
+    tag.div(class: "space-y-3", data: { controller: "cards--sortable", "cards--sortable_dragging_class": "opacity-40", "cards--sortable_grab_class": "cursor-grab", "cards--sortable_locked_class": "cursor-default", "cards--sortable_correct_class": "border-green-400/60 bg-green-400/10", "cards--sortable_incorrect_class": "border-red-400/60 bg-red-400/10" }, &block)
   end
 
   def sortable_list(entries, item_height: "min-h-14")
-    tag.ul(class: "space-y-2", data: { sortable_target: "list", action: "dragover->sortable#dragOver drop->sortable#drop" }) { safe_join(entries.map { |label, position| sortable_item(label, position, height: item_height) }) }
+    tag.ul(class: "space-y-2", data: { "cards--sortable_target": "list", action: "dragover->cards--sortable#dragOver drop->cards--sortable#drop" }) { safe_join(entries.map { |label, position| sortable_item(label, position, height: item_height) }) }
   end
 
   def sortable_item(label, position, height: "min-h-14")
-    tag.li(class: "flex #{height} cursor-grab items-center gap-3 border border-white/15 px-3 py-2 text-white/80 transition-colors", draggable: true, data: { sortable_target: "item", position: position, action: "dragstart->sortable#dragStart dragend->sortable#dragEnd" }) { safe_join([ tag.span("::", class: "font-mono text-2xs text-white/30"), tag.span(label) ]) }
+    tag.li(class: "flex #{height} cursor-grab items-center gap-3 border border-white/15 px-3 py-2 text-white/80 transition-colors", draggable: true, data: { "cards--sortable_target": "item", position: position, action: "dragstart->cards--sortable#dragStart dragend->cards--sortable#dragEnd" }) { safe_join([ tag.span("::", class: "font-mono text-2xs text-white/30"), tag.span(label) ]) }
   end
 end

@@ -11,33 +11,33 @@ module RapidSerialVisualPresentationHelper
     {
       class: "min-h-dvh grid place-items-center relative overflow-hidden select-none cursor-default",
       data: {
-        controller: "playback rsvp chapter-progress chapter-autoplay fullscreen",
+        controller: "playback--playback playback--rsvp playback--chapter-progress playback--chapter-autoplay fullscreen",
         action: [
-          "click->playback#togglePlayFromClick",
-          "keydown.space@window->playback#togglePlayFromKey",
+          "click->playback--playback#togglePlayFromClick",
+          "keydown.space@window->playback--playback#togglePlayFromKey",
           "keydown.f@window->fullscreen#toggleFromKey",
-          "playback:play->rsvp#onPlay",
-          "playback:play->chapter-progress#onPlay",
-          "playback:pause->rsvp#onPause",
-          "playback:pause->chapter-progress#onPause",
-          "playback:seeked->rsvp#onSeeked",
-          "playback:seeked->chapter-progress#onSeeked",
-          "playback:loadedmetadata->rsvp#onLoadedMetadata",
-          "playback:loadedmetadata->chapter-autoplay#onLoadedMetadata",
-          "playback:chapterend->rsvp#onChapterEnd",
-          "playback:chapterend->chapter-progress#onChapterEnd",
-          "playback:chapterend->chapter-autoplay#advance"
+          "playback:play->playback--rsvp#onPlay",
+          "playback:play->playback--chapter-progress#onPlay",
+          "playback:pause->playback--rsvp#onPause",
+          "playback:pause->playback--chapter-progress#onPause",
+          "playback:seeked->playback--rsvp#onSeeked",
+          "playback:seeked->playback--chapter-progress#onSeeked",
+          "playback:loadedmetadata->playback--rsvp#onLoadedMetadata",
+          "playback:loadedmetadata->playback--chapter-autoplay#onLoadedMetadata",
+          "playback:chapterend->playback--rsvp#onChapterEnd",
+          "playback:chapterend->playback--chapter-progress#onChapterEnd",
+          "playback:chapterend->playback--chapter-autoplay#advance"
         ].join(" "),
-        playback_start_ms_value: chapter.start_time_ms,
-        playback_end_ms_value: chapter.end_time_ms,
-        playback_initial_ms_value: initial_progress_ms,
-        playback_natural_wpm_value: natural_wpm,
-        rsvp_words_value: words.to_json,
-        rsvp_audio_offset_ms_value: Current.user.audio_offset_ms,
-        chapter_progress_url_value: audiobook_chapter_progress_path(audiobook, chapter),
-        chapter_autoplay_autoplay_value: autoplay,
-        chapter_autoplay_next_chapter_url_value: next_url,
-        chapter_autoplay_playback_outlet: "[data-controller~='playback']"
+        "playback--playback_start_ms_value": chapter.start_time_ms,
+        "playback--playback_end_ms_value": chapter.end_time_ms,
+        "playback--playback_initial_ms_value": initial_progress_ms,
+        "playback--playback_natural_wpm_value": natural_wpm,
+        "playback--rsvp_words_value": words.to_json,
+        "playback--rsvp_audio_offset_ms_value": Current.user.audio_offset_ms,
+        "playback--chapter-progress_url_value": audiobook_chapter_progress_path(audiobook, chapter),
+        "playback--chapter-autoplay_autoplay_value": autoplay,
+        "playback--chapter-autoplay_next_chapter_url_value": next_url,
+        "playback--chapter-autoplay_playback--playback_outlet": "[data-controller~='playback--playback']"
       }
     }
   end
@@ -47,15 +47,15 @@ module RapidSerialVisualPresentationHelper
       preload: "metadata",
       class: "hidden",
       data: {
-        playback_target: "audio",
-        rsvp_target: "audio",
-        chapter_progress_target: "audio",
+        "playback--playback_target": "audio",
+        "playback--rsvp_target": "audio",
+        "playback--chapter-progress_target": "audio",
         action: [
-          "play->playback#onPlay",
-          "pause->playback#onPause",
-          "seeked->playback#onSeeked",
-          "loadedmetadata->playback#onLoadedMetadata",
-          "timeupdate->playback#onTimeUpdate"
+          "play->playback--playback#onPlay",
+          "pause->playback--playback#onPause",
+          "seeked->playback--playback#onSeeked",
+          "loadedmetadata->playback--playback#onLoadedMetadata",
+          "timeupdate->playback--playback#onTimeUpdate"
         ].join(" ")
       }
     }
@@ -66,7 +66,7 @@ module RapidSerialVisualPresentationHelper
     tag.input type: "range", autocomplete: "off",
       min: 0, max: 1000, value: 0, step: 1, name: "seek",
       aria: { label: "Seek" },
-      data: { playback_target: "seek", action: "input->playback#seek" },
+      data: { "playback--playback_target": "seek", action: "input->playback--playback#seek" },
       class: "rsvp-scrubber"
   end
 
@@ -84,14 +84,14 @@ module RapidSerialVisualPresentationHelper
           step: 25, value: offset, name: "audio_offset_ms",
           aria: { label: "Audio sync offset in milliseconds" },
           data: {
-            rsvp_target: "audioOffset",
+            "playback--rsvp_target": "audioOffset",
             controller: "autosave",
             autosave_url_value: preferences_path,
-            action: "input->rsvp#setAudioOffset change->autosave#patch"
+            action: "input->playback--rsvp#setAudioOffset change->autosave#patch"
           },
           class: "w-20 accent-amber-400 cursor-pointer"),
         tag.span(format("%+dms", offset),
-          data: { rsvp_target: "audioOffsetReadout" },
+          data: { "playback--rsvp_target": "audioOffsetReadout" },
           class: "text-white/40 w-12 text-right")
       ])
     end
@@ -116,10 +116,10 @@ module RapidSerialVisualPresentationHelper
     select_tag "wpm", options,
       aria: { label: "Reading speed" },
       data: {
-        playback_target: "wpm",
+        "playback--playback_target": "wpm",
         controller: "autosave",
         autosave_url_value: preferences_path,
-        action: "change->playback#setRate change->autosave#patch"
+        action: "change->playback--playback#setRate change->autosave#patch"
       },
       class: "bg-transparent border-0 text-white/60 hover:text-amber-400 cursor-pointer uppercase tracking-wide font-mono"
   end

@@ -1,5 +1,5 @@
 <%= turbo_frame_tag dom_id(card) do %>
-  <article class="space-y-4" data-controller="reveal" data-action="card:graded->reveal#show">
+  <article class="space-y-4" data-controller="cards--reveal" data-action="card:graded->cards--reveal#show">
     <header class="flex items-center gap-3">
       <span class="shrink-0 font-mono text-xs uppercase tracking-wider text-white/40">// <%= card.concept_title %></span>
       <hr class="grow border-t border-white/15">
@@ -8,7 +8,7 @@
 
     <%= render card.kind, card: card %>
 
-    <div data-reveal-target="answer" hidden class="space-y-4">
+    <div data-cards--reveal-target="answer" hidden class="space-y-4">
       <%= render partial: card.kind.to_answer_partial_path, object: card.kind, as: card.kind.model_name.element %>
 
       <%= form_with url: audiobook_chapter_card_reviews_path(card.audiobook_chapter.audiobook, card.audiobook_chapter, card), scope: :review, class: "flex flex-wrap gap-3" do |f| %>

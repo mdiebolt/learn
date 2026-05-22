@@ -98,7 +98,8 @@
       "Bash(cp -R /tmp/fsrs_ruby/lib/fsrs_ruby /Users/bolt/code/learn/lib/fsrs_ruby)",
       "Bash(cp /tmp/fsrs_ruby/lib/fsrs_ruby.rb /Users/bolt/code/learn/lib/fsrs_ruby.rb)",
       "Bash(cp /tmp/fsrs_ruby/LICENSE /Users/bolt/code/learn/lib/fsrs_ruby/LICENSE)",
-      "Bash(xargs cat)"
+      "Bash(xargs cat)",
+      "Bash(bin/importmap json *)"
     ]
   }
 }

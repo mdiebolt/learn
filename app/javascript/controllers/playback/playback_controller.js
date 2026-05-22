@@ -87,14 +87,14 @@ export default class extends Controller {
   onPlay() {
     this.setPlaybackActive(true)
     this.startTicking()
-    this.dispatch("play")
+    this.dispatch("play", { prefix: "playback" })
   }
 
   onPause() {
     this.setPlaybackActive(false)
     this.stopTicking()
     this.updateUI()
-    this.dispatch("pause")
+    this.dispatch("pause", { prefix: "playback" })
   }
 
   // Mirrored on the wrapper (for in-frame styles like cursor: none) and
@@ -107,7 +107,7 @@ export default class extends Controller {
 
   onSeeked() {
     this.updateUI()
-    this.dispatch("seeked")
+    this.dispatch("seeked", { prefix: "playback" })
   }
 
   onLoadedMetadata() {
@@ -121,7 +121,7 @@ export default class extends Controller {
       this.audioTarget.playbackRate = this.computeRate(Number(this.wpmTarget.value))
     }
     this.updateUI()
-    this.dispatch("loadedmetadata")
+    this.dispatch("loadedmetadata", { prefix: "playback" })
   }
 
   // Crossing the chapter's end_time_ms while playing fires `chapterend`
@@ -135,7 +135,7 @@ export default class extends Controller {
     this.stopTicking()
     this.audioTarget.currentTime = this.endMsValue / 1000
     if (!this.audioTarget.paused) this.audioTarget.pause()
-    this.dispatch("chapterend")
+    this.dispatch("chapterend", { prefix: "playback" })
   }
 
   // ---- Scrubber + time-label loop ------------------------------------

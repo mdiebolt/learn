@@ -21,7 +21,7 @@
       <%# Word display: rendered as a single inline text run; the controller %>
       <%# translates it so the focal letter's center lands on the line X. %>
       <div class="rsvp-word text-[clamp(3.5rem,11vw,9rem)] font-medium leading-none">
-        <span class="rsvp-word-text" data-rsvp-target="word"></span>
+        <span class="rsvp-word-text" data-playback--rsvp-target="word"></span>
       </div>
 
       <%# Bottom hover zone — scrubber and time/wpm fade in when cursor approaches the bottom edge. %>
@@ -30,9 +30,9 @@
           <%= rsvp_scrubber %>
           <div class="px-6 py-4 flex items-center justify-between text-2xs font-mono uppercase tracking-wide tabular-nums text-white/50">
             <div class="flex items-center gap-2">
-              <span data-playback-target="currentTime">0:00</span>
+              <span data-playback--playback-target="currentTime">0:00</span>
               <span class="text-white/25">/</span>
-              <span data-playback-target="duration">0:00</span>
+              <span data-playback--playback-target="duration">0:00</span>
             </div>
 
             <div class="flex items-center gap-5">

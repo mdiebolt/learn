@@ -7,7 +7,7 @@ import { Controller } from "@hotwired/stimulus"
 //   2. When the playback controller signals end-of-chapter, navigate to
 //      the next chapter URL with `?autoplay=1` so the cycle continues.
 export default class extends Controller {
-  static outlets = ["playback"]
+  static outlets = ["playback--playback"]
   static values = {
     autoplay: Boolean,
     nextChapterUrl: String
@@ -15,7 +15,7 @@ export default class extends Controller {
 
   onLoadedMetadata() {
     if (!this.autoplayValue) return
-    if (this.hasPlaybackOutlet) this.playbackOutlet.play()
+    if (this.hasPlaybackPlaybackOutlet) this.playbackPlaybackOutlet.play()
   }
 
   // Prefer a Turbo Frame swap when our wrapper frame is present: it
