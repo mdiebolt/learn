@@ -4,20 +4,10 @@ module FsrsRuby
   module Schedulers
     # Scheduler with short-term learning support
     class BasicScheduler < BaseScheduler
-      def initialize(card, now, algorithm, strategies = {})
-        super
-        @learning_steps_strategy = strategies[:learning_steps] || method(:default_learning_steps)
-      end
-
       protected
 
-      def default_learning_steps(parameters, state, cur_step)
-        Strategies.basic_learning_steps_strategy(parameters, state, cur_step)
-      end
-
-      # Get learning step info for current card and grade
       def get_learning_info(card, grade)
-        @learning_steps_strategy.call(@algorithm.parameters, card.state, card.learning_steps || 0)[grade]
+        Strategies.basic_learning_steps_strategy(@algorithm.parameters, card.state, card.learning_steps || 0)[grade]
       end
 
       # Apply learning steps to next card

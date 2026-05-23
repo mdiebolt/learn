@@ -4,16 +4,8 @@ module FsrsRuby
   # Core FSRS v6.0 algorithm implementation
   class Algorithm
     attr_reader :parameters, :interval_modifier
-    attr_accessor :seed
 
     def initialize(params = {})
-      @parameters = ParameterUtils.generate_parameters(params)
-      @interval_modifier = calculate_interval_modifier(@parameters.request_retention)
-      @seed = nil
-    end
-
-    # Update parameters and recalculate derived values
-    def parameters=(params)
       @parameters = ParameterUtils.generate_parameters(params)
       @interval_modifier = calculate_interval_modifier(@parameters.request_retention)
     end
@@ -145,7 +137,7 @@ module FsrsRuby
     def apply_fuzz(ivl, elapsed_days)
       return ivl.round unless @parameters.enable_fuzz && ivl >= 2.5
 
-      prng = @seed ? FsrsRuby.alea(@seed) : FsrsRuby.alea(Time.now.to_i)
+      prng = FsrsRuby.alea(Time.now.to_i)
       fuzz_factor = prng.call
 
       fuzz_range = Helpers.get_fuzz_range(ivl, elapsed_days, @parameters.maximum_interval)

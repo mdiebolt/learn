@@ -2,23 +2,20 @@
 
 module FsrsRuby
   module Schedulers
-    # Base scheduler implementing template method pattern
     class BaseScheduler
-      attr_reader :last, :current, :review_time, :algorithm, :strategies, :elapsed_days
+      attr_reader :last, :current, :review_time, :algorithm, :elapsed_days
 
-      def initialize(card, now, algorithm, strategies = {})
+      def initialize(card, now, algorithm)
         @last = card.is_a?(Card) ? card : TypeConverter.card(card)
         @current = @last.clone
         @review_time = now.is_a?(Time) ? now : TypeConverter.time(now)
         @algorithm = algorithm
-        @strategies = strategies
         @next_cache = {}
 
         init
       end
 
       # Preview all possible outcomes
-      # @return [Hash] { Rating::AGAIN =>, Rating::HARD =>, Rating::GOOD =>, Rating::EASY => }
       def preview
         {
           Rating::AGAIN => review(Rating::AGAIN),
@@ -28,9 +25,6 @@ module FsrsRuby
         }
       end
 
-      # Apply specific rating
-      # @param grade [Integer] Rating (1-4)
-      # @return [RecordLogItem] { card:, log: }
       def review(grade)
         raise ArgumentError, "Invalid grade: #{grade}" unless (Rating::AGAIN..Rating::EASY).cover?(grade)
 
@@ -55,21 +49,15 @@ module FsrsRuby
 
       def init
         @elapsed_days = if @last.last_review
-                          Helpers.date_diff(@review_time, @last.last_review, :days)
+                          Helpers.date_diff(@review_time, @last.last_review)
                         else
                           0
                         end
 
         @current.last_review = @review_time
         @current.reps += 1
-
-        # Initialize seed strategy if provided
-        @seed_strategy = @strategies[:seed]
       end
 
-      # Build review log
-      # @param rating [Integer] Rating given
-      # @return [ReviewLog]
       def build_log(rating)
         ReviewLog.new(
           rating: rating,
@@ -85,9 +73,6 @@ module FsrsRuby
         )
       end
 
-      # Calculate next difficulty and stability
-      # @param interval [Integer] Elapsed interval
-      # @return [Hash] { difficulty:, stability: }
       def next_ds(interval = 0)
         @algorithm.next_state(
           { difficulty: @last.difficulty, stability: @last.stability },
@@ -96,7 +81,6 @@ module FsrsRuby
         )
       end
 
-      # Template methods (to be overridden by subclasses)
       def new_state(grade)
         raise NotImplementedError, "#{self.class} must implement #new_state"
       end
