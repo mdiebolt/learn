@@ -26,7 +26,7 @@ Rails.application.routes.draw do
     resources :reviews, module: :card
   end
 
-  resources :due_cards
+  resource :remember
 
   root "audiobooks#index"
 end
