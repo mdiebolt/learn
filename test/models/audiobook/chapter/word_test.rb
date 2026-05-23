@@ -68,4 +68,44 @@ class Audiobook::Chapter::WordTest < ActiveSupport::TestCase
 
     assert_equal inputs, Audiobook::Chapter::Word.split_compound_atoms(atoms).map { _1["text"] }
   end
+
+  test "display_text strips sentence-context punctuation" do
+    cases = {
+      "world."          => "world",
+      "however,"        => "however",
+      "stop!"           => "stop",
+      "first:"          => "first",
+      "second;"         => "second",
+      "\"Hello\""       => "Hello",
+      "“Hello”" => "Hello",
+      "(parenthesized)" => "parenthesized",
+      "world.\""        => "world",
+      "world.\")"       => "world"
+    }
+    cases.each do |input, expected|
+      assert_equal expected, Audiobook::Chapter::Word.display_text(input), "input: #{input.inspect}"
+    end
+  end
+
+  test "display_text keeps load-bearing punctuation" do
+    %w[don't Matt's Gift-giving Harley-Davidson 1,000 50,000 2.5 U.S. e.g. Dr. Mr. Ph.D. J. and/or 24/7].each do |input|
+      assert_equal input, Audiobook::Chapter::Word.display_text(input), "input: #{input.inspect}"
+    end
+  end
+
+  test "display_text keeps trailing question marks while still stripping any surrounding quotes or brackets" do
+    assert_equal "right?", Audiobook::Chapter::Word.display_text("right?")
+    assert_equal "right?", Audiobook::Chapter::Word.display_text("right?\"")
+    assert_equal "right?", Audiobook::Chapter::Word.display_text("right?)")
+  end
+
+  test "playback_payload renders display text and a matching ORP" do
+    chapter = audiobook_chapters(:one)
+    chapter.words.first.update!(text: "Hello.")
+
+    entry = Audiobook::Chapter::Word.playback_payload(chapter.words).first
+
+    assert_equal "Hello", entry[:text]
+    assert_equal Audiobook::Chapter::Word.compute_orp_for("Hello"), entry[:orp]
+  end
 end

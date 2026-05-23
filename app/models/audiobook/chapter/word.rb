@@ -57,9 +57,47 @@ class Audiobook::Chapter::Word < ApplicationRecord
       .compact.map { |m| m.end(0) }.min
   end
 
+  # Words whose trailing period is part of the word's identity rather than
+  # sentence punctuation. Extend as needed; the goal is "almost never wrong",
+  # not "exhaustive". Compared case-insensitively against the period-stripped
+  # body so "Dr.", "Mr.", "etc." all hit.
+  ABBREVIATIONS_WITH_TRAILING_PERIOD = %w[
+    Dr Mr Mrs Ms Jr Sr St Prof Rev Hon Capt Lt Sgt Gen Esq
+    Inc Ltd Co Corp Ave Blvd Rd Vol Vs Etc
+  ].map(&:downcase).to_set.freeze
+
+  LEADING_PUNCTUATION = /\A[(\[{"“]+/
+  TRAILING_PUNCTUATION = /[,;:!"”)\]}]+\z/
+
+  # Strip sentence-context punctuation so the focal word reads cleanly. Keep
+  # anything that belongs to the token itself: contractions ("don't"),
+  # possessives ("Matt's"), hyphenations ("Gift-giving"), numbers ("1,000"),
+  # abbreviations ("Dr.", "U.S."), and initials ("J.").
+  def self.display_text(text)
+    previous = nil
+    current = text.to_s
+    until previous == current
+      previous = current
+      current = current.sub(LEADING_PUNCTUATION, "").sub(TRAILING_PUNCTUATION, "")
+      current = current.chomp(".") if strippable_trailing_period?(current)
+    end
+    current
+  end
+
+  def self.strippable_trailing_period?(text)
+    return false unless text.end_with?(".")
+    body = text.chomp(".")
+    return false if body.empty?
+    return false if body.include?(".")
+    return false if body.match?(/\A[A-Z]\z/)
+    !ABBREVIATIONS_WITH_TRAILING_PERIOD.include?(body.downcase)
+  end
+
   def self.playback_payload(scope = all)
-    scope.pluck(:text, :start_time_ms, :orp_index).map { |text, start_ms, orp|
-      { text: text, start: start_ms, orp: orp }
+    scope.pluck(:text, :start_time_ms).filter_map { |text, start_ms|
+      display = display_text(text)
+      next if display.empty?
+      { text: display, start: start_ms, orp: compute_orp_for(display) }
     }
   end
 
