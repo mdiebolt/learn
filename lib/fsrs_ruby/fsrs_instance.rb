@@ -21,10 +21,7 @@ module FsrsRuby
 
     # Probability of recall for a card.
     # @param format [Boolean] true → percentage string, false → decimal
-    def get_retrievability(card, now = nil, format: true)
-      card = card.is_a?(Card) ? card : TypeConverter.card(card)
-      now = now ? TypeConverter.time(now) : Time.now
-
+    def get_retrievability(card, now = Time.now, format: true)
       elapsed_days = Helpers.date_diff(now, card.last_review || card.due)
       retrievability = forgetting_curve(@parameters.w, elapsed_days, card.stability)
 
@@ -50,9 +47,6 @@ module FsrsRuby
     # Reset a card to NEW.
     # @param reset_count [Boolean] also zero out reps/lapses
     def forget(card, now, reset_count: false)
-      card = card.is_a?(Card) ? card : TypeConverter.card(card)
-      now = now.is_a?(Time) ? now : TypeConverter.time(now)
-
       new_card = ParameterUtils.create_empty_card(now)
       new_card.reps = reset_count ? 0 : card.reps
       new_card.lapses = reset_count ? 0 : card.lapses
@@ -76,9 +70,6 @@ module FsrsRuby
     private
 
     def get_scheduler(card, now)
-      card = card.is_a?(Card) ? card : TypeConverter.card(card)
-      now = now.is_a?(Time) ? now : TypeConverter.time(now)
-
       @scheduler_class.new(card, now, self)
     end
   end

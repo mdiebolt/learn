@@ -1,9 +1,1 @@
-<% if @next_card %>
-  <%= turbo_stream.replace dom_id(@card) do %>
-    <%= render @next_card %>
-  <% end %>
-<% else %>
-  <%= turbo_stream.replace dom_id(@card) do %>
-    <div class="text-white/60 italic">Done for now.</div>
-  <% end %>
-<% end %>
+<%= turbo_stream.remove dom_id(@card) %>

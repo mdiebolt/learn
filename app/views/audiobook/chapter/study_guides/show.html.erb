@@ -9,7 +9,7 @@
     <% if @study_guide %>
       <ol class="space-y-20">
         <% @items.each do |item| %>
-          <li><%= render item.itemable %></li>
+          <li id="<%= dom_id(item.itemable) %>"><%= render item.itemable %></li>
         <% end %>
       </ol>
     <% else %>

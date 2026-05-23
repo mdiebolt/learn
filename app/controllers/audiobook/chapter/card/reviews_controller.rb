@@ -4,8 +4,6 @@ class Audiobook::Chapter::Card::ReviewsController < ApplicationController
   def create
     @card.apply_review!(rating: Integer(review_params.fetch(:rating)))
 
-    @next_card = Current.user.cards.due.where.not(id: @card.id).order(:due).first
-
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_back fallback_location: root_path }

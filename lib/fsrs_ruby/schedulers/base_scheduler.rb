@@ -6,9 +6,9 @@ module FsrsRuby
       attr_reader :last, :current, :review_time, :algorithm, :elapsed_days
 
       def initialize(card, now, algorithm)
-        @last = card.is_a?(Card) ? card : TypeConverter.card(card)
+        @last = card
         @current = @last.clone
-        @review_time = now.is_a?(Time) ? now : TypeConverter.time(now)
+        @review_time = now
         @algorithm = algorithm
         @next_cache = {}
 

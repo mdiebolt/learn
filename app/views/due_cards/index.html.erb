@@ -1,12 +1,10 @@
 <div class="px-8 py-12 max-w-3xl mx-auto space-y-6">
-  <header class="space-y-1">
+  <header>
     <h1 class="text-2xl font-medium">Due today</h1>
-    <p class="text-xs font-mono uppercase tracking-wide text-white/40"><%= pluralize(@due_cards.size, "card") %></p>
   </header>
 
-  <% if @due_cards.any? %>
-    <ol class="space-y-20"><% @due_cards.each do |card| %><li><%= render card %></li><% end %></ol>
-  <% else %>
-    <p class="text-white/60">Nothing due. Come back later.</p>
-  <% end %>
+  <ol class="space-y-20">
+    <li class="hidden last:block text-white/60 italic">Nothing due. Come back later.</li>
+    <% @due_cards.each do |card| %><li id="<%= dom_id(card) %>"><%= render card %></li><% end %>
+  </ol>
 </div>
