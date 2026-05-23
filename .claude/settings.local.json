@@ -99,7 +99,15 @@
       "Bash(cp /tmp/fsrs_ruby/lib/fsrs_ruby.rb /Users/bolt/code/learn/lib/fsrs_ruby.rb)",
       "Bash(cp /tmp/fsrs_ruby/LICENSE /Users/bolt/code/learn/lib/fsrs_ruby/LICENSE)",
       "Bash(xargs cat)",
-      "Bash(bin/importmap json *)"
+      "Bash(bin/importmap json *)",
+      "Read(//private/tmp/**)",
+      "Bash(ffmpeg -hide_banner -loglevel error -y -f lavfi -i \"anullsrc=r=8000:cl=mono\" -t 0.05 -c:a aac -b:a 8k -movflags +faststart tiny.m4b)",
+      "Bash(ffmpeg -hide_banner -loglevel error -y -f lavfi -i \"anullsrc=r=8000:cl=mono\" -t 0.05 -c:a libmp3lame -b:a 8k tiny.mp3)",
+      "Bash(ffmpeg -hide_banner -loglevel error -y -f lavfi -i \"anullsrc=r=8000:cl=mono\" -t 0.01 -c:a libmp3lame -b:a 8k -write_xing 0 -id3v2_version 0 tiny2.mp3)",
+      "Bash(ffmpeg -hide_banner -loglevel error -y -f lavfi -i \"anullsrc=r=8000:cl=mono\" -t 0.01 -c:a aac -b:a 8k tiny2.m4b)",
+      "Bash(ffmpeg -hide_banner -loglevel error -y -f lavfi -i \"anullsrc=r=8000:cl=mono\" -t 0.01 -c:a aac -b:a 8k /Users/bolt/code/learn/test/fixtures/files/silent.m4b)",
+      "Bash(ffmpeg -hide_banner -loglevel error -y -f lavfi -i \"anullsrc=r=8000:cl=mono\" -t 0.01 -c:a libmp3lame -b:a 8k -write_xing 0 -id3v2_version 0 /Users/bolt/code/learn/test/fixtures/files/silent.mp3)",
+      "Bash(ffmpeg -hide_banner -loglevel error -y -f lavfi -i \"anullsrc=r=8000:cl=mono\" -t 0.01 -c:a pcm_s16le /Users/bolt/code/learn/test/fixtures/files/silent.wav)"
     ]
   }
 }
