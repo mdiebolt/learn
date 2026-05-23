@@ -1,5 +1,5 @@
 class Audiobook::Chapter::Card::Cloze < ApplicationRecord
-  include Audiobook::Chapter::Card::Kind
+  include Kind
 
   validates :text, :answers, presence: true
 

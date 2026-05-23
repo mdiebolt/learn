@@ -1,6 +1,4 @@
 class Audiobook::Chapter::Card::Review < ApplicationRecord
-  self.table_name = "audiobook_chapter_card_reviews"
-
   RATINGS = {
     again: FsrsRuby::Rating::AGAIN,
     hard:  FsrsRuby::Rating::HARD,

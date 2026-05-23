@@ -1,5 +1,5 @@
 class Audiobook::Chapter::Card::FreeResponse < ApplicationRecord
-  include Audiobook::Chapter::Card::Kind
+  include Kind
 
   validates :question, :reference_answer, presence: true
 

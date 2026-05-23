@@ -1,5 +1,5 @@
 class Audiobook::Chapter::Card::Matching < ApplicationRecord
-  include Audiobook::Chapter::Card::Kind
+  include Kind
 
   validates :prompt, :pairs, presence: true
 

@@ -1,5 +1,5 @@
 class Audiobook::Chapter::Card::Ordering < ApplicationRecord
-  include Audiobook::Chapter::Card::Kind
+  include Kind
 
   validates :prompt, :items, presence: true
 
