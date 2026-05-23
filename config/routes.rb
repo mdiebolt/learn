@@ -15,13 +15,15 @@ Rails.application.routes.draw do
 
   resources :audiobooks do
     resource :transcription, module: :audiobook
-    resources :chapters do
-      resource :progress, module: "audiobook/chapter"
-      resource :study_guide, module: "audiobook/chapter"
-      resources :cards, module: "audiobook/chapter" do
-        resources :reviews, module: :card
-      end
-    end
+  end
+
+  resources :chapters do
+    resource :progress, module: :chapter
+    resource :study_guide
+  end
+
+  resources :cards do
+    resources :reviews, module: :card
   end
 
   resources :due_cards

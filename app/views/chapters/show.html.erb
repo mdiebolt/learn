@@ -4,7 +4,7 @@
 <%# transition; a body-replacing visit would drop fullscreen on most browsers. %>
 <%= turbo_frame_tag "chapter", data: { turbo_action: "advance" } do %>
   <% if @words.any? %>
-    <%= tag.div(**rsvp_container_attributes(audiobook: @audiobook, chapter: @chapter, words: @words, next_chapter: @next_chapter, autoplay: @autoplay, progress: @progress)) do %>
+    <%= tag.div(**rsvp_container_attributes(chapter: @chapter, words: @words, next_chapter: @next_chapter, autoplay: @autoplay, progress: @progress)) do %>
       <%# Top hover zone — the breadcrumb fades in when the cursor approaches the top edge. %>
       <div class="absolute top-0 left-0 right-0 h-24 group/header z-10">
         <div class="absolute top-0 left-0 right-0 px-6 pt-6 transition-opacity duration-300 opacity-0 pointer-events-none group-hover/header:opacity-100 group-hover/header:pointer-events-auto">

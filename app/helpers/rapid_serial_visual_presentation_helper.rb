@@ -2,8 +2,8 @@
 # player: the controller wiring on the container/audio elements and the
 # transport chrome (scrubber, sync offset, fullscreen, speed).
 module RapidSerialVisualPresentationHelper
-  def rsvp_container_attributes(audiobook:, chapter:, words:, next_chapter:, autoplay:, progress:)
-    next_url = next_chapter ? audiobook_chapter_path(audiobook, next_chapter) : ""
+  def rsvp_container_attributes(chapter:, words:, next_chapter:, autoplay:, progress:)
+    next_url = next_chapter ? chapter_path(next_chapter) : ""
     initial_progress_ms = (progress && !progress.completed?) ? progress.progress_ms : 0
     duration_ms = chapter.end_time_ms - chapter.start_time_ms
     natural_wpm = duration_ms.positive? ? (words.size * 60_000.0 / duration_ms) : 0
@@ -34,7 +34,7 @@ module RapidSerialVisualPresentationHelper
         "playback--playback_natural_wpm_value": natural_wpm,
         "playback--rsvp_words_value": words.to_json,
         "playback--rsvp_audio_offset_ms_value": Current.user.audio_offset_ms,
-        "playback--chapter-progress_url_value": audiobook_chapter_progress_path(audiobook, chapter),
+        "playback--chapter-progress_url_value": chapter_progress_path(chapter),
         "playback--chapter-autoplay_autoplay_value": autoplay,
         "playback--chapter-autoplay_next_chapter_url_value": next_url,
         "playback--chapter-autoplay_playback--playback_outlet": "[data-controller~='playback--playback']"

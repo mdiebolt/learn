@@ -2,7 +2,7 @@ module Audiobook::Chaptered
   extend ActiveSupport::Concern
 
   included do
-    has_many :chapters, class_name: "Audiobook::Chapter", dependent: :destroy
+    has_many :chapters, dependent: :destroy
   end
 
   def detect_chapters!

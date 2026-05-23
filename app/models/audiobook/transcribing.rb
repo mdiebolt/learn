@@ -11,10 +11,10 @@ module Audiobook::Transcribing
     raise "audiobook has no audio attached" unless audio.attached?
 
     transaction do
-      Audiobook::Chapter::Word.where(chapter_id: list.map(&:id)).delete_all
-      Audiobook::Chapter.where(id: list.map(&:id)).update_all(transcription_status: :transcribing)
+      Chapter::Word.where(chapter_id: list.map(&:id)).delete_all
+      Chapter.where(id: list.map(&:id)).update_all(transcription_status: :transcribing)
     end
-    list.each { |chapter| Audiobook::Chapter::ScribeJob.perform_later(chapter) }
+    list.each { |chapter| Chapter::ScribeJob.perform_later(chapter) }
   end
 
   # Aggregate state derived from the chapters' transcription_status. A book

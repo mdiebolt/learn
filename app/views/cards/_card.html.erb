@@ -1,0 +1,20 @@
+<article class="space-y-4" data-controller="cards--reveal" data-action="card:graded->cards--reveal#show">
+  <header class="flex items-center gap-3">
+    <span class="shrink-0 font-mono text-xs uppercase tracking-wider text-white/40">// <%= card.concept_title %></span>
+    <hr class="grow border-t border-white/15">
+    <span class="flex size-6 shrink-0 items-center justify-center border border-white/15 font-mono text-xs text-white/50" title="<%= card_kind_label(card) %>"><%= card.kind.glyph %></span>
+  </header>
+
+  <%= render card.kind, card: card %>
+
+  <div data-cards--reveal-target="answer" hidden class="space-y-4">
+    <%= render partial: card.kind.to_answer_partial_path, object: card.kind, as: card.kind.model_name.element %>
+
+    <%= form_with url: card_reviews_path(card), scope: :review, class: "flex flex-wrap gap-3" do |f| %>
+      <% Card::Review::RATINGS.each do |label, rating| %>
+        <%= f.button "[#{label.to_s.titleize}]", name: "review[rating]", value: rating, class: "ui-button text-white/40 #{rating_hover_class(label)}" %>
+      <% end %>
+    <% end %>
+  </div>
+</article>
+

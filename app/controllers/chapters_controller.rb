@@ -1,8 +1,8 @@
 class ChaptersController < ApplicationController
-  before_action :set_audiobook
   before_action :set_chapter
 
   def show
+    @audiobook = @chapter.audiobook
     @words = @chapter.playback_words
     @next_chapter = @chapter.following
     @autoplay = params[:autoplay] == "1"
@@ -11,11 +11,7 @@ class ChaptersController < ApplicationController
 
   private
 
-  def set_audiobook
-    @audiobook = Current.user.audiobooks.find(params[:audiobook_id])
-  end
-
   def set_chapter
-    @chapter = @audiobook.chapters.find(params[:id])
+    @chapter = Current.user.chapters.find(params[:id])
   end
 end
