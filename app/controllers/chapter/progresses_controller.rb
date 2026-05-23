@@ -1,5 +1,5 @@
 class Chapter::ProgressesController < ApplicationController
-  before_action :set_chapter
+  include ChapterScoped
 
   def update
     progress = Current.user.chapter_progresses.find_or_initialize_by(chapter: @chapter)
@@ -12,12 +12,7 @@ class Chapter::ProgressesController < ApplicationController
   end
 
   private
-
-  def set_chapter
-    @chapter = Current.user.chapters.find(params[:chapter_id])
-  end
-
-  def progress_params
-    params.permit(:progress_ms, :completed)
-  end
+    def progress_params
+      params.permit(:progress_ms, :completed)
+    end
 end

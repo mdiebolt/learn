@@ -1,5 +1,5 @@
 class Chapter::StudyGuidesController < ApplicationController
-  before_action :set_chapter
+  include ChapterScoped
 
   def show
     @audiobook = @chapter.audiobook
@@ -14,11 +14,5 @@ class Chapter::StudyGuidesController < ApplicationController
       format.turbo_stream
       format.html { redirect_to chapter_study_guide_path(@chapter), notice: "Generating study guide…" }
     end
-  end
-
-  private
-
-  def set_chapter
-    @chapter = Current.user.chapters.find(params[:chapter_id])
   end
 end
