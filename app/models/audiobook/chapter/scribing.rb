@@ -20,6 +20,7 @@ module Audiobook::Chapter::Scribing
 
   def persist_words(response)
     atoms = (response["words"] || []).select { |w| w["type"] == "word" }
+    atoms = Audiobook::Chapter::Word.split_compound_atoms(atoms)
     now = Time.current
 
     transaction do
