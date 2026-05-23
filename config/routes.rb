@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
   resources :chapters do
     resource :progress, module: :chapter
-    resource :study_guide
+    resource :study_guide, module: :chapter
   end
 
   resources :cards do

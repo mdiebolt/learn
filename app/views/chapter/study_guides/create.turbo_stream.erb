@@ -1,0 +1,2 @@
+<%= turbo_stream.replace dom_id(@chapter, :study_guide_control), partial: "chapter/study_guides/control", locals: { chapter: @chapter, generating: true } %>
+<%= turbo_stream.replace dom_id(@chapter, :study_guide), partial: "chapter/study_guides/generating", locals: { chapter: @chapter } %>

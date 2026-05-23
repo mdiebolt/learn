@@ -72,7 +72,7 @@ class StudyGuide < ApplicationRecord
     broadcast_replace_to(
       [ chapter, :study_guide ],
       target: ActionView::RecordIdentifier.dom_id(chapter, :study_guide),
-      partial: "study_guides/ready",
+      partial: "chapter/study_guides/ready",
       locals: { audiobook: chapter.audiobook, chapter: chapter, study_guide: self }
     )
   end
@@ -81,7 +81,7 @@ class StudyGuide < ApplicationRecord
     broadcast_replace_to(
       [ chapter, :study_guide_control ],
       target: ActionView::RecordIdentifier.dom_id(chapter, :study_guide_control),
-      partial: "study_guides/control",
+      partial: "chapter/study_guides/control",
       locals: { audiobook: chapter.audiobook, chapter: chapter, study_guide: self }
     )
   end

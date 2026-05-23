@@ -1,4 +1,4 @@
-class StudyGuidesController < ApplicationController
+class Chapter::StudyGuidesController < ApplicationController
   before_action :set_chapter
 
   def show
