@@ -2,7 +2,7 @@ class Audiobook::Chapter::Card::ReviewsController < ApplicationController
   before_action :set_card
 
   def create
-    @card.apply_review!(rating: Integer(review_params.fetch(:rating)))
+    @card.review!(rating: Integer(review_params.fetch(:rating)))
 
     respond_to do |format|
       format.turbo_stream

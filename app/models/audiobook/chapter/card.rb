@@ -38,7 +38,7 @@ class Audiobook::Chapter::Card < ApplicationRecord
     )
   end
 
-  def apply_review!(rating:, response: nil, now: Time.current)
+  def review!(rating:, response: nil, now: Time.current)
     result = Fsrs.instance.next(to_fsrs, now, rating)
     transaction do
       reviews.create!(
