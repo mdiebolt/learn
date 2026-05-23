@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.2].define(version: 2026_05_23_120000) do
+ActiveRecord::Schema[8.2].define(version: 2026_05_23_130000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -182,16 +182,16 @@ ActiveRecord::Schema[8.2].define(version: 2026_05_23_120000) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
-  create_table "study_guide_items", force: :cascade do |t|
+  create_table "study_guide_topics", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.bigint "itemable_id", null: false
-    t.string "itemable_type", null: false
     t.integer "position", null: false
     t.bigint "study_guide_id", null: false
+    t.bigint "topical_id", null: false
+    t.string "topical_type", null: false
     t.datetime "updated_at", null: false
-    t.index ["itemable_type", "itemable_id"], name: "index_study_guide_items_on_itemable"
-    t.index ["study_guide_id", "position"], name: "index_study_guide_items_on_study_guide_id_and_position", unique: true
-    t.index ["study_guide_id"], name: "index_study_guide_items_on_study_guide_id"
+    t.index ["study_guide_id", "position"], name: "index_study_guide_topics_on_study_guide_id_and_position", unique: true
+    t.index ["study_guide_id"], name: "index_study_guide_topics_on_study_guide_id"
+    t.index ["topical_type", "topical_id"], name: "index_study_guide_topics_on_topical"
   end
 
   create_table "study_guides", force: :cascade do |t|
@@ -258,7 +258,7 @@ ActiveRecord::Schema[8.2].define(version: 2026_05_23_120000) do
   add_foreign_key "chapter_words", "chapters"
   add_foreign_key "chapters", "audiobooks"
   add_foreign_key "sessions", "users"
-  add_foreign_key "study_guide_items", "study_guides"
+  add_foreign_key "study_guide_topics", "study_guides"
   add_foreign_key "study_guides", "chapters"
   add_foreign_key "study_guides", "users"
   add_foreign_key "visuals", "study_guides"

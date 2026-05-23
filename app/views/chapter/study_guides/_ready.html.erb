@@ -1,5 +1,5 @@
 <ol class="space-y-20">
-  <% study_guide.items.includes(:itemable).each do |item| %>
-    <li><%= render item.itemable %></li>
+  <% study_guide.topics.includes(:topical).each do |topic| %>
+    <li><%= render topic.topical %></li>
   <% end %>
 </ol>

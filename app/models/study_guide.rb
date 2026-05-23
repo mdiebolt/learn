@@ -6,7 +6,7 @@ class StudyGuide < ApplicationRecord
   belongs_to :user
   belongs_to :chapter
 
-  has_many :items, -> { order(:position) }, dependent: :destroy
+  has_many :topics, -> { order(:position) }, dependent: :destroy
   has_many :cards, dependent: :nullify
   has_many :visuals, dependent: :destroy
 
@@ -16,8 +16,8 @@ class StudyGuide < ApplicationRecord
     def create_from_ai_payload!(chapter:, user:, raw_response:, model:, prompt_version: PROMPT_VERSION)
       transaction do
         guide = create!(user: user, chapter: chapter, model: model, prompt_version: prompt_version)
-        parse_payload(raw_response).fetch("items", []).each { |raw| guide.append_from_ai(raw) }
-        raise EmptyGeneration, "AI returned no usable items for chapter #{chapter.id}" if guide.items.empty?
+        parse_payload(raw_response).fetch("topics", []).each { |raw| guide.append_from_ai(raw) }
+        raise EmptyGeneration, "AI returned no usable topics for chapter #{chapter.id}" if guide.topics.empty?
         guide
       end
     end
@@ -31,13 +31,13 @@ class StudyGuide < ApplicationRecord
   end
 
   def append_from_ai(raw)
-    record = build_itemable(raw)
-    items.create!(itemable: record, position: items.size) if record
+    record = build_topical(raw)
+    topics.create!(topical: record, position: topics.size) if record
   end
 
   private
 
-  def build_itemable(raw)
+  def build_topical(raw)
     self.class.transaction(requires_new: true) do
       case raw["type"]
       when "card"   then build_card(raw)
@@ -45,7 +45,7 @@ class StudyGuide < ApplicationRecord
       end
     end
   rescue ActiveRecord::RecordInvalid, KeyError => e
-    Rails.logger.warn("[#{self.class.name}] dropping item #{raw.inspect}: #{e.message}")
+    Rails.logger.warn("[#{self.class.name}] dropping topic #{raw.inspect}: #{e.message}")
     nil
   end
 

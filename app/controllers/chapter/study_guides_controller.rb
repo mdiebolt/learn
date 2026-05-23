@@ -4,7 +4,7 @@ class Chapter::StudyGuidesController < ApplicationController
   def show
     @audiobook = @chapter.audiobook
     @study_guide = @chapter.study_guides.where(user: Current.user).order(created_at: :desc).first
-    @items = @study_guide ? @study_guide.items.includes(:itemable) : []
+    @topics = @study_guide ? @study_guide.topics.includes(:topical) : []
   end
 
   def create

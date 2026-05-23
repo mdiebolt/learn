@@ -17,7 +17,7 @@ class StudyGuide::GenerateJob < ApplicationJob
       Respond with raw JSON only — no prose, no markdown fences.
 
       Output schema:
-      { "items": [
+      { "topics": [
           { "type": "visual", "kind": "<#{Visual.kind_types.map { |t| t.demodulize.underscore }.join("|")}>", "caption": "...", "attributes": { ... } },
           { "type": "card",   "kind": "<#{Card.kind_types.map { |t| t.demodulize.underscore }.join("|")}>",
             "concept_title": "...", "source_excerpt": "...", "attributes": { ... } }

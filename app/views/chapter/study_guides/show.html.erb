@@ -8,8 +8,8 @@
   <%= turbo_frame_tag dom_id(@chapter, :study_guide) do %>
     <% if @study_guide %>
       <ol class="space-y-20">
-        <% @items.each do |item| %>
-          <li id="<%= dom_id(item.itemable) %>"><%= render partial: item.itemable.to_partial_path, object: item.itemable %></li>
+        <% @topics.each do |topic| %>
+          <li id="<%= dom_id(topic.topical) %>"><%= render partial: topic.topical.to_partial_path, object: topic.topical %></li>
         <% end %>
       </ol>
     <% else %>
