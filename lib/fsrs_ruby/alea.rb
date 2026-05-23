@@ -27,9 +27,9 @@ module FsrsRuby
     def initialize(seed = nil)
       mash = Mash.new
       @c = 1
-      @s0 = mash.call(' ')
-      @s1 = mash.call(' ')
-      @s2 = mash.call(' ')
+      @s0 = mash.call(" ")
+      @s1 = mash.call(" ")
+      @s2 = mash.call(" ")
 
       seed = Time.now.to_i if seed.nil?
 

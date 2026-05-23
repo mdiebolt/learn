@@ -6,7 +6,7 @@ module FsrsRuby
     def self.clip_parameters(parameters, num_relearning_steps, enable_short_term = true)
       w17_w18_ceiling = Constants::W17_W18_CEILING
 
-      if [num_relearning_steps, 0].max > 1
+      if [ num_relearning_steps, 0 ].max > 1
         value = -(
           Math.log(parameters[11]) +
           Math.log(2.0**parameters[13] - 1.0) +
@@ -31,9 +31,9 @@ module FsrsRuby
 
       w = if props[:w]
             clip_parameters(props[:w].dup, relearning_steps.length, enable_short_term)
-          else
+      else
             Constants::DEFAULT_WEIGHTS.dup
-          end
+      end
 
       Parameters.new(
         request_retention: props[:request_retention] || Constants::DEFAULT_REQUEST_RETENTION,

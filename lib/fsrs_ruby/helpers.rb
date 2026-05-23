@@ -8,7 +8,7 @@ module FsrsRuby
     end
 
     def self.clamp(value, min, max)
-      [[value, min].max, max].min
+      [ [ value, min ].max, max ].min
     end
 
     # Add a time offset to a Time.
@@ -37,12 +37,12 @@ module FsrsRuby
         delta += (interval - 20.0) * 0.05 if interval >= 20.0
       end
 
-      interval = [interval, maximum_interval].min
+      interval = [ interval, maximum_interval ].min
 
-      min_ivl = [2, (interval - delta).round].max
-      max_ivl = [(interval + delta).round, maximum_interval].min
+      min_ivl = [ 2, (interval - delta).round ].max
+      max_ivl = [ (interval + delta).round, maximum_interval ].min
 
-      min_ivl = [min_ivl, elapsed_days + 1].max if interval > elapsed_days
+      min_ivl = [ min_ivl, elapsed_days + 1 ].max if interval > elapsed_days
       min_ivl = max_ivl if min_ivl > max_ivl
 
       { min_ivl: min_ivl, max_ivl: max_ivl }

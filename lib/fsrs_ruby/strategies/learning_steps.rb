@@ -6,9 +6,9 @@ module FsrsRuby
       def self.call(parameters, state, cur_step)
         learning_steps = if [ State::RELEARNING, State::REVIEW ].include?(state)
                           parameters.relearning_steps
-                         else
+        else
                           parameters.learning_steps
-                         end
+        end
 
         steps_length = learning_steps.length
         return {} if steps_length.zero? || cur_step >= steps_length
@@ -29,10 +29,10 @@ module FsrsRuby
 
           hard_minutes = if steps_length == 1
                            (convert_step_unit_to_minutes(first_step) * 1.5).round
-                         else
+          else
                            second_step = learning_steps[1]
                            ((convert_step_unit_to_minutes(first_step) + convert_step_unit_to_minutes(second_step)) / 2.0).round
-                         end
+          end
 
           result[Rating::HARD] = {
             scheduled_minutes: hard_minutes,
@@ -59,9 +59,9 @@ module FsrsRuby
         raise ArgumentError, "Invalid step value: #{step}" if value < 0
 
         case unit
-        when 'm' then value
-        when 'h' then value * 60
-        when 'd' then value * 1440
+        when "m" then value
+        when "h" then value * 60
+        when "d" then value * 1440
         else
           raise ArgumentError, "Invalid step unit: #{step}, expected m/h/d"
         end

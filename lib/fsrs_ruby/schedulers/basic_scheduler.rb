@@ -81,7 +81,7 @@ module FsrsRuby
 
         to_state = @current.state == State::RELEARNING ? State::RELEARNING : State::LEARNING
 
-        if [Rating::AGAIN, Rating::HARD].include?(grade)
+        if [ Rating::AGAIN, Rating::HARD ].include?(grade)
           to_state = @current.state == State::RELEARNING ? State::RELEARNING : State::LEARNING
         end
 
@@ -129,7 +129,7 @@ module FsrsRuby
             good_interval = @algorithm.next_interval(next_card.stability, interval)
             # Only enforce ordering if intervals would violate it and we're not at max_interval
             if good_interval <= hard_interval && hard_interval < @algorithm.parameters.maximum_interval
-              good_interval = [good_interval, hard_interval + 1].max
+              good_interval = [ good_interval, hard_interval + 1 ].max
             end
             next_card.scheduled_days = good_interval
           else # EASY
@@ -148,7 +148,7 @@ module FsrsRuby
             easy_interval = @algorithm.next_interval(easy_state[:stability], interval)
             # Only enforce ordering if intervals would violate it and we're not at max_interval
             if easy_interval <= good_interval && good_interval < @algorithm.parameters.maximum_interval
-              easy_interval = [easy_interval, good_interval + 1].max
+              easy_interval = [ easy_interval, good_interval + 1 ].max
             end
             next_card.scheduled_days = easy_interval
           end

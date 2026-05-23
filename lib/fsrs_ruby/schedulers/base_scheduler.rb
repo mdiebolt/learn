@@ -31,15 +31,15 @@ module FsrsRuby
         return @next_cache[grade] if @next_cache.key?(grade)
 
         result = case @current.state
-                 when State::NEW
+        when State::NEW
                    new_state(grade)
-                 when State::LEARNING, State::RELEARNING
+        when State::LEARNING, State::RELEARNING
                    learning_state(grade)
-                 when State::REVIEW
+        when State::REVIEW
                    review_state(grade)
-                 else
+        else
                    raise "Unknown state: #{@current.state}"
-                 end
+        end
 
         @next_cache[grade] = result
         result
@@ -50,9 +50,9 @@ module FsrsRuby
       def init
         @elapsed_days = if @last.last_review
                           Helpers.date_diff(@review_time, @last.last_review)
-                        else
+        else
                           0
-                        end
+        end
 
         @current.last_review = @review_time
         @current.reps += 1

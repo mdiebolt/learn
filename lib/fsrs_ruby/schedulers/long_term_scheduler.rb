@@ -51,7 +51,7 @@ module FsrsRuby
         next_card.lapses += 1 if grade == Rating::AGAIN
 
         # Calculate intervals for all ratings using their respective stabilities
-        intervals = [Rating::AGAIN, Rating::HARD, Rating::GOOD, Rating::EASY].map do |g|
+        intervals = [ Rating::AGAIN, Rating::HARD, Rating::GOOD, Rating::EASY ].map do |g|
           temp_state = @algorithm.next_state(
             { difficulty: @last.difficulty, stability: @last.stability },
             interval,
@@ -63,18 +63,18 @@ module FsrsRuby
         # Ensure ordering only when necessary (don't artificially inflate intervals)
         # But respect maximum_interval - don't force intervals beyond it
         max_interval = @algorithm.parameters.maximum_interval
-        intervals[0] = [intervals[0], intervals[1]].min # again <= hard
+        intervals[0] = [ intervals[0], intervals[1] ].min # again <= hard
         if intervals[1] <= intervals[0] && intervals[0] < max_interval
-          intervals[1] = [intervals[1], intervals[0] + 1].max
+          intervals[1] = [ intervals[1], intervals[0] + 1 ].max
         end  # hard > again
         if intervals[2] <= intervals[1] && intervals[1] < max_interval
-          intervals[2] = [intervals[2], intervals[1] + 1].max
+          intervals[2] = [ intervals[2], intervals[1] + 1 ].max
         end  # good > hard
         if intervals[3] <= intervals[2] && intervals[2] < max_interval
-          intervals[3] = [intervals[3], intervals[2] + 1].max
+          intervals[3] = [ intervals[3], intervals[2] + 1 ].max
         end  # easy > good
 
-        scheduled_days = intervals[[Rating::AGAIN, Rating::HARD, Rating::GOOD, Rating::EASY].index(grade)]
+        scheduled_days = intervals[[ Rating::AGAIN, Rating::HARD, Rating::GOOD, Rating::EASY ].index(grade)]
         next_card.scheduled_days = scheduled_days
         next_card.due = Helpers.date_scheduler(@review_time, scheduled_days, true)
 

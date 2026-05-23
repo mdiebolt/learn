@@ -34,7 +34,7 @@ module FsrsRuby
     # @param request_retention [Float] Target retention rate (0, 1]
     # @return [Float] Interval modifier
     def calculate_interval_modifier(request_retention)
-      raise ArgumentError, 'Requested retention rate should be in the range (0,1]' if request_retention <= 0 || request_retention > 1
+      raise ArgumentError, "Requested retention rate should be in the range (0,1]" if request_retention <= 0 || request_retention > 1
 
       info = compute_decay_factor(@parameters.w)
       Helpers.round8((request_retention**(1.0 / info[:decay]) - 1) / info[:factor])
@@ -44,7 +44,7 @@ module FsrsRuby
     # @param g [Integer] Grade (1=Again, 2=Hard, 3=Good, 4=Easy)
     # @return [Float] Initial stability
     def init_stability(g)
-      [@parameters.w[g - 1], Constants::S_MIN].max
+      [ @parameters.w[g - 1], Constants::S_MIN ].max
     end
 
     # CRITICAL: Exponential difficulty formula (NOT linear!)
@@ -126,7 +126,7 @@ module FsrsRuby
     def next_short_term_stability(s, g)
       sinc = (s**-@parameters.w[19]) * Math.exp(@parameters.w[17] * (g - 3 + @parameters.w[18]))
 
-      masked_sinc = g >= Rating::HARD ? [sinc, 1.0].max : sinc
+      masked_sinc = g >= Rating::HARD ? [ sinc, 1.0 ].max : sinc
       Helpers.clamp(Helpers.round8(s * masked_sinc), Constants::S_MIN, Constants::S_MAX)
     end
 
@@ -149,8 +149,8 @@ module FsrsRuby
     # @param elapsed_days [Integer] Days since last review
     # @return [Integer] Next interval in days
     def next_interval(s, elapsed_days = 0)
-      new_interval = [(s * @interval_modifier).round, 1].max
-      new_interval = [new_interval, @parameters.maximum_interval].min
+      new_interval = [ (s * @interval_modifier).round, 1 ].max
+      new_interval = [ new_interval, @parameters.maximum_interval ].min
       apply_fuzz(new_interval, elapsed_days)
     end
 
