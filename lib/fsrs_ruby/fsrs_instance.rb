@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module FsrsRuby
-  class FSRSInstance < Algorithm
+  class FsrsInstance < Algorithm
     def initialize(params = {})
       super(params)
       @scheduler_class = @parameters.enable_short_term ? Schedulers::BasicScheduler : Schedulers::LongTermScheduler

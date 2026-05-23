@@ -5,31 +5,24 @@
 # Original work is under MIT license
 
 module FsrsRuby
-  # Mash hash function for Alea PRNG
-  class Mash
-    def initialize
-      @n = 0xefc8249d
-    end
-
-    def call(data)
-      data = data.to_s
-      data.each_char do |char|
-        @n += char.ord
-        h = 0.02519603282416938 * @n
-        @n = h.to_i & 0xffffffff  # >>> 0 equivalent
-        h -= @n
-        h *= @n
-        @n = h.to_i & 0xffffffff  # >>> 0 equivalent
-        h -= @n
-        @n += (h * 0x100000000).to_i  # 2^32
-      end
-      (@n & 0xffffffff) * 2.3283064365386963e-10  # 2^-32
-    end
-  end
-
-  # Alea PRNG class
   class Alea
     attr_accessor :c, :s0, :s1, :s2
+
+    # Returns a lambda that yields the next pseudo-random value on each call.
+    # Wraps an Alea instance so callers can pass `prng.call` rather than
+    # tracking the instance themselves.
+    def self.factory(seed = nil)
+      xg = new(seed)
+
+      prng = lambda { xg.next }
+
+      prng.define_singleton_method(:int32) { (xg.next * 0x100000000).to_i }
+      prng.define_singleton_method(:double) { prng.call + ((prng.call * 0x200000).to_i * 1.1102230246251565e-16) }
+      prng.define_singleton_method(:state) { xg.state }
+      prng.define_singleton_method(:import_state) { |state| xg.state = state; prng }
+
+      prng
+    end
 
     def initialize(seed = nil)
       mash = Mash.new
@@ -51,7 +44,7 @@ module FsrsRuby
     end
 
     def next
-      t = 2091639 * @s0 + @c * 2.3283064365386963e-10  # 2^-32
+      t = 2091639 * @s0 + @c * 2.3283064365386963e-10
       @s0 = @s1
       @s1 = @s2
       @c = t.to_i
@@ -69,34 +62,5 @@ module FsrsRuby
       @s1 = new_state[:s1]
       @s2 = new_state[:s2]
     end
-  end
-
-  # Factory function for creating Alea PRNG with callable interface
-  # @param seed [Integer, String, nil] Seed for PRNG
-  # @return [Proc] Callable PRNG with additional methods
-  def self.alea(seed = nil)
-    xg = Alea.new(seed)
-
-    prng = lambda { xg.next }
-
-    # Add methods to the proc
-    prng.define_singleton_method(:int32) do
-      (xg.next * 0x100000000).to_i
-    end
-
-    prng.define_singleton_method(:double) do
-      prng.call + ((prng.call * 0x200000).to_i * 1.1102230246251565e-16)  # 2^-53
-    end
-
-    prng.define_singleton_method(:state) do
-      xg.state
-    end
-
-    prng.define_singleton_method(:import_state) do |state|
-      xg.state = state
-      prng
-    end
-
-    prng
   end
 end

@@ -1,7 +1,5 @@
-require "fsrs_ruby"
-
 module Fsrs
   def self.instance
-    @instance ||= FsrsRuby::FSRSInstance.new(request_retention: 0.9)
+    @instance ||= FsrsRuby::FsrsInstance.new(request_retention: 0.9)
   end
 end

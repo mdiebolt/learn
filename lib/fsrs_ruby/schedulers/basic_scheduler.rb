@@ -7,7 +7,7 @@ module FsrsRuby
       protected
 
       def get_learning_info(card, grade)
-        Strategies.basic_learning_steps_strategy(@algorithm.parameters, card.state, card.learning_steps || 0)[grade]
+        Strategies::LearningSteps.call(@algorithm.parameters, card.state, card.learning_steps || 0)[grade]
       end
 
       # Apply learning steps to next card

@@ -137,7 +137,7 @@ module FsrsRuby
     def apply_fuzz(ivl, elapsed_days)
       return ivl.round unless @parameters.enable_fuzz && ivl >= 2.5
 
-      prng = FsrsRuby.alea(Time.now.to_i)
+      prng = Alea.factory(Time.now.to_i)
       fuzz_factor = prng.call
 
       fuzz_range = Helpers.get_fuzz_range(ivl, elapsed_days, @parameters.maximum_interval)
