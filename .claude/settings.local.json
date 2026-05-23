@@ -108,7 +108,12 @@
       "Bash(ffmpeg -hide_banner -loglevel error -y -f lavfi -i \"anullsrc=r=8000:cl=mono\" -t 0.01 -c:a aac -b:a 8k /Users/bolt/code/learn/test/fixtures/files/silent.m4b)",
       "Bash(ffmpeg -hide_banner -loglevel error -y -f lavfi -i \"anullsrc=r=8000:cl=mono\" -t 0.01 -c:a libmp3lame -b:a 8k -write_xing 0 -id3v2_version 0 /Users/bolt/code/learn/test/fixtures/files/silent.mp3)",
       "Bash(ffmpeg -hide_banner -loglevel error -y -f lavfi -i \"anullsrc=r=8000:cl=mono\" -t 0.01 -c:a pcm_s16le /Users/bolt/code/learn/test/fixtures/files/silent.wav)",
-      "Bash(bin/rails audiobook_words:split_compounds)"
+      "Bash(bin/rails audiobook_words:split_compounds)",
+      "Bash(curl -s -c /tmp/cookies.txt -X POST http://localhost:3001/session -d \"email_address=mdiebolt@gmail.com&password=password\" -o /dev/null -w \"%{http_code}\\\\n\")",
+      "Bash(curl -s -c /tmp/cookies.txt -L http://localhost:3000/session/new)",
+      "Bash(curl -s -c /tmp/c.txt -b \"session_id=NQ==--2e54243cf99184ea5840bc4aa4383cb9e3c1cedf\" http://localhost:3000/audiobooks/14/chapters/316/cards/15 -o /dev/null -w \"%{http_code}\\\\n\")",
+      "Bash(curl -s -b \"session_id=NQ%3D%3D--2e54243cf99184ea5840bc4aa4383cb9e3c1cedf\" http://localhost:3000/due_cards -o /tmp/due.html -w \"%{http_code}\\\\n\")",
+      "Bash(curl -s -b \"session_id=NQ%3D%3D--2e54243cf99184ea5840bc4aa4383cb9e3c1cedf\" http://localhost:3000/due_cards -o /tmp/due.html)"
     ]
   }
 }
