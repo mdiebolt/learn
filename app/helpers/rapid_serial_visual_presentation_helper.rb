@@ -2,7 +2,8 @@
 # player: the controller wiring on the container/audio elements and the
 # transport chrome (scrubber, sync offset, fullscreen, speed).
 module RapidSerialVisualPresentationHelper
-  def rsvp_container_attributes(chapter:, words:, next_chapter:, autoplay:, progress:)
+  def rsvp_container_attributes(chapter:, words:, autoplay:, progress:)
+    next_chapter = chapter.following
     next_url = next_chapter ? chapter_path(next_chapter) : ""
     initial_progress_ms = (progress && !progress.completed?) ? progress.progress_ms : 0
     duration_ms = chapter.end_time_ms - chapter.start_time_ms

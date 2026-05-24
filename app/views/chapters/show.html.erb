@@ -3,15 +3,16 @@
 <%# swap leaves <html> in place, so document-level fullscreen survives the %>
 <%# transition; a body-replacing visit would drop fullscreen on most browsers. %>
 <%= turbo_frame_tag "chapter", data: { turbo_action: "advance" } do %>
-  <% if @words.any? %>
-    <%= tag.div(**rsvp_container_attributes(chapter: @chapter, words: @words, next_chapter: @next_chapter, autoplay: @autoplay, progress: @progress)) do %>
+  <% words = @chapter.playback_words %>
+  <% if words.any? %>
+    <%= tag.div(**rsvp_container_attributes(chapter: @chapter, words:, autoplay: params[:autoplay] == "1", progress: @progress)) do %>
       <%# Top hover zone — the breadcrumb fades in when the cursor approaches the top edge. %>
       <div class="absolute top-0 left-0 right-0 h-24 group/header z-10">
         <div class="absolute top-0 left-0 right-0 px-6 pt-6 transition-opacity duration-300 opacity-0 pointer-events-none group-hover/header:opacity-100 group-hover/header:pointer-events-auto">
           <%# `turbo_frame: "_top"` escapes the chapter frame so Turbo doesn't %>
           <%# look for a matching frame on the audiobook show page and surface %>
           <%# a "Content missing" error. %>
-          <p class="text-2xs font-mono uppercase tracking-wide text-white/40"><%= link_to "[#{@audiobook.title}]", @audiobook, data: { turbo_frame: "_top" }, class: "ui-link" %> <span>.. <%= @chapter.title %></span></p>
+          <p class="text-2xs font-mono uppercase tracking-wide text-white/40"><%= link_to "[#{@chapter.audiobook.title}]", @chapter.audiobook, data: { turbo_frame: "_top" }, class: "ui-link" %> <span>.. <%= @chapter.title %></span></p>
         </div>
       </div>
 
@@ -45,13 +46,13 @@
       </div>
 
       <%= tag.audio(**rsvp_audio_attributes) do %>
-        <%= tag.source src: rails_blob_path(@audiobook.audio), type: @audiobook.audio.content_type %>
+        <%= tag.source src: rails_blob_path(@chapter.audiobook.audio), type: @chapter.audiobook.audio.content_type %>
       <% end %>
     <% end %>
   <% else %>
     <div class="px-8 py-16 text-center space-y-4">
       <p class="font-mono text-2xs uppercase tracking-wide text-white/60">// transcript not ready yet</p>
-      <%= link_to "[← back to audiobook]", @audiobook, class: "ui-link" %>
+      <%= link_to "[← back to audiobook]", @chapter.audiobook, class: "ui-link" %>
     </div>
   <% end %>
 <% end %>
