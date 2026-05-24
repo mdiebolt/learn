@@ -28,7 +28,7 @@ module Audiobook::Chaptered
       title: atom.dig("tags", "title").presence || "Chapter #{position + 1}",
       start_time_ms: (atom["start_time"].to_f * 1000).round,
       end_time_ms: (atom["end_time"].to_f * 1000).round,
-      position: position
+      position:
     )
   end
 end

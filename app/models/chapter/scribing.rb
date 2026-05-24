@@ -29,7 +29,7 @@ module Chapter::Scribing
         text = atom["text"]
         {
           chapter_id: id,
-          text: text,
+          text:,
           start_time_ms: start_time_ms + (atom["start"].to_f * 1000).round,
           end_time_ms: start_time_ms + (atom["end"].to_f * 1000).round,
           position: i,

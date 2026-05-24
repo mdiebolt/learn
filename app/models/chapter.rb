@@ -34,7 +34,7 @@ class Chapter < ApplicationRecord
       [ audiobook, :transcript_badge ],
       target: ActionView::RecordIdentifier.dom_id(audiobook, :transcript_badge),
       partial: "audiobooks/transcript_badge",
-      locals: { audiobook: audiobook }
+      locals: { audiobook: }
     )
   end
 end

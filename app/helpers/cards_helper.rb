@@ -23,7 +23,7 @@ module CardsHelper
   end
 
   def cloze_blank(answer)
-    tag.input(type: "text", autocomplete: "off", spellcheck: "false", size: [ answer.length + 1, 5 ].max, class: "cloze-blank", data: { "cards--cloze_target": "blank", answer: answer })
+    tag.input(type: "text", autocomplete: "off", spellcheck: "false", size: [ answer.length + 1, 5 ].max, class: "cloze-blank", data: { "cards--cloze_target": "blank", answer: })
   end
 
   def card_actions(submit = nil, reveal: "cards--reveal#show")
@@ -35,7 +35,7 @@ module CardsHelper
   end
 
   def reveal_trigger(action)
-    tag.button("[reveal answer]", type: "button", class: "ui-button text-white/40 hover:text-white/70", data: { action: action })
+    tag.button("[reveal answer]", type: "button", class: "ui-button text-white/40 hover:text-white/70", data: { action: })
   end
 
   def sortable(&block)
@@ -47,6 +47,6 @@ module CardsHelper
   end
 
   def sortable_item(label, position, height: "min-h-14")
-    tag.li(class: "flex #{height} cursor-grab items-center gap-3 border border-white/15 px-3 py-2 text-white/80 transition-colors", draggable: true, data: { "cards--sortable_target": "item", position: position, action: "dragstart->cards--sortable#dragStart dragend->cards--sortable#dragEnd" }) { safe_join([ tag.span("::", class: "font-mono text-2xs text-white/30"), tag.span(label) ]) }
+    tag.li(class: "flex #{height} cursor-grab items-center gap-3 border border-white/15 px-3 py-2 text-white/80 transition-colors", draggable: true, data: { "cards--sortable_target": "item", position:, action: "dragstart->cards--sortable#dragStart dragend->cards--sortable#dragEnd" }) { safe_join([ tag.span("::", class: "font-mono text-2xs text-white/30"), tag.span(label) ]) }
   end
 end

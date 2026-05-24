@@ -4,7 +4,7 @@ class Chapter::Word::PositioningTest < ActiveSupport::TestCase
   Word = Chapter::Word
 
   def build(text)
-    Word.new(text: text, start_time_ms: 0, end_time_ms: 1, position: 0)
+    Word.new(text:, start_time_ms: 0, end_time_ms: 1, position: 0)
   end
 
   test "1-letter words have ORP at index 0" do

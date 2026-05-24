@@ -21,10 +21,10 @@ class Card < ApplicationRecord
 
   def to_fsrs
     FsrsRuby::Card.new(
-      due: due, stability: stability, difficulty: difficulty,
-      elapsed_days: elapsed_days, scheduled_days: scheduled_days,
-      learning_steps: learning_steps, reps: reps, lapses: lapses,
-      state: state, last_review: last_review
+      due:, stability:, difficulty:,
+      elapsed_days:, scheduled_days:,
+      learning_steps:, reps:, lapses:,
+      state:, last_review:
     )
   end
 
@@ -32,7 +32,7 @@ class Card < ApplicationRecord
     result = Fsrs.instance.next(to_fsrs, now, rating)
     transaction do
       reviews.create!(
-        rating: rating, response: response, reviewed_at: now,
+        rating:, response:, reviewed_at: now,
         prior_state: state, prior_due: due,
         prior_stability: stability, prior_difficulty: difficulty,
         prior_elapsed_days: elapsed_days,

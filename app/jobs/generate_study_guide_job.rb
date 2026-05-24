@@ -4,7 +4,7 @@ class GenerateStudyGuideJob < ApplicationJob
   def perform(chapter, user, client: Anthropic::Claude.new)
     raw = client.complete(prompt: build_prompt(chapter), system: system_prompt)
     StudyGuide.create_from_ai_payload!(
-      chapter: chapter, user: user, raw_response: raw, model: client.model
+      chapter:, user:, raw_response: raw, model: client.model
     )
   end
 

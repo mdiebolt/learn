@@ -11,18 +11,18 @@ namespace :audiobook_words do
 
     affected_chapter_ids.each do |chapter_id|
       Chapter::Word.transaction do
-        rows = Chapter::Word.where(chapter_id: chapter_id).order(:position).to_a
+        rows = Chapter::Word.where(chapter_id:).order(:position).to_a
         atoms = rows.map { |w| { "text" => w.text, "start" => w.start_time_ms / 1000.0, "end" => w.end_time_ms / 1000.0 } }
         expanded = Chapter::Word.split_compound_atoms(atoms)
         next if expanded.size == rows.size
 
         now = Time.current
-        Chapter::Word.where(chapter_id: chapter_id).delete_all
+        Chapter::Word.where(chapter_id:).delete_all
         Chapter::Word.insert_all!(expanded.map.with_index { |atom, i|
           text = atom["text"]
           {
-            chapter_id: chapter_id,
-            text: text,
+            chapter_id:,
+            text:,
             start_time_ms: (atom["start"] * 1000).round,
             end_time_ms: (atom["end"] * 1000).round,
             position: i,

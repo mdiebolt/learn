@@ -45,12 +45,12 @@ module AudiobooksHelper
   private
 
   def transcribe_button(audiobook, id:, box:, dot_size:, text:, chrome:, dot_color:, confirm: nil)
-    form = { id: id }
+    form = { id: }
     form[:data] = { turbo_confirm: confirm } if confirm
 
     button_to audiobook_transcription_path(audiobook),
       method: :post,
-      form: form,
+      form:,
       class: "ui-button inline-flex items-center #{box} #{chrome}" do
       concat tag.span(class: "#{dot_size} rounded-full #{dot_color}")
       concat " #{text}"
@@ -58,7 +58,7 @@ module AudiobooksHelper
   end
 
   def transcript_status_badge(id:, box:, dot_size:, text:, chrome:, dot_color:)
-    tag.div id: id,
+    tag.div id:,
       class: "inline-flex items-center #{box} font-mono text-2xs uppercase tracking-wide #{chrome}" do
       concat tag.span(class: "#{dot_size} rounded-full #{dot_color}")
       concat " #{text}"

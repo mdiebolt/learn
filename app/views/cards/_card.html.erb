@@ -5,7 +5,7 @@
     <span class="flex size-6 shrink-0 items-center justify-center border border-white/15 font-mono text-xs text-white/50" title="<%= card_kind_label(card) %>"><%= card.kind.glyph %></span>
   </header>
 
-  <%= render partial: card.kind.to_partial_path, object: card.kind, as: card.kind.model_name.element, locals: { card: card } %>
+  <%= render partial: card.kind.to_partial_path, object: card.kind, as: card.kind.model_name.element, locals: { card: } %>
 
   <div data-cards--reveal-target="answer" hidden class="space-y-4">
     <%= render partial: card.kind.to_answer_partial_path, object: card.kind, as: card.kind.model_name.element %>

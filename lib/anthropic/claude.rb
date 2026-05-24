@@ -20,7 +20,7 @@ module Anthropic
     def complete(prompt:, system: nil, max_tokens: 8192)
       raise "missing api key" unless @api_key
 
-      body = { model: @model, max_tokens: max_tokens, messages: [ { role: "user", content: prompt } ] }
+      body = { model: @model, max_tokens:, messages: [ { role: "user", content: prompt } ] }
       body[:system] = system if system
 
       response = connection.post(API_URL) do |req|

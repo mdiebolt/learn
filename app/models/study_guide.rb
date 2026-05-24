@@ -15,7 +15,7 @@ class StudyGuide < ApplicationRecord
   class << self
     def create_from_ai_payload!(chapter:, user:, raw_response:, model:, prompt_version: PROMPT_VERSION)
       transaction do
-        guide = create!(user: user, chapter: chapter, model: model, prompt_version: prompt_version)
+        guide = create!(user:, chapter:, model:, prompt_version:)
         parse_payload(raw_response).fetch("topics", []).each { guide.append_from_ai(it) }
         raise EmptyGeneration, "AI returned no usable topics for chapter #{chapter.id}" if guide.topics.empty?
         guide
@@ -53,11 +53,11 @@ class StudyGuide < ApplicationRecord
     kind_class = Card.kind_class_for(raw["kind"]) or return nil
     kind = kind_class.create!(raw.fetch("attributes", {}))
     cards.create!(
-      user: user,
-      chapter: chapter,
+      user:,
+      chapter:,
       concept_title: raw["concept_title"],
       source_excerpt: raw["source_excerpt"],
-      kind: kind,
+      kind:,
       due: Time.current
     )
   end
@@ -65,7 +65,7 @@ class StudyGuide < ApplicationRecord
   def build_visual(raw)
     kind_class = Visual.kind_class_for(raw["kind"]) or return nil
     kind = kind_class.create!(raw.fetch("attributes", {}))
-    visuals.create!(kind: kind, caption: raw["caption"])
+    visuals.create!(kind:, caption: raw["caption"])
   end
 
   def broadcast_ready
@@ -73,7 +73,7 @@ class StudyGuide < ApplicationRecord
       [ chapter, :study_guide ],
       target: ActionView::RecordIdentifier.dom_id(chapter, :study_guide),
       partial: "chapter/study_guides/ready",
-      locals: { audiobook: chapter.audiobook, chapter: chapter, study_guide: self }
+      locals: { audiobook: chapter.audiobook, chapter:, study_guide: self }
     )
   end
 
@@ -82,7 +82,7 @@ class StudyGuide < ApplicationRecord
       [ chapter, :study_guide_control ],
       target: ActionView::RecordIdentifier.dom_id(chapter, :study_guide_control),
       partial: "chapter/study_guides/control",
-      locals: { audiobook: chapter.audiobook, chapter: chapter, study_guide: self }
+      locals: { audiobook: chapter.audiobook, chapter:, study_guide: self }
     )
   end
 end
