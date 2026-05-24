@@ -21,6 +21,14 @@ module Audiobook::Chaptered
     end
   end
 
+  def progresses_by_chapter_id(user)
+    Chapter::Progress.where(user:, chapter: chapters).index_by(&:chapter_id)
+  end
+
+  def study_guides_by_chapter_id(user)
+    StudyGuide.where(user:, chapter: chapters).order(:created_at).index_by(&:chapter_id)
+  end
+
   private
 
   def create_from_atom(atom, position)

@@ -1,6 +1,4 @@
 class Chapter::Progress < ApplicationRecord
-  attribute :completed, :boolean
-
   belongs_to :user
   belongs_to :chapter
 

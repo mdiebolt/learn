@@ -2,10 +2,13 @@ class Chapter < ApplicationRecord
   include Scribing
 
   belongs_to :audiobook
-  has_many :words, dependent: :destroy
-  has_many :progresses, dependent: :destroy
-  has_many :study_guides, dependent: :destroy
-  has_many :cards, dependent: :destroy
+
+  with_options dependent: :destroy do
+    has_many :words
+    has_many :progresses
+    has_many :study_guides
+    has_many :cards
+  end
 
   enum :transcription_status, { pending: 0, transcribing: 1, ready: 2, failed: 3 }, prefix: :transcription
 
