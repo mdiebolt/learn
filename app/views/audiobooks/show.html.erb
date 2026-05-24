@@ -35,7 +35,7 @@
       <ul role="list">
         <% @audiobook.chapters.each_with_index do |chapter, i| %>
           <% progress = @progresses_by_chapter_id[chapter.id] %>
-          <% duration_str = "%02d:%02d" % chapter.duration_ms.divmod(60_000).then { |m, ms| [m, ms / 1000] } %>
+          <% duration_str = "%02d:%02d" % chapter.duration_ms.divmod(60_000).then { |m, ms| [m, ms / 1_000] } %>
           <li class="relative">
             <% if chapter.transcription_ready? %>
               <% fraction = progress&.fraction_through(chapter) || 0 %>

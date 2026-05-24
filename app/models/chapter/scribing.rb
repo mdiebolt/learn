@@ -30,8 +30,8 @@ module Chapter::Scribing
         {
           chapter_id: id,
           text:,
-          start_time_ms: start_time_ms + (atom["start"].to_f * 1000).round,
-          end_time_ms: start_time_ms + (atom["end"].to_f * 1000).round,
+          start_time_ms: start_time_ms + (atom["start"].to_f * 1_000).round,
+          end_time_ms: start_time_ms + (atom["end"].to_f * 1_000).round,
           position: i,
           orp_index: Chapter::Word.compute_orp_for(text),
           created_at: now,

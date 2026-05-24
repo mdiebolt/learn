@@ -26,8 +26,8 @@ module Audiobook::Chaptered
   def create_from_atom(atom, position)
     chapters.create!(
       title: atom.dig("tags", "title").presence || "Chapter #{position + 1}",
-      start_time_ms: (atom["start_time"].to_f * 1000).round,
-      end_time_ms: (atom["end_time"].to_f * 1000).round,
+      start_time_ms: (atom["start_time"].to_f * 1_000).round,
+      end_time_ms: (atom["end_time"].to_f * 1_000).round,
       position:
     )
   end

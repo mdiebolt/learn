@@ -61,7 +61,7 @@ module FsrsRuby
         case unit
         when "m" then value
         when "h" then value * 60
-        when "d" then value * 1440
+        when "d" then value * 1_440
         else
           raise ArgumentError, "Invalid step unit: #{step}, expected m/h/d"
         end

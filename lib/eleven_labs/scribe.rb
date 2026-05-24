@@ -37,7 +37,7 @@ module ElevenLabs
     def connection
       @connection ||= Faraday.new do |f|
         f.request :multipart
-        f.options.timeout = 1800
+        f.options.timeout = 30.minutes.to_i
         f.options.open_timeout = 30
         f.adapter Faraday.default_adapter
       end

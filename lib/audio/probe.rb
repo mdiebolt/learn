@@ -31,7 +31,7 @@ module Audio
     end
 
     def duration_ms
-      ((@data.dig("format", "duration") || 0).to_f * 1000).round
+      ((@data.dig("format", "duration") || 0).to_f * 1_000).round
     end
   end
 end

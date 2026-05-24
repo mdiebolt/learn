@@ -17,7 +17,7 @@ module Anthropic
     end
 
     # Sends a single user message and returns the model's text response.
-    def complete(prompt:, system: nil, max_tokens: 8192)
+    def complete(prompt:, system: nil, max_tokens: 8_192)
       raise "missing api key" unless @api_key
 
       body = { model: @model, max_tokens:, messages: [ { role: "user", content: prompt } ] }

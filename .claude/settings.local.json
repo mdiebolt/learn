@@ -17,7 +17,10 @@
       "Bash(git -C /Users/bolt/code/learn mv app/jobs/audiobook/ingest_job.rb app/jobs/ingest_audiobook_job.rb)",
       "Bash(git -C /Users/bolt/code/learn mv app/jobs/chapter/scribe_job.rb app/jobs/transcribe_chapter_job.rb)",
       "Bash(git -C /Users/bolt/code/learn mv app/jobs/study_guide/generate_job.rb app/jobs/generate_study_guide_job.rb)",
-      "Bash(git -C /Users/bolt/code/learn mv test/jobs/chapter/scribe_job_test.rb test/jobs/transcribe_chapter_job_test.rb)"
+      "Bash(git -C /Users/bolt/code/learn mv test/jobs/chapter/scribe_job_test.rb test/jobs/transcribe_chapter_job_test.rb)",
+      "Bash(grep -rn -E '[^_a-zA-Z0-9][0-9]{4,}' --include='*.rb' --include='*.erb' --include='*.rake' --include='*.yml' .)",
+      "Bash(grep -rn -E '[^_a-zA-Z0-9.][0-9]{4,}[^_a-zA-Z0-9.]' --include='*.rb' --include='*.erb' --include='*.rake' app/ lib/ test/)",
+      "Bash(grep *)"
     ],
     "deny": [
       "Bash(curl *)",

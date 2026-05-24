@@ -12,7 +12,7 @@ namespace :audiobook_words do
     affected_chapter_ids.each do |chapter_id|
       Chapter::Word.transaction do
         rows = Chapter::Word.where(chapter_id:).order(:position).to_a
-        atoms = rows.map { |w| { "text" => w.text, "start" => w.start_time_ms / 1000.0, "end" => w.end_time_ms / 1000.0 } }
+        atoms = rows.map { |w| { "text" => w.text, "start" => w.start_time_ms / 1_000.0, "end" => w.end_time_ms / 1_000.0 } }
         expanded = Chapter::Word.split_compound_atoms(atoms)
         next if expanded.size == rows.size
 
@@ -23,8 +23,8 @@ namespace :audiobook_words do
           {
             chapter_id:,
             text:,
-            start_time_ms: (atom["start"] * 1000).round,
-            end_time_ms: (atom["end"] * 1000).round,
+            start_time_ms: (atom["start"] * 1_000).round,
+            end_time_ms: (atom["end"] * 1_000).round,
             position: i,
             orp_index: Chapter::Word.compute_orp_for(text),
             created_at: now,

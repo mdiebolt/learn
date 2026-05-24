@@ -64,7 +64,7 @@ module RapidSerialVisualPresentationHelper
   # The bottom-edge seek bar.
   def rsvp_scrubber
     tag.input type: "range", autocomplete: "off",
-      min: 0, max: 1000, value: 0, step: 1, name: "seek",
+      min: 0, max: 1_000, value: 0, step: 1, name: "seek",
       aria: { label: "Seek" },
       data: { "playback--playback_target": "seek", action: "input->playback--playback#seek" },
       class: "rsvp-scrubber"

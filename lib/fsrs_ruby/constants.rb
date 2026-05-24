@@ -4,7 +4,7 @@ module FsrsRuby
   module Constants
     # Default configuration values
     DEFAULT_REQUEST_RETENTION = 0.9
-    DEFAULT_MAXIMUM_INTERVAL = 36500
+    DEFAULT_MAXIMUM_INTERVAL = 36_500
     DEFAULT_ENABLE_FUZZ = false
     DEFAULT_ENABLE_SHORT_TERM = true
     DEFAULT_LEARNING_STEPS = [ "1m", "10m" ].freeze
@@ -12,7 +12,7 @@ module FsrsRuby
 
     # Stability bounds
     S_MIN = 0.001
-    S_MAX = 36500.0
+    S_MAX = 36_500.0
     INIT_S_MAX = 100.0
 
     # Decay values

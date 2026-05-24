@@ -18,16 +18,16 @@ module FsrsRuby
           scheduled_minutes = step_info[:scheduled_minutes]
           next_steps = step_info[:next_step]
 
-          if scheduled_minutes > 0 && scheduled_minutes < 1440
+          if scheduled_minutes > 0 && scheduled_minutes < 1_440
             # Schedule by minutes, stay in learning state
             next_card.learning_steps = next_steps
             next_card.scheduled_days = 0
             next_card.state = to_state
             next_card.due = Helpers.date_scheduler(@review_time, scheduled_minutes, false)
-          elsif scheduled_minutes >= 1440
+          elsif scheduled_minutes >= 1_440
             # Promote to REVIEW, schedule by days
             next_card.state = State::REVIEW
-            scheduled_days = (scheduled_minutes / 1440.0).round
+            scheduled_days = (scheduled_minutes / 1_440.0).round
             next_card.scheduled_days = scheduled_days
             next_card.due = Helpers.date_scheduler(@review_time, scheduled_days, true)
             next_card.learning_steps = 0

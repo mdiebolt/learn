@@ -37,7 +37,7 @@ module Audio
     private
 
     def seconds(ms)
-      format("%.3f", ms / 1000.0)
+      format("%.3f", ms / 1_000.0)
     end
   end
 end
