@@ -2,7 +2,7 @@ class Card::ReviewsController < ApplicationController
   before_action :set_card
 
   def create
-    @card.review!(rating: Integer(review_params.fetch(:rating)))
+    @card.review!(rating: review_params[:rating].to_i)
 
     respond_to do |format|
       format.turbo_stream

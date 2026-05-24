@@ -6,15 +6,8 @@ class AudiobooksController < ApplicationController
   end
 
   def show
-    @progresses_by_chapter_id = Current.user.chapter_progresses
-      .joins(:chapter)
-      .where(chapters: { audiobook_id: @audiobook.id })
-      .index_by(&:chapter_id)
-
-    @study_guides_by_chapter_id = StudyGuide
-      .where(user: Current.user, chapter_id: @audiobook.chapters.ids)
-      .order(:created_at)
-      .index_by(&:chapter_id)
+    @progresses_by_chapter_id = @audiobook.progresses_by_chapter_id(Current.user)
+    @study_guides_by_chapter_id = @audiobook.study_guides_by_chapter_id(Current.user)
   end
 
   def new
