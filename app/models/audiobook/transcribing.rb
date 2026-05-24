@@ -14,7 +14,7 @@ module Audiobook::Transcribing
       Chapter::Word.where(chapter_id: list.map(&:id)).delete_all
       Chapter.where(id: list.map(&:id)).update_all(transcription_status: :transcribing)
     end
-    list.each { |chapter| Chapter::ScribeJob.perform_later(chapter) }
+    list.each { |chapter| TranscribeChapterJob.perform_later(chapter) }
   end
 
   # Aggregate state derived from the chapters' transcription_status. A book

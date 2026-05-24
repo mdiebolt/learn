@@ -1,4 +1,4 @@
-class StudyGuide::GenerateJob < ApplicationJob
+class GenerateStudyGuideJob < ApplicationJob
   queue_as :default
 
   def perform(chapter, user, client: Anthropic::Claude.new)

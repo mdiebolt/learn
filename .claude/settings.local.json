@@ -13,7 +13,11 @@
       "Bash(bin/rails db:rollback)",
       "Bash(bin/rails assets:precompile)",
       "Bash(bundle exec rubocop *)",
-      "Read(//Users/bolt/code/skills/skills/the-rails-way/**)"
+      "Read(//Users/bolt/code/skills/skills/the-rails-way/**)",
+      "Bash(git -C /Users/bolt/code/learn mv app/jobs/audiobook/ingest_job.rb app/jobs/ingest_audiobook_job.rb)",
+      "Bash(git -C /Users/bolt/code/learn mv app/jobs/chapter/scribe_job.rb app/jobs/transcribe_chapter_job.rb)",
+      "Bash(git -C /Users/bolt/code/learn mv app/jobs/study_guide/generate_job.rb app/jobs/generate_study_guide_job.rb)",
+      "Bash(git -C /Users/bolt/code/learn mv test/jobs/chapter/scribe_job_test.rb test/jobs/transcribe_chapter_job_test.rb)"
     ],
     "deny": [
       "Bash(curl *)",

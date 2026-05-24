@@ -1,4 +1,4 @@
-class Chapter::ScribeJob < ApplicationJob
+class TranscribeChapterJob < ApplicationJob
   queue_as :default
 
   # ElevenLabs allows at most 12 concurrent speech-to-text requests per
@@ -11,7 +11,7 @@ class Chapter::ScribeJob < ApplicationJob
   retry_on ElevenLabs::Scribe::RateLimitError, wait: :polynomially_longer, attempts: 8 do |job, error|
     chapter = job.arguments.first
     chapter.transcription_failed!
-    Rails.logger.error("[Chapter::ScribeJob] #{chapter.id} failed after retries: #{error.message}")
+    Rails.logger.error("[TranscribeChapterJob] #{chapter.id} failed after retries: #{error.message}")
   end
 
   def perform(chapter)
@@ -20,7 +20,7 @@ class Chapter::ScribeJob < ApplicationJob
     raise
   rescue => e
     chapter.transcription_failed!
-    Rails.logger.error("[Chapter::ScribeJob] #{chapter.id} failed: #{e.message}")
+    Rails.logger.error("[TranscribeChapterJob] #{chapter.id} failed: #{e.message}")
     raise
   end
 end

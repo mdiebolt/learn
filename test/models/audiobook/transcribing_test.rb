@@ -36,7 +36,7 @@ class Audiobook::TranscribingTest < ActiveSupport::TestCase
   end
 
   test "transcribe! enqueues a chapter job per chapter and marks them transcribing" do
-    assert_enqueued_jobs(@audiobook.chapters.size, only: Chapter::ScribeJob) do
+    assert_enqueued_jobs(@audiobook.chapters.size, only: TranscribeChapterJob) do
       @audiobook.audio.attach(fixture_file_upload("silent.m4b", "audio/mp4"))
       @audiobook.transcribe!(force: true)
     end

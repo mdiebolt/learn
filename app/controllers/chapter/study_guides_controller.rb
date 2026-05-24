@@ -8,7 +8,7 @@ class Chapter::StudyGuidesController < ApplicationController
   end
 
   def create
-    StudyGuide::GenerateJob.perform_later(@chapter, Current.user)
+    GenerateStudyGuideJob.perform_later(@chapter, Current.user)
 
     respond_to do |format|
       format.turbo_stream
