@@ -14,9 +14,11 @@ class Chapter::Progress < ApplicationRecord
     elapsed.to_f / chapter.duration_ms
   end
 
+  def completed=(value)
+    self.completed_at ||= Time.current if value
+  end
+
   def record(attrs)
-    assign_attributes(attrs.slice(:progress_ms))
-    self.completed_at ||= Time.current if attrs[:completed]
-    save
+    update(attrs.slice(:progress_ms, :completed))
   end
 end
