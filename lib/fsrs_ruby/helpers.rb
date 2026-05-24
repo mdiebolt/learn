@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module FsrsRuby
   module Helpers
     def self.round8(value)

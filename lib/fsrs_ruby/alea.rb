@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A port of Alea algorithm by Johannes Baagøe
 # https://github.com/davidbau/seedrandom/blob/released/lib/alea.js
 # Original work is under MIT license

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module FsrsRuby
   # Core FSRS v6.0 algorithm implementation
   class Algorithm

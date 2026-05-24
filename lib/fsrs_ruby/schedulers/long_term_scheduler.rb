@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module FsrsRuby
   module Schedulers
     # Scheduler without short-term learning (no learning steps)

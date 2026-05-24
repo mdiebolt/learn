@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module FsrsRuby
   module State
     NEW = 0

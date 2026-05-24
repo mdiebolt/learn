@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module FsrsRuby
   class ReviewLog
     attr_accessor :rating, :state, :due, :stability, :difficulty,

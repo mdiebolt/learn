@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module FsrsRuby
   class FsrsInstance < Algorithm
     def initialize(params = {})

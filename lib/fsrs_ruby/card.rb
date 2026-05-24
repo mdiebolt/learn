@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module FsrsRuby
   class Card
     attr_accessor :due, :stability, :difficulty, :elapsed_days, :scheduled_days,

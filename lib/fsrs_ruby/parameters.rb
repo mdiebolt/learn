@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module FsrsRuby
   class Parameters
     attr_accessor :request_retention, :maximum_interval, :w, :enable_fuzz,
