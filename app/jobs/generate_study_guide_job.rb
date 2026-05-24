@@ -2,10 +2,8 @@ class GenerateStudyGuideJob < ApplicationJob
   queue_as :default
 
   def perform(chapter, user, client: Anthropic::Claude.new)
-    raw = client.complete(prompt: build_prompt(chapter), system: system_prompt)
-    StudyGuide.create_from_ai_payload!(
-      chapter:, user:, raw_response: raw, model: client.model
-    )
+    raw_response = client.complete(prompt: build_prompt(chapter), system: system_prompt)
+    StudyGuide.create_from_ai_payload!(chapter:, user:, raw_response:, model: client.model)
   end
 
   private

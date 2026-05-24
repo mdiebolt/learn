@@ -1,8 +1,10 @@
-/* While audio is playing, the chapter wrapper hides its cursor and the
- * layout-level logo fades out. The playback controller toggles
- * `playback-active` on the chapter wrapper and on `<body>`; the logo
- * lives outside the wrapper, so the body class is what reaches it. */
-.playback-active {
+/* The chapter wrapper hides its cursor once the pointer has been still
+ * for a beat (the idle controller adds the `idle` class), and the
+ * layout-level logo fades out whenever audio is playing. The playback
+ * controller toggles `playback-active` on the chapter wrapper and on
+ * `<body>`; the logo lives outside the wrapper, so the body class is
+ * what reaches it. */
+.idle {
   cursor: none;
 }
 

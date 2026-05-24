@@ -8,14 +8,11 @@ const ARTISTIC_LEAD_WALL_MS = 30
 
 // Word display only. Reads `audio.currentTime` each frame, picks the
 // matching word from `wordsValue`, and renders it centered on the focal
-// column. Subscribes to `playback:*` events to start/stop its rAF loop,
-// and exposes a sync-offset slider that the user can nudge to dial in
-// audio/word alignment for their output device.
+// column. Subscribes to `playback:*` events to start/stop its rAF loop.
 export default class extends Controller {
-  static targets = ["audio", "word", "audioOffset", "audioOffsetReadout"]
+  static targets = ["audio", "word"]
   static values = {
-    words: Array,
-    audioOffsetMs: Number
+    words: Array
   }
 
   connect() {
@@ -62,16 +59,6 @@ export default class extends Controller {
 
   onChapterEnd() {
     this.stopTicking()
-  }
-
-  // ---- Sync-offset slider --------------------------------------------
-
-  setAudioOffset(event) {
-    this.audioOffsetMsValue = Number(event.target.value)
-    if (this.hasAudioOffsetReadoutTarget) {
-      this.audioOffsetReadoutTarget.textContent = this.formatOffset(this.audioOffsetMsValue)
-    }
-    this.updateWord()
   }
 
   // ---- Word display loop ---------------------------------------------
@@ -140,15 +127,14 @@ export default class extends Controller {
   }
 
   // Media-time offset to add to `currentTime` when picking the word that
-  // should be displayed now. Three wall-clock components: artistic lead
-  // (eye gets a head-start), the user's sync nudge, and the device's
-  // output latency (subtracted, since heard audio trails `currentTime`).
-  // Rescaled by `playbackRate` so the *perceived* lead is constant
-  // across WPM choices — at 2× rate, 30ms of wall-clock lead is 60ms of
-  // media time.
+  // should be displayed now. Two wall-clock components: artistic lead
+  // (eye gets a head-start) and the device's output latency (subtracted,
+  // since heard audio trails `currentTime`). Rescaled by `playbackRate`
+  // so the *perceived* lead is constant across WPM choices — at 2× rate,
+  // 30ms of wall-clock lead is 60ms of media time.
   leadMediaMs() {
     const rate = this.audioTarget.playbackRate || 1
-    return (ARTISTIC_LEAD_WALL_MS + this.audioOffsetMsValue - this.latencyWallMs()) * rate
+    return (ARTISTIC_LEAD_WALL_MS - this.latencyWallMs()) * rate
   }
 
   // Binary search for the last word whose `start` is <= timeMs.
@@ -207,9 +193,5 @@ export default class extends Controller {
     if (!frame) return
     const focalCenter = focalSpan.offsetLeft + focalSpan.offsetWidth / 2
     this.wordTarget.style.left = `${frame.offsetWidth / 3 - focalCenter}px`
-  }
-
-  formatOffset(ms) {
-    return `${ms >= 0 ? "+" : ""}${ms}ms`
   }
 }

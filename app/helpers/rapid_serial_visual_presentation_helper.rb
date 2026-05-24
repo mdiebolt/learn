@@ -1,6 +1,6 @@
 # DOM construction for the RSVP (rapid serial visual presentation) chapter
 # player: the controller wiring on the container/audio elements and the
-# transport chrome (scrubber, sync offset, fullscreen, speed).
+# transport chrome (scrubber, fullscreen, speed).
 module RapidSerialVisualPresentationHelper
   def rsvp_container_attributes(chapter:, words:, autoplay:, progress:)
     next_chapter = chapter.following
@@ -12,9 +12,10 @@ module RapidSerialVisualPresentationHelper
     {
       class: "min-h-dvh grid place-items-center relative overflow-hidden select-none cursor-default",
       data: {
-        controller: "playback--playback playback--rsvp playback--chapter-progress playback--chapter-autoplay fullscreen",
+        controller: "playback--playback playback--rsvp playback--chapter-progress playback--chapter-autoplay fullscreen idle",
         action: [
           "click->playback--playback#togglePlayFromClick",
+          "mousemove@window->idle#bump",
           "keydown.space@window->playback--playback#togglePlayFromKey",
           "keydown.f@window->fullscreen#toggleFromKey",
           "playback:play->playback--rsvp#onPlay",
@@ -34,7 +35,6 @@ module RapidSerialVisualPresentationHelper
         "playback--playback_initial_ms_value": initial_progress_ms,
         "playback--playback_natural_wpm_value": natural_wpm,
         "playback--rsvp_words_value": words.to_json,
-        "playback--rsvp_audio_offset_ms_value": Current.user.audio_offset_ms,
         "playback--chapter-progress_url_value": chapter_progress_path(chapter),
         "playback--chapter-autoplay_autoplay_value": autoplay,
         "playback--chapter-autoplay_next_chapter_url_value": next_url,
@@ -69,33 +69,6 @@ module RapidSerialVisualPresentationHelper
       aria: { label: "Seek" },
       data: { "playback--playback_target": "seek", action: "input->playback--playback#seek" },
       class: "rsvp-scrubber"
-  end
-
-  # The audio-sync offset slider with its label and live `+Nms` readout.
-  # Autosaves to the user's preferences on change.
-  def rsvp_audio_offset_control
-    offset = Current.user.audio_offset_ms
-
-    tag.label class: "flex items-center gap-2 cursor-pointer", data: { playback_no_toggle: true } do
-      safe_join([
-        tag.span("sync", class: "text-white/40"),
-        tag.input(type: "range", autocomplete: "off",
-          min: User::AUDIO_OFFSET_MS_RANGE.begin,
-          max: User::AUDIO_OFFSET_MS_RANGE.end,
-          step: 25, value: offset, name: "audio_offset_ms",
-          aria: { label: "Audio sync offset in milliseconds" },
-          data: {
-            "playback--rsvp_target": "audioOffset",
-            controller: "autosave",
-            autosave_url_value: preferences_path,
-            action: "input->playback--rsvp#setAudioOffset change->autosave#patch"
-          },
-          class: "w-20 accent-amber-400 cursor-pointer"),
-        tag.span(format("%+dms", offset),
-          data: { "playback--rsvp_target": "audioOffsetReadout" },
-          class: "text-white/40 w-12 text-right")
-      ])
-    end
   end
 
   # Plain-text fullscreen toggle handled by the fullscreen controller.
