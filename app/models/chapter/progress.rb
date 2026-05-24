@@ -15,8 +15,8 @@ class Chapter::Progress < ApplicationRecord
   end
 
   def record(attrs)
-    assign_attributes(attrs.slice(:progress_ms, :completed))
-    self.completed_at ||= Time.current if completed
+    assign_attributes(attrs.slice(:progress_ms))
+    self.completed_at ||= Time.current if attrs[:completed]
     save
   end
 end

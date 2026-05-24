@@ -11,7 +11,8 @@
       "Bash(bundle exec rubocop *)",
       "Read(//Users/bolt/code/skills/skills/the-rails-way/**)",
       "Bash(git mv *)",
-      "Bash(grep *)"
+      "Bash(grep *)",
+      "Bash(xargs ls -la)"
     ],
     "deny": [
       "Bash(curl *)",
