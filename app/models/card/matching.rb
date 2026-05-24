@@ -6,6 +6,6 @@ class Card::Matching < ApplicationRecord
   def glyph = "="
 
   def shuffled_answers
-    pairs.map { |pair| pair["right"] }.each_with_index.to_a.shuffle
+    pairs.map { it["right"] }.each_with_index.to_a.shuffle
   end
 end

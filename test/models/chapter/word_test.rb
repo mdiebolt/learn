@@ -22,7 +22,7 @@ class Chapter::WordTest < ActiveSupport::TestCase
       { "text" => "giving.Transactional", "start" => 1.0, "end" => 2.0 }
     ])
 
-    assert_equal [ "giving.", "Transactional" ], atoms.map { _1["text"] }
+    assert_equal [ "giving.", "Transactional" ], atoms.map { it["text"] }
     assert_in_delta 1.35, atoms[0]["end"], 0.01
     assert_in_delta 1.35, atoms[1]["start"], 0.01
   end
@@ -32,7 +32,7 @@ class Chapter::WordTest < ActiveSupport::TestCase
       { "text" => "Gift?\"Generosity", "start" => 0.0, "end" => 1.0 }
     ])
 
-    assert_equal [ "Gift?\"", "Generosity" ], atoms.map { _1["text"] }
+    assert_equal [ "Gift?\"", "Generosity" ], atoms.map { it["text"] }
   end
 
   test "split_compound_atoms leaves abbreviations like U.S.A alone" do
@@ -40,7 +40,7 @@ class Chapter::WordTest < ActiveSupport::TestCase
       { "text" => "U.S.A.", "start" => 0.0, "end" => 1.0 }
     ])
 
-    assert_equal [ "U.S.A." ], atoms.map { _1["text"] }
+    assert_equal [ "U.S.A." ], atoms.map { it["text"] }
   end
 
   test "split_compound_atoms handles multiple sentence breaks in one token" do
@@ -48,7 +48,7 @@ class Chapter::WordTest < ActiveSupport::TestCase
       { "text" => "one.Two.Three", "start" => 0.0, "end" => 3.0 }
     ])
 
-    assert_equal [ "one.", "Two.", "Three" ], atoms.map { _1["text"] }
+    assert_equal [ "one.", "Two.", "Three" ], atoms.map { it["text"] }
   end
 
   test "split_compound_atoms splits camelCase merges when the trailing word is a sentence-starter" do
@@ -59,14 +59,14 @@ class Chapter::WordTest < ActiveSupport::TestCase
     ])
 
     assert_equal [ "attend", "Now,", "could", "If", "recruiters", "It" ],
-      atoms.map { _1["text"] }
+      atoms.map { it["text"] }
   end
 
   test "split_compound_atoms leaves legitimate camelCase tokens alone" do
     inputs = %w[McCord iPad YouTube LinkedIn DreamWorks DiLeonardo AgriGold ExxonMobil IAmWaldo]
-    atoms = inputs.map { |t| { "text" => t, "start" => 0.0, "end" => 1.0 } }
+    atoms = inputs.map { { "text" => it, "start" => 0.0, "end" => 1.0 } }
 
-    assert_equal inputs, Chapter::Word.split_compound_atoms(atoms).map { _1["text"] }
+    assert_equal inputs, Chapter::Word.split_compound_atoms(atoms).map { it["text"] }
   end
 
   test "display_text strips sentence-context punctuation" do

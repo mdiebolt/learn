@@ -16,7 +16,7 @@ class StudyGuide < ApplicationRecord
     def create_from_ai_payload!(chapter:, user:, raw_response:, model:, prompt_version: PROMPT_VERSION)
       transaction do
         guide = create!(user: user, chapter: chapter, model: model, prompt_version: prompt_version)
-        parse_payload(raw_response).fetch("topics", []).each { |raw| guide.append_from_ai(raw) }
+        parse_payload(raw_response).fetch("topics", []).each { guide.append_from_ai(it) }
         raise EmptyGeneration, "AI returned no usable topics for chapter #{chapter.id}" if guide.topics.empty?
         guide
       end

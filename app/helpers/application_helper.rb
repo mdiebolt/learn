@@ -14,7 +14,7 @@ module ApplicationHelper
     return if record.nil? || record.errors.empty?
 
     tag.div class: "ui-flash ui-flash--alert space-y-1" do
-      safe_join(record.errors.full_messages.map { |message| tag.div("// #{message}") })
+      safe_join(record.errors.full_messages.map { tag.div("// #{it}") })
     end
   end
 

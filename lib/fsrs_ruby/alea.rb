@@ -19,7 +19,7 @@ module FsrsRuby
       prng.define_singleton_method(:int32) { (xg.next * 0x100000000).to_i }
       prng.define_singleton_method(:double) { prng.call + ((prng.call * 0x200000).to_i * 1.1102230246251565e-16) }
       prng.define_singleton_method(:state) { xg.state }
-      prng.define_singleton_method(:import_state) { |state| xg.state = state; prng }
+      prng.define_singleton_method(:import_state) { xg.state = it; prng }
 
       prng
     end

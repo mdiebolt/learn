@@ -19,7 +19,7 @@ module Chapter::Scribing
   private
 
   def persist_words(response)
-    atoms = (response["words"] || []).select { |w| w["type"] == "word" }
+    atoms = (response["words"] || []).select { it["type"] == "word" }
     atoms = Chapter::Word.split_compound_atoms(atoms)
     now = Time.current
 

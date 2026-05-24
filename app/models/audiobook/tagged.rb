@@ -31,7 +31,7 @@ module Audiobook::Tagged
   def set_title_and_author(probe)
     tags = probe.tags
     self.title = tags["title"].presence || title
-    self.author = AUTHOR_TAGS.filter_map { |key| tags[key].presence }.first || author
+    self.author = AUTHOR_TAGS.filter_map { tags[it].presence }.first || author
   end
 
   def attach_embedded_cover(source_path)

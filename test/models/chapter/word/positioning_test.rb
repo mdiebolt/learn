@@ -46,7 +46,7 @@ class Chapter::Word::PositioningTest < ActiveSupport::TestCase
   end
 
   test "before_orp / at_orp / after_orp slice the text correctly" do
-    word = build("hello").tap { |w| w.orp_index = w.compute_orp_index }
+    word = build("hello").tap { it.orp_index = it.compute_orp_index }
 
     assert_equal "h",   word.before_orp
     assert_equal "e",   word.at_orp

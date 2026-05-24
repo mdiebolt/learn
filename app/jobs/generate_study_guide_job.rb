@@ -18,8 +18,8 @@ class GenerateStudyGuideJob < ApplicationJob
 
       Output schema:
       { "topics": [
-          { "type": "visual", "kind": "<#{Visual.kind_types.map { |t| t.demodulize.underscore }.join("|")}>", "caption": "...", "attributes": { ... } },
-          { "type": "card",   "kind": "<#{Card.kind_types.map { |t| t.demodulize.underscore }.join("|")}>",
+          { "type": "visual", "kind": "<#{Visual.kind_types.map { it.demodulize.underscore }.join("|")}>", "caption": "...", "attributes": { ... } },
+          { "type": "card",   "kind": "<#{Card.kind_types.map { it.demodulize.underscore }.join("|")}>",
             "concept_title": "...", "source_excerpt": "...", "attributes": { ... } }
         ] }
 

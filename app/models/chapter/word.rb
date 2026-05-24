@@ -32,7 +32,7 @@ class Chapter::Word < ApplicationRecord
   CAMEL_SENTENCE_BREAK = /[a-z](?=(?:#{CAMEL_SENTENCE_STARTERS.join('|')})(?:[^A-Za-z]|$))/
 
   def self.split_compound_atoms(atoms)
-    atoms.flat_map { |atom| split_compound_atom(atom) }
+    atoms.flat_map { split_compound_atom(it) }
   end
 
   def self.split_compound_atom(atom)
@@ -54,7 +54,7 @@ class Chapter::Word < ApplicationRecord
 
   def self.first_split_index(text)
     [ SENTENCE_BREAK.match(text), CAMEL_SENTENCE_BREAK.match(text) ]
-      .compact.map { |m| m.end(0) }.min
+      .compact.map { it.end(0) }.min
   end
 
   # Words whose trailing period is part of the word's identity rather than
