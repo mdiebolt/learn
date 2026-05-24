@@ -1,13 +1,12 @@
 <div class="font-mono <%= container_classes %>">
   <div class="flex items-center justify-between gap-4">
     <%= link_to audiobooks_path, class: "ui-link" do %>
-      [← back to library]
+      [audiobooks]
     <% end %>
     <%= delete_audiobook_button(@audiobook) %>
   </div>
 
   <header class="mt-8 mb-12">
-    <div class="ui-eyebrow mb-3">// audiobook</div>
     <div class="flex items-center justify-between gap-6">
       <h1 class="ui-title truncate min-w-0"><%= @audiobook.title %></h1>
       <div class="shrink-0">

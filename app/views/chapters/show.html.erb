@@ -12,7 +12,13 @@
           <%# `turbo_frame: "_top"` escapes the chapter frame so Turbo doesn't %>
           <%# look for a matching frame on the audiobook show page and surface %>
           <%# a "Content missing" error. %>
-          <p class="text-2xs font-mono uppercase tracking-wide text-white/40"><%= link_to "[#{@chapter.audiobook.title}]", @chapter.audiobook, data: { turbo_frame: "_top" }, class: "ui-link" %> <span>.. <%= @chapter.title %></span></p>
+          <p class="text-2xs font-mono uppercase tracking-wide text-white/40">
+            <%= link_to "[audiobooks]", audiobooks_path, data: { turbo_frame: "_top" }, class: "ui-link" %>
+            <span>..</span>
+            <%= link_to "[#{@chapter.audiobook.title}]", @chapter.audiobook, data: { turbo_frame: "_top" }, class: "ui-link" %>
+            <span>..</span>
+            <span><%= @chapter.title %></span>
+          </p>
         </div>
       </div>
 

@@ -1,10 +1,7 @@
 <div class="<%= container_classes %>">
   <header class="mt-14 flex items-end justify-between gap-6 mb-12">
-    <div>
-      <div class="ui-eyebrow mb-3">// library</div>
-      <h1 class="ui-title">Audiobooks</h1>
-    </div>
-    <%= link_to "[+ new]", new_audiobook_path, class: "ui-link shrink-0" %>
+    <h1 class="ui-title">Audiobooks</h1>
+    <%= link_to "[new]", new_audiobook_path, class: "ui-link shrink-0" %>
   </header>
 
   <% if @audiobooks.any? %>
