@@ -37,7 +37,7 @@
         <li class="relative">
           <% if chapter.transcription_ready? %>
             <% fraction = progress&.fraction_through(chapter) || 0 %>
-            <div class="hidden"><%= turbo_stream_from chapter, :study_guide_control %></div>
+            <%= turbo_stream_from chapter, :study_guide_control %>
             <%= render "chapter/study_guides/control", chapter:, study_guide: @study_guides_by_chapter_id[chapter.id] %>
             <%= link_to chapter_path(chapter), class: "block -mx-4 p-4 hover:bg-white/[0.02] transition-colors group" do %>
               <div class="flex items-baseline justify-between gap-4">

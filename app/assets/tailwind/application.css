@@ -8,3 +8,7 @@
 
 @import "./affordances.css";
 @import "./rsvp.css";
+
+turbo-cable-stream-source {
+  display: contents;
+}
