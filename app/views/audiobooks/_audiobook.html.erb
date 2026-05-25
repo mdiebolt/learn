@@ -16,7 +16,7 @@
   <% end %>
 
   <% if audiobook.status.to_sym == :ready %>
-    <%= transcript_badge(audiobook, small: true) %>
+    <%= transcript_badge(audiobook) %>
   <% else %>
     <%= audiobook_status_chip(audiobook) %>
   <% end %>
