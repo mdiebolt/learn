@@ -1,4 +1,4 @@
-<div class="font-mono <%= container_classes %>">
+<div class="<%= container_classes %>">
   <div class="flex items-center justify-between gap-4">
     <%= link_to audiobooks_path, class: "ui-link" do %>
       [audiobooks]
@@ -48,18 +48,18 @@
                   </div>
                   <span class="shrink-0 text-2xs uppercase tracking-wide tabular-nums text-white/40"><%= duration_str %></span>
                 </div>
-                <div class="overflow-hidden whitespace-nowrap progress-leader text-xs" style="--p: <%= (fraction * 100).round %>%" aria-hidden="true"><%= "." * 240 %></div>
+                <div class="overflow-hidden whitespace-nowrap progress-leader text-xs font-mono" style="--p: <%= (fraction * 100).round %>%" aria-hidden="true"><%= "." * 240 %></div>
               <% end %>
             <% else %>
               <div class="py-3">
                 <div class="flex items-baseline justify-between gap-4">
                   <div class="flex items-baseline gap-4 min-w-0">
-                    <span class="text-2xs tabular-nums text-white/40 shrink-0"><%= "%02d" % (i + 1) %></span>
+                    <span class="text-2xs tabular-nums text-white/40 shrink-0 font-mono"><%= "%02d" % (i + 1) %></span>
                     <span class="text-white/60 truncate"><%= chapter.title %></span>
                   </div>
                   <span class="shrink-0 text-2xs uppercase tracking-wide tabular-nums text-white/40"><%= duration_str %></span>
                 </div>
-                <div class="overflow-hidden whitespace-nowrap progress-leader text-xs" style="--p: 0%" aria-hidden="true"><%= "." * 240 %></div>
+                <div class="overflow-hidden whitespace-nowrap progress-leader text-xs font-mono" style="--p: 0%" aria-hidden="true"><%= "." * 240 %></div>
               </div>
             <% end %>
           </li>

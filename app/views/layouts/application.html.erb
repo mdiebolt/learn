@@ -28,10 +28,12 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-h-dvh bg-black text-white antialiased font-sans">
+  <body class="min-h-dvh bg-black text-white antialiased">
     <main class="isolate">
-      <%= link_to root_path, class: "app-logo fixed top-4 right-2 size-10" do %>
-        <%= image_tag "logo.jpeg", alt: "Learn Logo" %>
+      <% unless content_for?(:hide_logo) %>
+        <%= link_to root_path, class: "app-logo absolute top-4 left-1/2 -translate-x-1/2 size-10" do %>
+          <%= image_tag "logo.jpeg", alt: "Learn Logo" %>
+        <% end %>
       <% end %>
 
       <%= yield %>
