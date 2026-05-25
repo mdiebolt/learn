@@ -39,7 +39,7 @@
             <% fraction = progress&.fraction_through(chapter) || 0 %>
             <div class="hidden"><%= turbo_stream_from chapter, :study_guide_control %></div>
             <%= render "chapter/study_guides/control", chapter:, study_guide: @study_guides_by_chapter_id[chapter.id] %>
-            <%= link_to chapter_path(chapter), class: "block py-3 -mx-4 px-4 hover:bg-white/[0.02] transition-colors group" do %>
+            <%= link_to chapter_path(chapter), class: "block -mx-4 p-4 hover:bg-white/[0.02] transition-colors group" do %>
               <div class="flex items-baseline justify-between gap-4">
                 <div class="flex items-baseline gap-4 min-w-0">
                   <span class="text-2xs tabular-nums text-white/40 shrink-0"><%= "%02d" % (i + 1) %></span>
@@ -47,7 +47,7 @@
                 </div>
                 <span class="shrink-0 text-2xs uppercase tracking-wide tabular-nums text-white/40"><%= duration_str %></span>
               </div>
-              <div class="overflow-hidden whitespace-nowrap progress-leader text-xs font-mono" style="--p: <%= (fraction * 100).round %>%" aria-hidden="true"><%= "." * 240 %></div>
+              <div class="leading-none overflow-hidden whitespace-nowrap progress-leader text-xs font-mono" style="--p: <%= (fraction * 100).round %>%" aria-hidden="true"><%= "." * 240 %></div>
             <% end %>
           <% else %>
             <div class="py-3">
@@ -58,7 +58,7 @@
                 </div>
                 <span class="shrink-0 text-2xs uppercase tracking-wide tabular-nums text-white/40"><%= duration_str %></span>
               </div>
-              <div class="overflow-hidden whitespace-nowrap progress-leader text-xs font-mono" style="--p: 0%" aria-hidden="true"><%= "." * 240 %></div>
+              <div class="leading-none overflow-hidden whitespace-nowrap progress-leader text-xs font-mono" style="--p: 0%" aria-hidden="true"><%= "." * 240 %></div>
             </div>
           <% end %>
         </li>
