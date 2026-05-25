@@ -1,1 +1,10 @@
-<dl class="text-sm text-white/80"><% matching.pairs.each do |pair| %><div class="flex gap-2"><dt class="font-medium"><%= pair["left"] %></dt><dd>→ <%= pair["right"] %></dd></div><% end %></dl>
+<dl class="text-sm text-white/80">
+  <% matching.pairs.each do |pair| %>
+    <div class="flex gap-2">
+      <dt class="font-medium">
+        <%= pair["left"] %>
+      </dt>
+      <dd>→ <%= pair["right"] %></dd>
+    </div>
+  <% end %>
+</dl>

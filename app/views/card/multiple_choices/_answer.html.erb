@@ -1,4 +1,12 @@
 <div class="text-sm text-white/80 space-y-2">
-  <p><strong>Answer:</strong> <%= multiple_choice.options[multiple_choice.correct_index] %></p>
-  <% if multiple_choice.rationale.present? %><p class="text-white/60"><%= multiple_choice.rationale %></p><% end %>
+  <p>
+    <strong>Answer:</strong>
+    <%= multiple_choice.options[multiple_choice.correct_index] %>
+  </p>
+
+  <% if multiple_choice.rationale.present? %>
+    <p class="text-white/60">
+      <%= multiple_choice.rationale %>
+    </p>
+  <% end %>
 </div>

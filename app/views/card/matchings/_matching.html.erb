@@ -3,7 +3,9 @@
   <div class="grid grid-cols-2 gap-3">
     <ol class="space-y-2">
       <% matching.pairs.each do |pair| %>
-        <li class="flex h-16 items-center border border-white/10 px-3 py-2 text-white/80"><%= pair["left"] %></li>
+        <li class="flex h-16 items-center border border-white/10 px-3 py-2 text-white/80">
+          <%= pair["left"] %>
+        </li>
       <% end %>
     </ol>
     <%= sortable_list(matching.shuffled_answers, item_height: "h-16") %>
