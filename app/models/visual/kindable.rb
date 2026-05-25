@@ -12,8 +12,9 @@ module Visual::Kindable
   end
 
   class_methods do
-    def kind_class_for(slug)
-      kind_types.find { it.demodulize.underscore == slug.to_s }&.constantize
+    def build_kind(slug, attributes = {})
+      kind_class = kind_types.find { it.demodulize.underscore == slug.to_s }
+      kind_class&.create!(attributes)
     end
   end
 

@@ -50,22 +50,21 @@ class StudyGuide < ApplicationRecord
   end
 
   def build_card(raw)
-    kind_class = Card.kind_class_for(raw["kind"]) or return nil
-    kind = kind_class.create!(raw.fetch("attributes", {}))
     cards.create!(
       user:,
       chapter:,
       concept_title: raw["concept_title"],
       source_excerpt: raw["source_excerpt"],
-      kind:,
+      kind: Card.build_kind(raw["kind"], raw.fetch("attributes", {})),
       due: Time.current
     )
   end
 
   def build_visual(raw)
-    kind_class = Visual.kind_class_for(raw["kind"]) or return nil
-    kind = kind_class.create!(raw.fetch("attributes", {}))
-    visuals.create!(kind:, caption: raw["caption"])
+    visuals.create!(
+      kind: Visual.build_kind(raw["kind"], raw.fetch("attributes", {})),
+      caption: raw["caption"]
+    )
   end
 
   def broadcast_ready
