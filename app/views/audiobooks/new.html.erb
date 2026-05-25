@@ -1,10 +1,7 @@
-<%= link_to audiobooks_path, class: "ui-link" do %>
-  [audiobooks]
+<% content_for :breadcrumb do %>
+  <%= link_to "[audiobooks]", audiobooks_path, class: "ui-link" %>
 <% end %>
-
-<header class="mt-8 mb-12">
-  <h1 class="ui-title">New audiobook</h1>
-</header>
+<% content_for :title, "New audiobook" %>
 
 <%= form_with model: @audiobook, class: "space-y-8" do |f| %>
   <%= error_summary @audiobook %>

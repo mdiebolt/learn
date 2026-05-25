@@ -1,5 +1,5 @@
 class Chapter::StudyGuidesController < ApplicationController
-  include ChapterScoped
+  include ChapterScoped, RenderPartialsWithoutNamespace
 
   def show
     @audiobook = @chapter.audiobook

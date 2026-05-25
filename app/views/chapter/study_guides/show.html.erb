@@ -11,7 +11,7 @@
   <% if @study_guide %>
     <ol class="space-y-20">
       <% @topics.each do |topic| %>
-        <li id="<%= dom_id(topic.topical) %>"><%= render partial: topic.topical.to_partial_path, object: topic.topical %></li>
+        <li id="<%= dom_id(topic.topical) %>"><%= render topic.topical %></li>
       <% end %>
     </ol>
   <% else %>
