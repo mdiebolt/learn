@@ -1,8 +1,12 @@
 <ol class="space-y-2 text-sm text-white/80 border-l border-white/20 pl-4">
   <% timeline.events.each do |event| %>
     <li>
-      <div class="text-xs font-mono uppercase tracking-wide text-white/40"><%= event["when"] %></div>
-      <div><%= event["label"] %></div>
+      <div class="text-xs font-mono uppercase tracking-wide text-white/40">
+        <%= event["when"] %>
+      </div>
+      <div>
+        <%= event["label"] %>
+      </div>
     </li>
   <% end %>
 </ol>

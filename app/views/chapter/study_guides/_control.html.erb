@@ -1,10 +1,8 @@
-<% study_guide = local_assigns[:study_guide] %>
-<% generating = local_assigns[:generating] || false %>
 <%= turbo_frame_tag dom_id(chapter, :study_guide_control), class: "absolute right-full top-0 pt-4 pr-4" do %>
   <% glyph = "font-mono text-2xs text-white/50 transition" %>
-  <% if study_guide %>
+  <% if local_assigns[:study_guide] %>
     <%= link_to "§", chapter_study_guide_path(chapter), data: { turbo_frame: "_top" }, title: "Review study guide", class: "#{glyph} hover:text-amber-400" %>
-  <% elsif generating %>
+  <% elsif local_assigns[:generating] %>
     <span title="Generating study guide…" class="<%= glyph %> animate-pulse">§</span>
   <% else %>
     <%= button_to "§", chapter_study_guide_path(chapter), title: "Generate study guide", form_class: "contents", class: "#{glyph} opacity-40 hover:opacity-100 hover:text-amber-400" %>

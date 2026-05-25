@@ -6,11 +6,7 @@ module CardsHelper
     easy: "hover:text-sky-400"
   }.freeze
 
-  def card_kind_label(card)
-    card.kind.model_name.element.titleize
-  end
-
-  def rating_hover_class(rating)
+def rating_hover_class(rating)
     RATING_HOVERS.fetch(rating.to_sym, "")
   end
 

@@ -2,5 +2,9 @@
 
 <ol class="space-y-20">
   <li class="hidden last:block text-white/60 italic">Nothing due. Come back later.</li>
-  <% @due_cards.each do |card| %><li id="<%= dom_id(card) %>"><%= render card %></li><% end %>
+  <% @due_cards.each do |card| %>
+    <%= tag.li(id: dom_id(card)) do %>
+      <%= render card %>
+    <% end %>
+  <% end %>
 </ol>

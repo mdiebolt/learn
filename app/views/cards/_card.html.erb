@@ -1,8 +1,12 @@
 <article class="space-y-4" data-controller="cards--reveal" data-action="card:graded->cards--reveal#show">
   <header class="flex items-center gap-3">
-    <span class="shrink-0 font-mono text-xs uppercase tracking-wider text-white/40">// <%= card.concept_title %></span>
+    <span class="shrink-0 font-mono text-xs uppercase tracking-wider text-white/40">
+      // <%= card.concept_title %>
+    </span>
     <hr class="grow border-t border-white/15">
-    <span class="flex size-6 shrink-0 items-center justify-center border border-white/15 font-mono text-xs text-white/50" title="<%= card_kind_label(card) %>"><%= card.kind.glyph %></span>
+    <span class="flex size-6 shrink-0 items-center justify-center border border-white/15 font-mono text-xs text-white/50" title="<%= card.name %>">
+      <%= card.glyph %>
+    </span>
   </header>
 
   <%= render card.kind, card: %>

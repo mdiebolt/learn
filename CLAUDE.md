@@ -20,10 +20,6 @@ resources :chapters, except: [:destroy]
 
 Minimize these. Prefer richly-named domain terms. Only add a comment if it explains the "why" of the code in a way that isn’t clear from the method name or invocation flow.
 
-## Views
-
-Don’t wrap tags into multiple lines.
-
 ## Jobs
 
 Pass instances of ActiveRecord objects to jobs rather than ids since Rails knows how to look up the model automatically.

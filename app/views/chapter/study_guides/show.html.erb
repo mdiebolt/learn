@@ -3,7 +3,11 @@
 <% end %>
 <% content_for :title, @chapter.title %>
 <% if @audiobook.author.present? %>
-  <% content_for :subtitle do %><p class="text-lg text-white/60"><%= @audiobook.author %></p><% end %>
+  <% content_for :subtitle do %>
+    <p class="text-lg text-white/60">
+      <%= @audiobook.author %>
+    </p>
+  <% end %>
 <% end %>
 
 <%= turbo_stream_from @chapter, :study_guide %>
@@ -11,7 +15,9 @@
   <% if @study_guide %>
     <ol class="space-y-20">
       <% @topics.each do |topic| %>
-        <li id="<%= dom_id(topic.topical) %>"><%= render topic.topical %></li>
+        <li id="<%= dom_id(topic.topical) %>">
+          <%= render topic.topical %>
+        </li>
       <% end %>
     </ol>
   <% else %>

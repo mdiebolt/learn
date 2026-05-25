@@ -3,10 +3,7 @@
 <%= form_with url: passwords_path, class: "space-y-8" do |form| %>
   <div>
     <%= form.label :email_address, "// email", class: "mb-2" %>
-    <%= form.email_field :email_address,
-      required: true, autofocus: true, autocomplete: "username",
-      value: params[:email_address]
-    %>
+    <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", value: params[:email_address] %>
   </div>
 
   <div class="flex items-center justify-between gap-4 pt-4">

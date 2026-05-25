@@ -19,6 +19,12 @@ class Card < ApplicationRecord
     kind_types.find { it.demodulize.underscore == slug.to_s }&.constantize
   end
 
+  delegate :glyph, to: :kind
+
+  def name
+    kind.model_name.element.titleize
+  end
+
   def to_fsrs
     FsrsRuby::Card.new(
       due:, stability:, difficulty:,

@@ -3,8 +3,7 @@
 <%= form_with url: password_path(params[:token]), method: :put, class: "space-y-8" do |form| %>
   <div>
     <%= form.label :password, "// new password", class: "mb-2" %>
-    <%= form.password_field :password,
-      required: true, autocomplete: "new-password", maxlength: 72 %>
+    <%= form.password_field :password, required: true, autocomplete: "new-password", maxlength: 72 %>
   </div>
   <div>
     <%= form.label :password_confirmation, "// confirm new password", class: "mb-2" %>
