@@ -1,11 +1,5 @@
 class Card < ApplicationRecord
-  delegated_type :kind, types: %w[
-    Card::MultipleChoice
-    Card::Cloze
-    Card::FreeResponse
-    Card::Ordering
-    Card::Matching
-  ], dependent: :destroy
+  include Kindable
 
   belongs_to :user
   belongs_to :chapter
@@ -14,16 +8,6 @@ class Card < ApplicationRecord
   has_many :reviews, dependent: :destroy
 
   scope :due, ->(now = Time.current) { where("due <= ?", now) }
-
-  def self.kind_class_for(slug)
-    kind_types.find { it.demodulize.underscore == slug.to_s }&.constantize
-  end
-
-  delegate :glyph, to: :kind
-
-  def name
-    kind.model_name.element.titleize
-  end
 
   def to_fsrs
     FsrsRuby::Card.new(
