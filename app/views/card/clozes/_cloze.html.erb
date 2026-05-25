@@ -1,4 +1,6 @@
-<div class="space-y-3" data-controller="cards--cloze" data-cards--cloze-correct-class="cloze-blank--correct" data-cards--cloze-incorrect-class="cloze-blank--incorrect">
-  <p class="text-base leading-loose"><%= cloze_blanks(cloze) %></p>
+<%= cloze_card do %>
+  <p class="text-base leading-loose">
+    <%= cloze_card_blanks(cloze) %>
+  </p>
   <%= card_actions(submit_button("cards--cloze")) %>
-</div>
+<% end %>

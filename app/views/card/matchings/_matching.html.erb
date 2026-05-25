@@ -1,4 +1,4 @@
-<%= sortable do %>
+<%= sortable_card do %>
   <p class="text-base"><%= matching.prompt %></p>
   <div class="grid grid-cols-2 gap-3">
     <ol class="space-y-2">
@@ -8,7 +8,7 @@
         </li>
       <% end %>
     </ol>
-    <%= sortable_list(matching.shuffled_answers, item_height: "h-16") %>
+    <%= sortable_card_list(matching.shuffled_answers, item_height: "h-16") %>
   </div>
   <%= card_actions(submit_button("cards--sortable")) %>
 <% end %>

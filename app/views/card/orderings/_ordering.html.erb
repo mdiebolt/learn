@@ -1,5 +1,7 @@
-<%= sortable do %>
-  <p class="text-base"><%= ordering.prompt %></p>
-  <%= sortable_list(ordering.shuffled_items) %>
+<%= sortable_card do %>
+  <p class="text-base">
+    <%= ordering.prompt %>
+  </p>
+  <%= sortable_card_list(ordering.shuffled_items) %>
   <%= card_actions(submit_button("cards--sortable")) %>
 <% end %>
