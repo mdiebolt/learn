@@ -1,23 +1,21 @@
-<div class="<%= container_classes %>">
-  <%= link_to audiobooks_path, class: "ui-link" do %>
-    [audiobooks]
-  <% end %>
+<%= link_to audiobooks_path, class: "ui-link" do %>
+  [audiobooks]
+<% end %>
 
-  <header class="mt-8 mb-12">
-    <h1 class="ui-title">New audiobook</h1>
-  </header>
+<header class="mt-8 mb-12">
+  <h1 class="ui-title">New audiobook</h1>
+</header>
 
-  <%= form_with model: @audiobook, class: "space-y-8" do |f| %>
-    <%= error_summary @audiobook %>
+<%= form_with model: @audiobook, class: "space-y-8" do |f| %>
+  <%= error_summary @audiobook %>
 
-    <div>
-      <%= f.label :audio, "// audio file (m4b or mp3)", class: "mb-3" %>
-      <%= f.file_field :audio, accept: ".m4b,.mp3", direct_upload: true %>
-      <p class="text-xs text-white/40 mt-3">
-        Audiobook files can be large. The upload will go directly from your browser to storage.
-      </p>
-    </div>
+  <div>
+    <%= f.label :audio, "// audio file (m4b or mp3)", class: "mb-3" %>
+    <%= f.file_field :audio, accept: ".m4b,.mp3", direct_upload: true %>
+    <p class="text-xs text-white/40 mt-3">
+      Audiobook files can be large. The upload will go directly from your browser to storage.
+    </p>
+  </div>
 
-    <%= f.submit "upload", class: "ui-button ui-button--accent" %>
-  <% end %>
-</div>
+  <%= f.submit "upload", class: "ui-button ui-button--accent" %>
+<% end %>

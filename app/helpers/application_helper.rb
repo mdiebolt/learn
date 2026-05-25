@@ -17,8 +17,4 @@ module ApplicationHelper
       safe_join(record.errors.full_messages.map { tag.div("// #{it}") })
     end
   end
-
-  def container_classes
-    "max-w-3xl mx-auto px-6 py-12 sm:py-16"
-  end
 end

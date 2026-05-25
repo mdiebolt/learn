@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" class="scheme-only-dark">
+  <%= render "layouts/head" %>
+
+  <body class="min-h-dvh bg-black text-white antialiased">
+    <main>
+      <div class="max-w-sm mx-auto px-6 py-16 sm:py-24">
+        <%= flash_banners %>
+        <h1 class="ui-title mb-12">
+          <%= yield :title %>
+        </h1>
+        <%= yield %>
+      </div>
+    </main>
+  </body>
+</html>
