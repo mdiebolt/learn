@@ -4,9 +4,14 @@
 
   <body class="min-h-dvh bg-black text-white antialiased">
     <main class="isolate">
-      <%= link_to root_path, class: "app-logo absolute top-4 left-1/2 -translate-x-1/2 size-10" do %>
+      <button type="button" popovertarget="app-menu" class="app-logo absolute top-4 left-1/2 -translate-x-1/2 size-10 cursor-pointer">
         <%= image_tag "logo.jpeg", alt: "Learn Logo" %>
-      <% end %>
+      </button>
+
+      <div id="app-menu" popover class="app-menu">
+        <%= link_to "[audiobooks]", audiobooks_path, class: "ui-link" %>
+        <%= link_to "[remember]", remember_path, class: "ui-link" %>
+      </div>
 
       <div class="max-w-3xl mx-auto px-6 py-12 sm:py-16">
         <%= yield %>

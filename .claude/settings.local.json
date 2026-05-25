@@ -12,7 +12,9 @@
       "Read(//Users/bolt/code/skills/skills/the-rails-way/**)",
       "Bash(git mv *)",
       "Bash(grep *)",
-      "Bash(xargs ls -la)"
+      "Bash(xargs ls -la)",
+      "Read(//Users/bolt/.config/agents/skills/**)",
+      "Read(//Users/bolt/.claude/**)"
     ],
     "deny": [
       "Bash(curl *)",
