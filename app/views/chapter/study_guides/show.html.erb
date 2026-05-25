@@ -1,17 +1,10 @@
-<div class="flex items-center justify-between gap-4 h-6">
+<% content_for :breadcrumb do %>
   <%= link_to "[#{@audiobook.title}]", @audiobook, class: "ui-link" %>
-  <div></div>
-</div>
-
-<header class="mt-8 mb-12">
-  <div class="flex items-baseline justify-between gap-6">
-    <h1 class="ui-title truncate min-w-0"><%= @chapter.title %></h1>
-    <div class="shrink-0"></div>
-  </div>
-  <% if @audiobook.author.present? %>
-    <p class="text-lg text-white/60"><%= @audiobook.author %></p>
-  <% end %>
-</header>
+<% end %>
+<% content_for :title, @chapter.title %>
+<% if @audiobook.author.present? %>
+  <% content_for :subtitle do %><p class="text-lg text-white/60"><%= @audiobook.author %></p><% end %>
+<% end %>
 
 <%= turbo_stream_from @chapter, :study_guide %>
 <%= turbo_frame_tag dom_id(@chapter, :study_guide) do %>

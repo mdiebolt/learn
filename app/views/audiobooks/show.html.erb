@@ -1,19 +1,15 @@
-<div class="flex items-center justify-between gap-4 h-6">
+<% content_for :breadcrumb do %>
   <%= link_to "[audiobooks]", audiobooks_path, class: "ui-link" %>
-  <div></div>
-</div>
-
-<header class="mt-8 mb-12">
-  <div class="flex items-baseline justify-between gap-6">
-    <h1 class="ui-title truncate min-w-0"><%= @audiobook.title %></h1>
-    <div class="shrink-0">
-      <%= delete_audiobook_button(@audiobook) %>
-    </div>
-  </div>
-  <% if @audiobook.author.present? %>
+<% end %>
+<% content_for :title, @audiobook.title %>
+<% content_for :cta do %>
+  <%= delete_audiobook_button(@audiobook) %>
+<% end %>
+<% if @audiobook.author.present? %>
+  <% content_for :subtitle do %>
     <p class="text-lg text-white/60"><%= @audiobook.author %></p>
   <% end %>
-</header>
+<% end %>
 
 <% case @audiobook.status.to_sym %>
 <% when :pending, :processing %>

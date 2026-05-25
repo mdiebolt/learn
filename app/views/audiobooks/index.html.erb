@@ -1,16 +1,7 @@
-<div class="flex items-center justify-between gap-4 h-6">
-  <div></div>
-  <div></div>
-</div>
-
-<header class="mt-8 mb-12">
-  <div class="flex items-baseline justify-between gap-6">
-    <h1 class="ui-title truncate min-w-0">Audiobooks</h1>
-    <div class="shrink-0">
-      <%= link_to "[new]", new_audiobook_path, class: "ui-link" %>
-    </div>
-  </div>
-</header>
+<% content_for :title, "Audiobooks" %>
+<% content_for :cta do %>
+  <%= link_to "[new]", new_audiobook_path, class: "ui-link" %>
+<% end %>
 
 <% if @audiobooks.any? %>
   <ul role="list">

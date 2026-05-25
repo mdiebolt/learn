@@ -22,7 +22,7 @@ Minimize these. Prefer richly-named domain terms. Only add a comment if it expla
 
 ## Views
 
-Don’t wrap tags or erb code into multiple lines.
+Don’t wrap tags into multiple lines.
 
 ## Jobs
 
