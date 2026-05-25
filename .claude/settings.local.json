@@ -14,7 +14,8 @@
       "Bash(grep *)",
       "Bash(xargs ls -la)",
       "Read(//Users/bolt/.config/agents/skills/**)",
-      "Read(//Users/bolt/.claude/**)"
+      "Read(//Users/bolt/.claude/**)",
+      "Bash(bundle show *)"
     ],
     "deny": [
       "Bash(curl *)",
