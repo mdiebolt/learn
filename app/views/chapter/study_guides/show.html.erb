@@ -1,10 +1,12 @@
-<div class="flex items-center justify-between gap-4">
+<div class="flex items-center justify-between gap-4 h-6">
   <%= link_to "[#{@audiobook.title}]", @audiobook, class: "ui-link" %>
+  <div></div>
 </div>
 
 <header class="mt-8 mb-12">
-  <div class="flex items-center justify-between gap-6">
+  <div class="flex items-baseline justify-between gap-6">
     <h1 class="ui-title truncate min-w-0"><%= @chapter.title %></h1>
+    <div class="shrink-0"></div>
   </div>
   <% if @audiobook.author.present? %>
     <p class="text-lg text-white/60"><%= @audiobook.author %></p>
