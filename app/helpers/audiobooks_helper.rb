@@ -29,7 +29,7 @@ module AudiobooksHelper
   end
 
   def audiobook_status_chip(audiobook)
-    color = audiobook.status.to_sym == :failed ? "text-red-400" : "text-white/50"
+    color = audiobook.errored? ? "text-red-400" : "text-white/50"
     tag.span "// #{audiobook.status}",
       class: "font-mono text-2xs uppercase tracking-wide shrink-0 #{color}"
   end

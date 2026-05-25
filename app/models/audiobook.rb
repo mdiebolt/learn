@@ -5,7 +5,7 @@ class Audiobook < ApplicationRecord
 
   has_one_attached :cover
 
-  enum :status, { pending: 0, processing: 1, ready: 2, failed: 3 }
+  enum :status, { queued: 0, ingesting: 1, ingested: 2, errored: 3 }
 
   scope :recent, -> { order(created_at: :desc) }
 end

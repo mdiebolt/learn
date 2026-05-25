@@ -12,15 +12,15 @@
 <% end %>
 
 <% case @audiobook.status.to_sym %>
-<% when :pending, :processing %>
+<% when :queued, :ingesting %>
   <div class="border border-amber-400/30 px-6 py-8 text-center">
     <p class="text-2xs uppercase tracking-wide text-amber-400">// detecting chapters · reload in a moment</p>
   </div>
-<% when :failed %>
+<% when :errored %>
   <div class="border border-red-400/30 px-6 py-8 text-center">
     <p class="text-2xs uppercase tracking-wide text-red-400">// chapter detection failed · try uploading again</p>
   </div>
-<% when :ready %>
+<% when :ingested %>
   <section>
     <h2 class="ui-eyebrow">// chapters</h2>
     <ul role="list">

@@ -15,7 +15,7 @@
     </div>
   <% end %>
 
-  <% if audiobook.status.to_sym == :ready %>
+  <% if audiobook.ingested? %>
     <%= transcript_badge(audiobook) %>
   <% else %>
     <%= audiobook_status_chip(audiobook) %>
