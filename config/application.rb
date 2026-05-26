@@ -23,5 +23,10 @@ module Learn
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Audiobook range requests after the device wakes from sleep need the
+    # original signed URL to still be valid. The 5-minute default is too
+    # short for a paused playback session.
+    config.active_storage.urls_expire_in = 1.day
   end
 end
