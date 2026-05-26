@@ -1,7 +1,9 @@
 module RenderPartialsWithoutNamespace
   extend ActiveSupport::Concern
 
-  included do
-    before_action { view_context.prefix_partial_path_with_controller_namespace = false }
+  private
+
+  def view_context
+    super.tap { |view| view.prefix_partial_path_with_controller_namespace = false }
   end
 end
