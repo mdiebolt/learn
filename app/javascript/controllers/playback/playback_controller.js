@@ -55,7 +55,14 @@ export default class extends Controller {
   }
 
   play() {
-    this.audioTarget.play().catch(() => {})
+    this.audioTarget.play().catch((error) => {
+      console.warn("Audio play() rejected:", error)
+    })
+  }
+
+  onError() {
+    const error = this.audioTarget.error
+    console.warn("Audio element error:", error && error.code, error && error.message)
   }
 
   pause() {

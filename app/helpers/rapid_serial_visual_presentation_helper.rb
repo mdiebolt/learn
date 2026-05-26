@@ -56,7 +56,8 @@ module RapidSerialVisualPresentationHelper
           "pause->playback--playback#onPause",
           "seeked->playback--playback#onSeeked",
           "loadedmetadata->playback--playback#onLoadedMetadata",
-          "timeupdate->playback--playback#onTimeUpdate"
+          "timeupdate->playback--playback#onTimeUpdate",
+          "error->playback--playback#onError"
         ].join(" ")
       }
     }

@@ -51,7 +51,13 @@
       </div>
 
       <%= tag.audio(**rsvp_audio_attributes) do %>
-        <%= tag.source src: rails_blob_path(@chapter.audiobook.audio), type: @chapter.audiobook.audio.content_type %>
+        <%# Proxy (not redirect) so the audio src never points at a TTL'd %>
+        <%# signed URL — a pause that outlives the URL's expiry would %>
+        <%# otherwise 404 on the next byte-range request after wake. %>
+        <%# Before scaling: put a CDN (e.g. CloudFront) in front of the app %>
+        <%# origin so audio range requests hit the edge cache instead of %>
+        <%# tying up Puma workers and re-paying S3 egress per listener. %>
+        <%= tag.source src: rails_storage_proxy_path(@chapter.audiobook.audio), type: @chapter.audiobook.audio.content_type %>
       <% end %>
     <% end %>
   <% else %>
