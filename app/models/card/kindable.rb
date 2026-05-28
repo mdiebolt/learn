@@ -15,8 +15,8 @@ module Card::Kindable
 
   class_methods do
     def build_kind(slug, attributes = {})
-      kind_class = kind_types.find { it.demodulize.underscore == slug.to_s }
-      kind_class&.create!(attributes)
+      type = kind_types.find { it.demodulize.underscore == slug.to_s }
+      type&.constantize&.create!(attributes)
     end
   end
 

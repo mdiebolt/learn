@@ -1,0 +1,7 @@
+new:
+  user: one
+  chapter: one
+  concept_title: "Pythagorean theorem"
+  source_excerpt: "a^2 + b^2 = c^2"
+  kind: basic (Card::MultipleChoice)
+  due: 2026-01-01 00:00:00

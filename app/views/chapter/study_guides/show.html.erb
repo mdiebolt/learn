@@ -1,7 +1,9 @@
 <% content_for :breadcrumb do %>
   <%= link_to "[#{@audiobook.title}]", @audiobook, class: "ui-link" %>
 <% end %>
+
 <% content_for :title, @chapter.title %>
+
 <% if @audiobook.author.present? %>
   <% content_for :subtitle do %>
     <p class="text-lg text-white/60">

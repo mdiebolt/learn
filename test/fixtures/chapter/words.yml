@@ -10,6 +10,6 @@ second:
   chapter: one
   text: world
   start_time_ms: 500
-  end_time_ms: 1000
+  end_time_ms: 1_000
   position: 1
   orp_index: 1

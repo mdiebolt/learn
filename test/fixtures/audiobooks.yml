@@ -1,6 +1,3 @@
-# Fixtures bypass validations, so these have no audio attachment.
-# Tests that need an attached file should attach it explicitly.
-
 one:
   user: one
   title: Test Audiobook One

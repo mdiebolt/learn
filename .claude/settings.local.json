@@ -15,7 +15,9 @@
       "Bash(xargs ls -la)",
       "Read(//Users/bolt/.config/agents/skills/**)",
       "Read(//Users/bolt/.claude/**)",
-      "Bash(bundle show *)"
+      "Bash(bundle show *)",
+      "Read(//Users/bolt/.pi/agent/npm/node_modules/**)",
+      "Bash(ln -s /Users/bolt/.nvm/versions/node/v22.22.0/lib/node_modules/@earendil-works/pi-coding-agent /Users/bolt/.pi/agent/npm/node_modules/@earendil-works/pi-coding-agent)"
     ],
     "deny": [
       "Bash(curl *)",
@@ -35,6 +37,6 @@
       "Read(config/credentials*.yml.enc)",
       "Read(~/.ssh/**)"
     ],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "auto"
   }
 }
